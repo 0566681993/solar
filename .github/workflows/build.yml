@@ -24,7 +24,7 @@ jobs:
 
     - name: Install Libraries
       run: |
-        arduino-cli lib install "ModbusIP_ESP8266"
+        arduino-cli lib install "modbus-esp8266"
 
     - name: Compile Firmware
       run: |
