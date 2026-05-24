@@ -1,0 +1,465 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Solar siêu nhân</title>
+    <style>
+        body { background-color: #f1f5f9; margin: 0; display: flex; flex-direction: column; align-items: center; font-family: 'Inter', sans-serif;; padding-top: 20px; }
+        .wrapper { position: relative; width: 360px; height: 370px; background: #fff; border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .node { position: absolute; width: 73px; height: 73px; border: 1px solid #cbd5e1; border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #fff; z-index: 2; font-weight: bold; color: #64748b; }
+        .node span { font-size: 10px; }
+        .node .val { font-size: 11px; color: #0f172a; margin-top: 2px; }
+
+        #node-inv { left: 143px; top: 130px; height: 75px; border: 2px solid #22c55e; color: #16a34a; }
+        #node-bu  { left: 150px; top: 250px; width: 60px; height: 60px; border-top: 3px solid #00e676; }
+        #node-pv  { left: 40px;  top: 35px;  border-top: 3px solid #ffb300; }
+        #node-bat { left: 40px;  top: 250px; border-top: 3px solid #a855f7; }
+        #node-grid{ left: 250px; top: 35px;  border-top: 3px solid #ef4444; }
+        #node-home{ left: 250px; top: 250px; border-top: 3px solid #00b0ff; }
+
+        svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .base-line { stroke: #e2e8f0; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        .flow-line { stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; display: none; }
+        .particle { fill: #ffffff; stroke: currentColor; stroke-width: 1.5; display: none; }
+
+        /* Style phần bổ sung */
+        .stats-container { width: 360px; background: #fff; border-radius: 24px; padding: 20px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .stats-title { font-size: 14px; font-weight: bold; margin-bottom: 15px; color: #334155; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .stat-item { display: flex; align-items: center; gap: 10px; }
+        .stat-text { font-size: 11px; color: #64748b; }
+        .stat-val { font-size: 13px; font-weight: bold; color: #0f172a; }
+        
+        .bar-container { margin-bottom: 15px; }
+        .bar-label { font-size: 12px; color: #334155; margin-bottom: 5px; display: flex; justify-content: space-between; }
+        .progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; display: flex; }
+        .bar-seg { height: 100%; }
+        .bar-legend { display: flex; justify-content: space-between; margin-top: 6px; font-size: 10px; color: #64748b; }
+        .legend-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+        .legend-row { display: flex; align-items: center; gap: 4px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .legend-val { font-weight: bold; color: #0f172a; }
+		
+        /* Layout Tổng sản lượng mới */
+        .total-container { width: 360px; background: #fff; border-radius: 24px; padding: 20px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .total-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .total-item { display: flex; flex-direction: column; }
+        .total-label { font-size: 10px; color: #64748b; margin-bottom: 2px; }
+        .total-value { font-size: 13px; font-weight: bold; color: #0f172a; }
+		body, div, span {-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;text-rendering: optimizeLegibility;
+		/* model máy */
+		#model{
+    position: absolute;
+    left: 50.5%;
+    top: 105px;   /* chỉnh lên/xuống ở đây */
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-weight: 600;
+    color: #334155;
+    z-index: 3;
+    background: rgba(255,255,255,0.7);
+    padding: 2px 8px;
+    border-radius: 6px;
+    backdrop-filter: blur(4px);
+}
+}		
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+		<div id="model">SEN ECO 6K</div>
+        <div class="node" id="node-pv">🌞<div class="val" id="v-pv">0W</div>
+		<div style="font-size:9px;color:#94a3b8" id="info-pv">0V | 0A
+	    </div></div>
+        <div class="node" id="node-bat">🔋<div class="val" id="v-bat">0W</div>
+		<div style="font-size:9px;color:#94a3b8" id="info-bat">0V | 0A
+	    </div></div>
+        <div class="node" id="node-grid">⚡<div class="val" id="v-grid">0W</div>
+		<div style="font-size:9px;color:#94a3b8" id="info-gid">0V | 0A
+	    </div></div>
+        <div class="node" id="node-home">🏠<div class="val" id="v-home">0W</div>
+		<div style="font-size:9px;color:#94a3b8" id="info-home">0V | 0A
+	    </div></div>
+        <div class="node" id="node-inv">📟<span>SENERGY</span></div>
+        <div class="node" id="node-bu">💡<div class="val" id="v-bu">0W</div>
+		<div style="font-size:9px;color:#94a3b8" id="info-eps">0V | 0A
+	    </div></div>
+
+        <svg id="svg-layer">
+			<!-- BASE LINE -->
+			<path class="base-line" d="
+				M 145,150 L 85,150 Q 75,150 75,140 L 75,95
+				M 145,195 L 85,195 Q 75,195 75,205 L 75,250
+				M 215,150 L 275,150 Q 285,150 285,140 L 285,95
+				M 215,195 L 275,195 Q 285,195 285,205 L 285,250
+				M 180,205 L 180,250
+			"/>
+
+			<!-- FLOW LINES -->
+			<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 145,150 L 85,150 Q 75,150 75,140 L 75,95"/>
+			<path id="l-bat" class="flow-line" style="stroke:#a855f7;" d="M 145,195 L 85,195 Q 75,195 75,205 L 75,250"/>
+			<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 215,150 L 275,150 Q 285,150 285,140 L 285,95"/>
+			<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 215,195 L 275,195 Q 285,195 285,205 L 285,250"/>
+			<path id="l-bu" class="flow-line" style="stroke:#00e676;" d="M 180,205 L 180,250"/>
+
+            <circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 145,160 L 85,160 Q 75,160 75,150 L 75,105" /></circle>
+            <circle id="p-bat" class="particle" style="color:#a855f7;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 145,195 L 85,195 Q 75,195 75,205 L 75,250" /></circle>
+            <circle id="p-grid" class="particle" style="color:#ef4444;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 215,150 L 275,150 Q 285,150 285,140 L 285,95" /></circle>
+            <circle id="p-home" class="particle" style="color:#00b0ff;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 215,195 L 275,195 Q 285,195 285,205 L 285,250" /></circle>
+            <circle id="p-bu" class="particle" style="color:#00e676;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 180,205 L 180,250" /></circle>
+        </svg>
+    </div>
+
+    <div class="stats-container">
+        <div class="stats-title">Hôm nay</div>
+        <div class="stats-grid">
+            <div class="stat-item">🌞<div><div class="stat-text">Tạo ra</div><div class="stat-val" id="st-pv">0 kWh</div></div></div>
+            <div class="stat-item">🏠<div><div class="stat-text">Sử dụng</div><div class="stat-val" id="st-load">0 kWh</div></div></div>
+            <div class="stat-item">💸<div><div class="stat-text">Đẩy lưới</div><div class="stat-val" id="st-grid-sell">0 kWh</div></div></div>
+            <div class="stat-item">🛒<div><div class="stat-text">Lấy lưới</div><div class="stat-val" id="st-grid-buy">0 kWh</div></div></div>
+			<div class="stat-item">🔋<div><div class="stat-text">Nạp pin</div><div class="stat-val" id="st-bat-charge">0 kWh</div></div></div>
+            <div class="stat-item">🪫<div><div class="stat-text">Xả pin</div><div class="stat-val" id="st-bat-discharge">0 kWh</div></div></div>
+        </div>
+
+        <div class="bar-container">
+            <div class="bar-label"><span>Sử dụng hôm nay</span><span id="st-use-total">0 kWh</span></div>
+            <div class="progress-bar">
+                <div class="bar-seg" style="width: 28%; background:#fbbf24"></div>
+                <div class="bar-seg" style="width: 20%; background:#4ade80"></div>
+                <div class="bar-seg" style="width: 52%; background:#fb923c"></div>
+            </div>
+            <div class="bar-legend">
+                <div class="legend-item"><div class="legend-row"><span class="dot" style="background:#fbbf24"></span>Solar</div><span id="st-use-solar">0% / 0kWh</span></div>
+                <div class="legend-item"><div class="legend-row"><span class="dot" style="background:#4ade80"></span>Pin</div><span id="st-use-bat">0% / 0kWh</span></div>
+                <div class="legend-item"><div class="legend-row"><span class="dot" style="background:#fb923c"></span>Lưới</div><span id="st-use-grid">0% / 0kWh</span></div>
+            </div>
+        </div>
+        <div class="bar-container">
+            <div class="bar-label"><span>Sản lượng PV tạo ra</span><span id="st-pv-total">0 Wh</span></div>
+            <div class="progress-bar">
+                <div class="bar-seg" style="width: 60%; background:#818cf8"></div>
+                <div class="bar-seg" style="width: 20%; background:#38bdf8"></div>
+                <div class="bar-seg" style="width: 20%; background:#94a3b8"></div>
+            </div>
+            <div class="bar-legend">
+                <div class="legend-item"><div class="legend-row"><span class="dot" style="background:#818cf8"></span>Tải</div><span id="st-pv-load">0% / 0Wh</span></div>
+                <div class="legend-item"><div class="legend-row"><span class="dot" style="background:#38bdf8"></span>Sạc pin</div><span id="st-pv-charge">0% / 0Wh</span></div>
+                <div class="legend-item"><div class="legend-row"><span class="dot" style="background:#94a3b8"></span>Đẩy lưới</div><span id="st-pv-grid">0% / 0Wh</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="total-container">
+        <div class="stats-title">Tổng sản lượng</div>
+        <div class="total-grid">
+            <div class="total-item"><div class="total-label">PV</div><div class="total-value">125.4 kWh</div></div>
+            <div class="total-item"><div class="total-label">Đẩy lưới</div><div class="total-value">5.3 kWh</div></div>
+            <div class="total-item"><div class="total-label">Tiêu thụ</div><div class="total-value">85.2 kWh</div></div>
+            <div class="total-item"><div class="total-label">Mua lưới</div><div class="total-value">12.5 kWh</div></div>
+            <div class="total-item"><div class="total-label">Nạp pin</div><div class="total-value">22.1 kWh</div></div>
+            <div class="total-item"><div class="total-label">Xả pin</div><div class="total-value">20.8 kWh</div></div>
+        </div>
+    </div>
+
+<script>
+
+const SUPABASE_URL =
+    "https://rtxdvcvzkepogytpnvsi.supabase.co"
+
+const SUPABASE_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0eGR2Y3Z6a2Vwb2d5dHBudnNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyNzI1NzksImV4cCI6MjA2ODg0ODU3OX0.SG_q8rnfAA7LAFoYYQyPsUFZPqsh1C13GbkGln4Z3JU"
+
+function formatPower(value) {
+    value = Number(value) || 0
+    if (Math.abs(value) >= 1000) {
+        return (value / 1000).toFixed(2) + "kW"
+    }
+    return Math.round(value) + "W"
+}
+
+/* =========================
+   FLOW ON/OFF
+========================= */
+function setFlow(name, value, d) {
+
+    const line = document.getElementById("l-" + name)
+    const particle = document.getElementById("p-" + name)
+
+    if (!line || !particle) return
+
+    const anim = particle.querySelector("animateMotion")
+    if (!anim) return
+
+    // =========================
+    // CHỐT: CHECK TỪ SUPABASE
+    // =========================
+    let show = false
+    let reverse = false
+
+    const pv = Number(d.pv1_power) || 0
+    const grid = Number(d.grid_power) || 0
+    const bat = Number(d.battery_power) || 0
+    const load = Number(d.load_power) || 0
+    const eps = Number(d.eps_voltage) || 0
+
+    // =========================
+    // PV: luôn chiều PV → inverter
+    // =========================
+    if (name === "pv") {
+        show = pv > 0
+        reverse = true
+    }
+
+    // =========================
+    // GRID: 2 chiều thật
+    // =========================
+	else if (name === "grid") {
+
+		const g = Number(grid) || 0
+
+		// chỉ cần có dấu là đủ
+		show = g !== 0
+
+		// +grid: lưới → inverter
+		// -grid: inverter → lưới
+		reverse = g > 0
+	}
+
+    // =========================
+    // BAT: sạc / xả
+    // =========================
+    else if (name === "bat") {
+        show = Math.abs(bat) > 0
+        reverse = bat < 0
+    }
+
+    // =========================
+    // LOAD (HOME): inverter → tải
+    // =========================
+    else if (name === "home") {
+        show = load > 0
+        reverse = false
+    }
+
+    // =========================
+    // EPS (backup)
+    // =========================
+    else if (name === "bu") {
+        show = eps > 0
+        reverse = false
+    }
+
+    // =========================
+    // APPLY
+    // =========================
+    line.style.display = show ? "block" : "none"
+    particle.style.display = show ? "block" : "none"
+
+    if (show) {
+        if (reverse) {
+            anim.setAttribute("keyPoints", "1;0")
+            anim.setAttribute("keyTimes", "0;1")
+        } else {
+            anim.removeAttribute("keyPoints")
+            anim.removeAttribute("keyTimes")
+        }
+    }
+}
+async function loadData() {
+
+    try {
+
+        const response = await fetch(
+            `${SUPABASE_URL}/rest/v1/inverter_logs?device_id=eq.SEN ECO 6KW&select=*&order=created_at.desc&limit=1`,
+            {
+                headers: {
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": `Bearer ${SUPABASE_KEY}`,
+                    "Content-Type": "application/json"
+                },
+                cache: "no-store"
+            }
+        )
+
+        const result = await response.json()
+
+        if (!Array.isArray(result) || result.length === 0) return
+
+        const d = result[0]
+
+        // =========================
+        // PV (LUÃ”N DÆ¯Æ NG â†’ inverter)
+        // =========================
+        const pv =
+            Number(d.pv1_power) || 0
+
+        // =========================
+        // GRID (GIá»® SIGN)
+        // =========================
+        const grid =
+            Number(d.grid_power) || 0
+        const grid_current =
+            Number(d.grid_current) || 0
+        const grid_voltage =
+            Number(d.grid_voltage) || 0
+        const grid_buy_today =
+            Number(d.grid_buy_today) || 0
+        const grid_sel_today =
+            Number(d.grid_sel_today) || 0	
+	
+		// pv
+		const pv1_power =
+            Number(d.pv1_power) || 0
+        const pv1_current =
+            Number(d.pv1_current) || 0
+        const pv1_voltage =
+            Number(d.pv1_voltage) || 0
+        const pv_today =
+            Number(d.pv_today) || 0
+        const pv_total =
+            Number(d.pv_total) || 0
+
+			
+        // =========================
+        // LOAD
+        // =========================
+        const home =
+            Number(d.load_power) || 0
+        const load_current =
+            Number(d.load_current) || 0
+        const load_voltage =
+            Number(d.load_voltage) || 0
+        const load_today =
+            Number(d.load_today) || 0
+        const load_total =
+            Number(d.load_total) || 0
+        // =========================
+        // EPS
+        // =========================
+        const bu =
+            Number(d.eps_power) || 0
+        const eps_voltage =
+            Number(d.eps_voltage) || 0
+        const eps_current =
+            Number(d.eps_current) || 0
+        const eps_today =
+            Number(d.eps_today) || 0
+        const eps_total =
+            Number(d.eps_total) || 0			
+        // =========================
+        // BATTERY (QUAN TRá»ŒNG)
+        // =========================
+        const bat =
+            Number(d.battery_power) || 0
+        const battery_voltage =
+            Number(d.battery_voltage) || 0
+        const battery_current =
+            Number(d.battery_current) || 0			
+        const battery_changer_today =
+            Number(d.battery_changer_today) || 0			
+        const battery_dischanger_today =
+            Number(d.battery_dischanger_today) || 0			
+        const battery_total_changer =
+            Number(d.battery_total_changer) || 0			
+        const battery_total_dischanger =
+            Number(d.battery_total_dischanger) || 0				
+        // =========================
+        // UI TEXT
+        // =========================
+        document.getElementById("v-pv").innerText = formatPower(pv)
+        document.getElementById("v-grid").innerText = formatPower(grid)
+        document.getElementById("v-home").innerText = formatPower(home)
+        document.getElementById("v-bu").innerText = formatPower(bu)
+        document.getElementById("v-bat").innerText = formatPower(bat)
+		document.getElementById("info-pv").innerText =`${pv1_voltage || 0}V / ${pv1_current || 0}A`
+		document.getElementById("info-gid").innerText =`${grid_voltage|| 0}V / ${grid_current || 0}A`
+		document.getElementById("info-eps").innerText =`${eps_voltage|| 0}V / ${eps_current || 0}A`
+		document.getElementById("info-home").innerText =`${load_voltage|| 0}V / ${load_current || 0}A`
+		document.getElementById("info-bat").innerText =`${battery_voltage || 0}V / ${battery_current || 0}A`
+		//===============================
+		document.getElementById("st-pv").innerText = pv_today.toFixed(2) + " kWh"
+		
+		document.getElementById("st-load").innerText =
+			(load_today||0).toFixed(2) + " kWh"
+
+		document.getElementById("st-grid-buy").innerText =
+			(grid_buy_today||0).toFixed(2) + " kWh"
+
+		document.getElementById("st-grid-sell").innerText =
+			(grid_sel_today||0).toFixed(2) + " kWh"
+
+		document.getElementById("st-bat-charge").innerText =
+			(battery_changer_today || 0).toFixed(2) + " kWh"
+
+		document.getElementById("st-bat-discharge").innerText =
+			(battery_dischanger_today || 0).toFixed(2) + " kWh"
+		//=============================================
+		const use_total =
+			pv_today + battery_dischanger_today + grid_buy_today
+
+		// tránh chia 0
+		const safe_total = use_total || 1
+
+		// =========================
+		// % LOGIC
+		// =========================
+		const solar_percent = (pv_today / safe_total) * 100
+		const bat_percent = (battery_dischanger_today / safe_total) * 100
+		const grid_percent = (grid_buy_today / safe_total) * 100
+
+		document.getElementById("st-use-total").innerText =
+			use_total.toFixed(2) + " kWh"
+
+		document.getElementById("st-use-solar").innerText =
+			solar_percent.toFixed(0) + "% / " + pv_today.toFixed(2) + "kWh"
+
+		document.getElementById("st-use-bat").innerText =
+			bat_percent.toFixed(0) + "% / " + battery_dischanger_today.toFixed(2) + "kWh"
+
+		document.getElementById("st-use-grid").innerText =
+			grid_percent.toFixed(0) + "% / " + grid_buy_today.toFixed(2) + "kWh"
+
+
+		// PV BAR
+		const pv_total_kwh = pv_today
+
+		const pv_load = load_today
+		const pv_charge = battery_changer_today
+		const pv_grid = grid_sel_today
+
+		document.getElementById("st-pv-total").innerText =
+			pv_total_kwh.toFixed(2) + " kWh"
+
+		document.getElementById("st-pv-load").innerText =
+			((pv_load / pv_total_kwh) * 100).toFixed(0) + "% / " + pv_load.toFixed(2) + "Wh"
+
+		document.getElementById("st-pv-charge").innerText =
+			((pv_charge / pv_total_kwh) * 100).toFixed(0) + "% / " + pv_charge.toFixed(2) + "Wh"
+
+		document.getElementById("st-pv-grid").innerText =
+			((pv_grid / pv_total_kwh) * 100).toFixed(0) + "% / " + pv_grid.toFixed(2) + "Wh"			
+        // =========================
+        // FLOW CONTROL
+        // =========================
+		setFlow("pv", pv, d)
+		setFlow("grid", grid, d)
+		setFlow("home", home, d)
+		setFlow("bu", bu, d)
+		setFlow("bat", bat, d)
+		
+
+    } catch (e) {
+        console.log("LOAD ERROR:", e)
+    }
+}
+
+// START
+loadData()
+setInterval(loadData, 2000)
+
+</script>
+</body>
+</html>
