@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <title>Solar siêu nhân</title>
-	<link rel="icon"
-href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>😁</text></svg>">
+	<link rel="icon" type="image/png" href="icon.png">
     <style>
         body { background-color: #f1f5f9; margin: 0; display: flex; flex-direction: column; align-items: center; font-family: 'Inter', sans-serif;; padding-top: 20px; }
         .wrapper { position: relative; width: 360px; height: 370px; background: #fff; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
@@ -81,7 +80,6 @@ href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%22
 			object-fit:contain;
 			margin-top:7px;
 			background:transparent;
-
 			mix-blend-mode:multiply;
 		}	
 		/* =========================
@@ -327,12 +325,37 @@ href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%22
 		.ivtsetting-btn{
 			height:20px;
 			border:none;
-			border-radius:12px;
+			border-radius:10px;
 			background:#22c55e;
 			color:#fff;
 			font-weight:300;
 			cursor:pointer;
-		}	
+		}
+
+		.ivtsetting-title{
+			display:flex;
+			align-items:center;
+			justify-content:space-between;
+
+			font-size:14px;
+			font-weight:600;
+			color:#334155;
+			margin-bottom:15px;
+		}
+
+		.login-btn{
+			width:32px;
+			height:32px;
+			border:none;
+			border-radius:10px;
+			background:#f1f5f9;
+			cursor:pointer;
+			font-size:14px;
+		}
+
+		.login-btn:active{
+			transform:scale(0.95);
+		}		
 
 }		
     </style>
@@ -433,8 +456,8 @@ href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%22
 		<div class="ivtsetting-card">
 
 			<div class="ivtsetting-title">
-				Cài đặt biến tần
-			</div>
+				<span>Cài đặt biến tần</span><button class="login-btn" onclick="openLogin()">🔒</button></div>
+			
 			<div class="ivtsetting-row">
 				<div class="ivtsetting-name">
 					Chế độ hoạt động
@@ -969,6 +992,21 @@ function formatPower3(value) {
         return (value /100).toFixed(1) + " kWh"
     }
     return Math.round(value) + " Wh"
+}
+function openLogin(){
+
+	const phone = prompt("Nhập số điện thoại")
+	if(!phone) return
+
+	const pass = prompt("Nhập mật khẩu")
+	if(!pass) return
+
+	if(phone === "0123456789" && pass === "123456"){
+		alert("Đăng nhập thành công")
+	}
+	else{
+		alert("Sai tài khoản hoặc mật khẩu")
+	}
 }
 /* =========================
    FLOW ON/OFF
