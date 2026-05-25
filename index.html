@@ -105,7 +105,7 @@
 			<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 215,195 L 275,195 Q 285,195 285,205 L 285,250"/>
 			<path id="l-bu" class="flow-line" style="stroke:#00e676;" d="M 180,205 L 180,250"/>
 
-            <circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 145,160 L 85,160 Q 75,160 75,150 L 75,105" /></circle>
+            <circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 145,150 L 85,150 Q 75,150 75,140 L 75,95" /></circle>
             <circle id="p-bat" class="particle" style="color:#a855f7;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 145,195 L 85,195 Q 75,195 75,205 L 75,250" /></circle>
             <circle id="p-grid" class="particle" style="color:#ef4444;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 215,150 L 275,150 Q 285,150 285,140 L 285,95" /></circle>
             <circle id="p-home" class="particle" style="color:#00b0ff;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 215,195 L 275,195 Q 285,195 285,205 L 285,250" /></circle>
@@ -117,7 +117,7 @@
         <div class="stats-title">Hôm nay</div>
         <div class="stats-grid">
             <div class="stat-item">🌞<div><div class="stat-text">Tạo ra</div><div class="stat-val" id="st-pv">0 kWh</div></div></div>
-            <div class="stat-item">🏠<div><div class="stat-text">Sử dụng</div><div class="stat-val" id="st-load">0 kWh</div></div></div>
+            <div class="stat-item">💪<div><div class="stat-text">Công suất đỉnh</div><div class="stat-val" id="st-peak">0 kWh</div></div></div>
             <div class="stat-item">💸<div><div class="stat-text">Đẩy lưới</div><div class="stat-val" id="st-grid-sell">0 kWh</div></div></div>
             <div class="stat-item">🛒<div><div class="stat-text">Lấy lưới</div><div class="stat-val" id="st-grid-buy">0 kWh</div></div></div>
 			<div class="stat-item">🔋<div><div class="stat-text">Nạp pin</div><div class="stat-val" id="st-bat-charge">0 kWh</div></div></div>
@@ -137,30 +137,14 @@
                 <div class="legend-item"><div class="legend-row"><span class="dot" style="background:#fb923c"></span>Lưới</div><span id="st-use-grid">0% / 0kWh</span></div>
             </div>
         </div>
-        <div class="bar-container">
-            <div class="bar-label"><span>Sản lượng PV tạo ra</span><span id="st-pv-total">0 Wh</span></div>
-            <div class="progress-bar">
-                <div class="bar-seg" style="width: 60%; background:#818cf8"></div>
-                <div class="bar-seg" style="width: 20%; background:#38bdf8"></div>
-                <div class="bar-seg" style="width: 20%; background:#94a3b8"></div>
-            </div>
-            <div class="bar-legend">
-                <div class="legend-item"><div class="legend-row"><span class="dot" style="background:#818cf8"></span>Tải</div><span id="st-pv-load">0% / 0Wh</span></div>
-                <div class="legend-item"><div class="legend-row"><span class="dot" style="background:#38bdf8"></span>Sạc pin</div><span id="st-pv-charge">0% / 0Wh</span></div>
-                <div class="legend-item"><div class="legend-row"><span class="dot" style="background:#94a3b8"></span>Đẩy lưới</div><span id="st-pv-grid">0% / 0Wh</span></div>
-            </div>
-        </div>
+
     </div>
 
     <div class="total-container">
         <div class="stats-title">Tổng sản lượng</div>
         <div class="total-grid">
-            <div class="total-item"><div class="total-label">PV</div><div class="total-value">125.4 kWh</div></div>
-            <div class="total-item"><div class="total-label">Đẩy lưới</div><div class="total-value">5.3 kWh</div></div>
-            <div class="total-item"><div class="total-label">Tiêu thụ</div><div class="total-value">85.2 kWh</div></div>
-            <div class="total-item"><div class="total-label">Mua lưới</div><div class="total-value">12.5 kWh</div></div>
-            <div class="total-item"><div class="total-label">Nạp pin</div><div class="total-value">22.1 kWh</div></div>
-            <div class="total-item"><div class="total-label">Xả pin</div><div class="total-value">20.8 kWh</div></div>
+            <div class="total-item"><div class="total-label">Sản lượng PV</div><span id="total_pv">0 kWh</span></div>
+            <div class="total-item"><div class="total-label">Tiêu thụ</div><span id="total_sd">0 kWh</span></div>
         </div>
     </div>
 
@@ -321,6 +305,8 @@ async function loadData() {
             Number(d.pv_today) || 0
         const pv_total =
             Number(d.pv_total) || 0
+		const pv_peak =
+            Number(d.pv_power_peak) || 0
 
 			
         // =========================
@@ -380,10 +366,10 @@ async function loadData() {
 		document.getElementById("info-home").innerText =`${load_voltage|| 0}V / ${load_current || 0}A`
 		document.getElementById("info-bat").innerText =`${battery_voltage || 0}V / ${battery_current || 0}A`
 		//===============================
-		document.getElementById("st-pv").innerText = pv_today.toFixed(2) + " kWh"
+		document.getElementById("st-pv").innerText = pv_today + " Wh"
 		
-		document.getElementById("st-load").innerText =
-			(load_today||0).toFixed(2) + " kWh"
+		document.getElementById("st-peak").innerText =
+			(pv_peak||0).toFixed() + " Wh"
 
 		document.getElementById("st-grid-buy").innerText =
 			(grid_buy_today||0).toFixed(2) + " kWh"
@@ -396,51 +382,39 @@ async function loadData() {
 
 		document.getElementById("st-bat-discharge").innerText =
 			(battery_dischanger_today || 0).toFixed(2) + " kWh"
+			
+		document.getElementById("total_pv").innerText =
+			(pv_total || 0) + " kWh"
+
+		document.getElementById("total_sd").innerText =
+			(load_total || 0) + " kWh"
 		//=============================================
-		const use_total =
-			pv_today + battery_dischanger_today + grid_buy_today
+		const use_total = load_today
 
 		// tránh chia 0
-		const safe_total = use_total || 1
+		const solar_day = pv_today/1000
 
 		// =========================
 		// % LOGIC
 		// =========================
-		const solar_percent = (pv_today / safe_total) * 100
-		const bat_percent = (battery_dischanger_today / safe_total) * 100
-		const grid_percent = (grid_buy_today / safe_total) * 100
+		const solar_percent = ( (solar_day - battery_changer_today) / load_today) * 100
+		const bat_percent = (battery_dischanger_today / load_today) * 100
+		const grid_percent = (grid_buy_today / load_today) * 100
 
 		document.getElementById("st-use-total").innerText =
 			use_total.toFixed(2) + " kWh"
 
 		document.getElementById("st-use-solar").innerText =
-			solar_percent.toFixed(0) + "% / " + pv_today.toFixed(2) + "kWh"
+			solar_percent.toFixed(2) + "% / " + (solar_day- battery_changer_today) + "kWh"
 
 		document.getElementById("st-use-bat").innerText =
-			bat_percent.toFixed(0) + "% / " + battery_dischanger_today.toFixed(2) + "kWh"
+			bat_percent.toFixed(2) + "% / " + battery_dischanger_today.toFixed(2) + "kWh"
 
 		document.getElementById("st-use-grid").innerText =
-			grid_percent.toFixed(0) + "% / " + grid_buy_today.toFixed(2) + "kWh"
+			grid_percent.toFixed(2) + "% / " + grid_buy_today.toFixed(2) + "kWh"
 
 
-		// PV BAR
-		const pv_total_kwh = pv_today
-
-		const pv_load = load_today
-		const pv_charge = battery_changer_today
-		const pv_grid = grid_sel_today
-
-		document.getElementById("st-pv-total").innerText =
-			pv_total_kwh.toFixed(2) + " kWh"
-
-		document.getElementById("st-pv-load").innerText =
-			((pv_load / pv_total_kwh) * 100).toFixed(0) + "% / " + pv_load.toFixed(2) + "Wh"
-
-		document.getElementById("st-pv-charge").innerText =
-			((pv_charge / pv_total_kwh) * 100).toFixed(0) + "% / " + pv_charge.toFixed(2) + "Wh"
-
-		document.getElementById("st-pv-grid").innerText =
-			((pv_grid / pv_total_kwh) * 100).toFixed(0) + "% / " + pv_grid.toFixed(2) + "Wh"			
+		
         // =========================
         // FLOW CONTROL
         // =========================
