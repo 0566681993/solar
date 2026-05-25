@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#2D3436"> <title>Solar siêu nhân</title>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-	<link rel="icon" type="image/png" href="icon.png">
+	<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌞</text></svg>">
     <style>
         body { background-color: #f1f5f9; margin: 0; display: flex; flex-direction: column; align-items: center; font-family: 'Inter', sans-serif;; padding-top: 20px; }
         .wrapper { position: relative; width: 360px; height: 370px; background: #fff; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 10px; }
@@ -381,23 +381,53 @@
 		  font-weight: 600;
 		}
 
-		/* Đẩy nội dung chính xuống để không bị header đè lên */
+		/* 1. Thiết lập cơ bản */
 		body {
-		  padding-top: calc(60px + env(safe-area-inset-top));
+			margin: 0;
+			padding: 0;
+			background-color: #f4f4f4; /* Màu nền trang */
 		}
-		/* Dùng biến để đổi màu đồng bộ dễ hơn */
-		:root {
-			--main-color: #2D3436;
+
+		/* 2. Thanh header cố định */
+		.status-header {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 50px; /* Chiều cao cố định */
+			padding-top: env(safe-area-inset-top); /* Xử lý phần notch */
+			background-color: #2D3436;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 999;
 		}
-		.status-header { background-color: var(--main-color); }		
+
+		/* 3. ĐẨY NỘI DUNG XUỐNG - Chìa khóa nằm ở đây */
+		.content-wrapper {
+			/* Đẩy toàn bộ nội dung xuống dưới chiều cao của header + notch */
+			padding-top: calc(40px + env(safe-area-inset-top));
+			width: 100%;
+			box-sizing: border-box; /* Quan trọng để padding không làm vỡ layout */
+		}
+
+		.user-name {
+			color: #fff;
+			font-weight: bold;
+			font-size: 18px;
+		}	
 
 	
     </style>
 </head>
 <body>
 	<header class="status-header">
-	  <div class="user-name">PHẠM ĐÌNH TÂN</div>
+	  <div class="user-name">🌤️Phạm Đình Tân🌤️</div>
 	</header>
+
+	<main class="content-wrapper">
+	  <div class="container">    </div>
+	</main>
 	<div class="tabs">
 		<button class="tab-btn active" onclick="showTab('home')">
 			Biến tần
