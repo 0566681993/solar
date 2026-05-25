@@ -15,7 +15,7 @@
         .node .val { font-size: 11px; color: #0f172a; margin-top: 2px; }
 		body{padding-bottom:60px;}
 
-        #node-inv { left: 143px; top: 130px; height: 75px; border: 2px solid #22c55e; color: #16a34a; }
+        #node-inv { left: 144px; top: 130px; height: 75px; border: 2px solid #22c55e; color: #16a34a; }
         #node-bu  { left: 150px; top: 250px; width: 60px; height: 60px; border-top: 3px solid #00e676; }
         #node-pv  { left: 40px;  top: 35px;  border-top: 3px solid #ffb300; }
         #node-bat { left: 40px;  top: 250px; border-top: 3px solid #a855f7; }
@@ -53,12 +53,12 @@
         .total-value { font-size: 13px; font-weight: bold; color: #0f172a; }
 		body, div, span {-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;text-rendering: optimizeLegibility;
 		/* model máy */
-		#model{
+		#v-inv{
 		position: absolute;
 		left: 50.5%;
 		top: 105px;   /* chỉnh lên/xuống ở đây */
 		transform: translateX(-50%);
-		font-size: 12px;
+		font-size: 15px;
 		font-weight: 600;
 		color: #334155;
 		z-index: 3;
@@ -67,6 +67,22 @@
 		border-radius: 6px;
 		backdrop-filter: blur(4px);
 		}
+		
+
+		#node-inv{
+		background:transparent;
+		box-shadow:none;
+		border:none;
+		}
+		.inv-img{
+			width:85px;
+			height:85px;
+			object-fit:contain;
+			margin-top:10px;
+			background:transparent;
+
+			mix-blend-mode:multiply;
+		}	
 		/* =========================
 		TAB
 		========================= */
@@ -333,7 +349,7 @@
 	
 	<div id="home" class="page active">
 		<div class="wrapper">
-			<div id="model">SEN ECO 6K</div>
+			<div id="v-inv">0 °C</div>
 			<div class="node" id="node-pv">🌞<div class="val" id="v-pv">0W</div>
 			<div style="font-size:9px;color:#94a3b8" id="info-pv">0V | 0A
 			</div></div>
@@ -346,7 +362,7 @@
 			<div class="node" id="node-home">🏠<div class="val" id="v-home">0W</div>
 			<div style="font-size:9px;color:#94a3b8" id="info-home">0V | 0A
 			</div></div>
-			<div class="node" id="node-inv">📟<span>SENERGY</span><div class="val" id="v-inv">0 °C</div></div>
+			<div class="node" id="node-inv"><img src="inv.png" class="inv-img"></div>
 			<div class="node" id="node-bu">💡<div class="val" id="v-bu">0W</div>
 			<div style="font-size:9px;color:#94a3b8" id="info-eps">0V | 0A
 			</div></div>
@@ -354,25 +370,25 @@
 			<svg id="svg-layer">
 				<!-- BASE LINE -->
 				<path class="base-line" d="
-					M 145,150 L 85,150 Q 75,150 75,140 L 75,95
-					M 145,195 L 85,195 Q 75,195 75,205 L 75,250
-					M 215,150 L 275,150 Q 285,150 285,140 L 285,95
-					M 215,195 L 275,195 Q 285,195 285,205 L 285,250
-					M 180,205 L 180,250
+					M 150,150 L 85,150 Q 75,150 75,140 L 75,95
+					M 150,195 L 85,195 Q 75,195 75,205 L 75,250
+					M 210,150 L 275,150 Q 285,150 285,140 L 285,95
+					M 210,195 L 275,195 Q 285,195 285,205 L 285,250
+					M 180,215 L 180,250
 				"/>
 
 				<!-- FLOW LINES -->
-				<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 145,150 L 85,150 Q 75,150 75,140 L 75,95"/>
-				<path id="l-bat" class="flow-line" style="stroke:#a855f7;" d="M 145,195 L 85,195 Q 75,195 75,205 L 75,250"/>
-				<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 215,150 L 275,150 Q 285,150 285,140 L 285,95"/>
-				<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 215,195 L 275,195 Q 285,195 285,205 L 285,250"/>
-				<path id="l-bu" class="flow-line" style="stroke:#00e676;" d="M 180,205 L 180,250"/>
+				<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 150,150 L 85,150 Q 75,150 75,140 L 75,95"/>
+				<path id="l-bat" class="flow-line" style="stroke:#a855f7;" d="M 150,195 L 85,195 Q 75,195 75,205 L 75,250"/>
+				<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 210,150 L 275,150 Q 285,150 285,140 L 285,95"/>
+				<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 210,195 L 275,195 Q 285,195 285,205 L 285,250"/>
+				<path id="l-bu" class="flow-line" style="stroke:#00e676;" d="M 180,215 L 180,250"/>
 
-				<circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 145,150 L 85,150 Q 75,150 75,140 L 75,95" /></circle>
+				<circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 150,150 L 85,150 Q 75,150 75,140 L 75,95" /></circle>
 				<circle id="p-bat" class="particle" style="color:#a855f7;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 145,195 L 85,195 Q 75,195 75,205 L 75,250" /></circle>
 				<circle id="p-grid" class="particle" style="color:#ef4444;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 215,150 L 275,150 Q 285,150 285,140 L 285,95" /></circle>
 				<circle id="p-home" class="particle" style="color:#00b0ff;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 215,195 L 275,195 Q 285,195 285,205 L 285,250" /></circle>
-				<circle id="p-bu" class="particle" style="color:#00e676;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 180,205 L 180,250" /></circle>
+				<circle id="p-bu" class="particle" style="color:#00e676;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 180,220 L 180,250" /></circle>
 			</svg>
 		</div>
 
