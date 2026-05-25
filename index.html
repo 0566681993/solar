@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#2D3436"> <title>Solar siêu nhân</title>
+    <meta name="theme-color" content="#FFA500"> 
+	<title>Solar siêu nhân</title>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 	<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌞</text></svg>">
     <style>
@@ -394,15 +395,27 @@
 			top: 0;
 			left: 0;
 			width: 100%;
-			height: 50px; /* Chiều cao cố định */
-			padding-top: env(safe-area-inset-top); /* Xử lý phần notch */
-			background-color: #2D3436;
+			/* Chiều cao 60px bao gồm cả phần notch */
+			height: 50px; 
+			padding-top: env(safe-area-inset-top);
+			
+			/* Màu sắc */
+			background-color: #FFA500; 
+			color: white;
+			
+			/* Căn giữa chữ */
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			z-index: 999;
+			
+			/* Font chữ */
+			font-weight: bold;
+			font-size: 18px;
+			font-family: sans-serif;
+			
+			/* Thứ tự hiển thị */
+			z-index: 1000;
 		}
-
 		/* 3. ĐẨY NỘI DUNG XUỐNG - Chìa khóa nằm ở đây */
 		.content-wrapper {
 			/* Đẩy toàn bộ nội dung xuống dưới chiều cao của header + notch */
