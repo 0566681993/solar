@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#2D3436"> <title>Solar siêu nhân</title>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <title>Solar siêu nhân</title>
 	<link rel="icon" type="image/png" href="icon.png">
     <style>
         body { background-color: #f1f5f9; margin: 0; display: flex; flex-direction: column; align-items: center; font-family: 'Inter', sans-serif;; padding-top: 20px; }
-        .wrapper { position: relative; width: 360px; height: 370px; background: #fff; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .wrapper { position: relative; width: 360px; height: 370px; background: #fff; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 10px; }
         .node { position: absolute; width: 73px; height: 73px; border: 1px solid #cbd5e1; border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #fff; z-index: 2; font-weight: bold; color: #64748b; }
         .node span { font-size: 10px; }
         .node .val { font-size: 11px; color: #0f172a; margin-top: 2px; }
@@ -17,8 +18,8 @@
 
         #node-inv { left: 144px; top: 130px; height: 75px; border: 2px solid #22c55e; color: #16a34a; }
         #node-bu  { left: 150px; top: 250px; width: 60px; height: 60px; border-top: 3px solid #00e676; }
-        #node-pv  { left: 40px;  top: 35px;  border-top: 3px solid #ffb300; }
-        #node-bat { left: 40px;  top: 250px; border-top: 3px solid #a855f7; }
+        #node-pv  { left: 38px;  top: 35px;  border-top: 3px solid #ffb300; }
+        #node-bat { left: 38px;  top: 250px; border-top: 3px solid #a855f7; }
         #node-grid{ left: 250px; top: 35px;  border-top: 3px solid #ef4444; }
         #node-home{ left: 250px; top: 250px; border-top: 3px solid #00b0ff; }
 
@@ -28,7 +29,7 @@
         .particle { fill: #ffffff; stroke: currentColor; stroke-width: 1.5; display: none; }
 
         /* Style phần bổ sung */
-        .stats-container { width: 360px; background: #fff; border-radius: 20px; padding: 20px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .stats-container { width: 360px; background: #fff; border-radius: 20px; padding: 20px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 10px; }
         .stats-title { font-size: 14px; font-weight: bold; margin-bottom: 15px; color: #334155; }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .stat-item { display: flex; align-items: center; gap: 10px; }
@@ -46,7 +47,7 @@
         .legend-val { font-weight: bold; color: #0f172a; }
 		
         /* Layout Tổng sản lượng mới */
-        .total-container { width: 360px; background: #fff; border-radius: 20px; padding: 20px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .total-container { width: 360px; background: #fff; border-radius: 20px; padding: 20px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 10px; }
         .total-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .total-item { display: flex; flex-direction: column; }
         .total-label { font-size: 10px; color: #64748b; margin-bottom: 2px; }
@@ -75,12 +76,10 @@
 		border:none;
 		}
 		.inv-img{
-			width:85px;
+			width:72px;
 			height:85px;
-			object-fit:contain;
+
 			margin-top:7px;
-			background:transparent;
-			mix-blend-mode:multiply;
 		}	
 		/* =========================
 		TAB
@@ -355,12 +354,50 @@
 
 		.login-btn:active{
 			transform:scale(0.95);
-		}		
+		}	
+		/* Import font từ Google Fonts */
+		@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
 
-}		
+		.status-header {
+		  position: fixed;
+		  top: 0;
+		  width: 100%;
+		  /* Độ cao bao gồm cả vùng an toàn của notch */
+		  padding-top: env(safe-area-inset-top); 
+		  height: 50px; /* Điều chỉnh chiều cao tùy ý */
+		  background-color: #2D3436; /* Màu dải đồng bộ */
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+		  z-index: 1000;
+		  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+		}
+
+		.user-name {
+		  font-family: 'Poppins', sans-serif;
+		  color: #FFFFFF;
+		  font-size: 18px;
+		  letter-spacing: 1px;
+		  font-weight: 600;
+		}
+
+		/* Đẩy nội dung chính xuống để không bị header đè lên */
+		body {
+		  padding-top: calc(60px + env(safe-area-inset-top));
+		}
+		/* Dùng biến để đổi màu đồng bộ dễ hơn */
+		:root {
+			--main-color: #2D3436;
+		}
+		.status-header { background-color: var(--main-color); }		
+
+	
     </style>
 </head>
 <body>
+	<header class="status-header">
+	  <div class="user-name">PHẠM ĐÌNH TÂN</div>
+	</header>
 	<div class="tabs">
 		<button class="tab-btn active" onclick="showTab('home')">
 			Biến tần
@@ -394,25 +431,25 @@
 			<svg id="svg-layer">
 				<!-- BASE LINE -->
 				<path class="base-line" d="
-					M 150,150 L 85,150 Q 75,150 75,140 L 75,95
-					M 150,195 L 85,195 Q 75,195 75,205 L 75,250
+					M 145,150 L 85,150 Q 75,150 75,140 L 75,95
+					M 145,195 L 85,195 Q 75,195 75,205 L 75,250
 					M 210,150 L 275,150 Q 285,150 285,140 L 285,95
 					M 210,195 L 275,195 Q 285,195 285,205 L 285,250
-					M 180,215 L 180,250
+					M 181,215 L 181,250
 				"/>
 
 				<!-- FLOW LINES -->
-				<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 150,150 L 85,150 Q 75,150 75,140 L 75,95"/>
-				<path id="l-bat" class="flow-line" style="stroke:#a855f7;" d="M 150,195 L 85,195 Q 75,195 75,205 L 75,250"/>
+				<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 145,150 L 85,150 Q 75,150 75,140 L 75,95"/>
+				<path id="l-bat" class="flow-line" style="stroke:#a855f7;" d="M 145,195 L 85,195 Q 75,195 75,205 L 75,250"/>
 				<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 210,150 L 275,150 Q 285,150 285,140 L 285,95"/>
 				<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 210,195 L 275,195 Q 285,195 285,205 L 285,250"/>
-				<path id="l-bu" class="flow-line" style="stroke:#00e676;" d="M 180,215 L 180,250"/>
+				<path id="l-bu" class="flow-line" style="stroke:#00e676;" d="M 181,215 L 181,250"/>
 
-				<circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 150,150 L 85,150 Q 75,150 75,140 L 75,95" /></circle>
+				<circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 145,150 L 85,150 Q 75,150 75,140 L 75,95" /></circle>
 				<circle id="p-bat" class="particle" style="color:#a855f7;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 145,195 L 85,195 Q 75,195 75,205 L 75,250" /></circle>
 				<circle id="p-grid" class="particle" style="color:#ef4444;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 215,150 L 275,150 Q 285,150 285,140 L 285,95" /></circle>
 				<circle id="p-home" class="particle" style="color:#00b0ff;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 215,195 L 275,195 Q 285,195 285,205 L 285,250" /></circle>
-				<circle id="p-bu" class="particle" style="color:#00e676;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 180,220 L 180,250" /></circle>
+				<circle id="p-bu" class="particle" style="color:#00e676;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 181,215 L 181,250" /></circle>
 			</svg>
 		</div>
 
