@@ -1310,18 +1310,19 @@ async function loadData() {
 		// % LOGIC
 		// =========================
 		const use_total = load_today + eps_today
-		const solar_percent = (pv_today-battery_changer_today)/load_today *100
+		const bat_disch = battery_changer_today*10
+		const solar_percent = (pv_today-bat_disch)/load_today *100
 		const bat_percent = (battery_dischanger_today / load_today) * 100
 		const grid_percent = (grid_buy_today / load_today) * 100
 
 		// thanh bar %
 		document.getElementById("st-use-total").innerText = formatPower2(use_total*10)
-		document.getElementById("bar-use-solar").style.width = solar_percent + "%"
+		document.getElementById("bar-use-solar").style.width = solar_percent/10 + "%"
 		document.getElementById("bar-use-bat").style.width = bat_percent + "%"
 		document.getElementById("bar-use-grid").style.width = grid_percent + "%"
 
 		// dưới thanh bar
-		document.getElementById("st-use-solar").innerText = solar_percent.toFixed(2) + "% / " + formatPower2(pv_today- battery_changer_today*10)
+		document.getElementById("st-use-solar").innerText = (solar_percent/10).toFixed(2) + "% / " + formatPower2(pv_today- battery_changer_today*10)
 		document.getElementById("st-use-bat").innerText = bat_percent.toFixed(2) + "% / " + formatPower2(battery_dischanger_today*10)
 		document.getElementById("st-use-grid").innerText = grid_percent.toFixed(2) + "% / " + formatPower2(grid_buy_today*10) 
 		// nhiệt độ ivt
