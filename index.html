@@ -1293,7 +1293,7 @@ async function loadData() {
 		//===============================
 		//  hôm nay
 		document.getElementById("st-pv").innerText = formatPower2(pv_today)
-		document.getElementById("st-peak").innerText =formatPower2(pv_peak)
+		document.getElementById("st-peak").innerText =formatPower2(pv_peak/10)
 		document.getElementById("st-grid-buy").innerText = formatPower2(grid_buy_today*10)
 		document.getElementById("st-grid-sell").innerText = formatPower2(grid_sel_today*10)
 		document.getElementById("st-bat-charge").innerText = formatPower2(battery_changer_today*10)
