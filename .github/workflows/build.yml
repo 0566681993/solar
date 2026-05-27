@@ -26,6 +26,7 @@ jobs:
     - name: Install Libraries
       run: |
         arduino-cli lib install "modbus-esp8266"
+        arduino-cli lib install "Adafruit NeoPixel"
 
     - name: Compile Firmware
       run: |
