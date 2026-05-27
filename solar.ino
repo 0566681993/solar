@@ -319,7 +319,7 @@ void checkUpdate() {
 // =====================================================
 // CONVERT
 // =====================================================
-uint32_t toS32(uint16_t h,uint16_t l) {
+int32_t toS32(uint16_t h,uint16_t l) {
 
   uint32_t v =
     ((uint32_t)h << 16) | l;
@@ -797,7 +797,6 @@ void loop() {
 
     // ================= MODBUS =================
     unsigned long modbusStart = millis();
-    uint16_t test;
 
     bool ok = readInverter();
 
