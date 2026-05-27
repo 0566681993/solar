@@ -1289,7 +1289,7 @@ async function loadData() {
 		document.getElementById("info-gid").innerText =`${grid_voltage|| 0}V / ${grid_current || 0}A`
 		document.getElementById("info-eps").innerText =`${eps_voltage|| 0}V / ${eps_current || 0}A`
 		document.getElementById("info-home").innerText =`${load_voltage|| 0}V / ${load_current || 0}A`
-		document.getElementById("info-bat").innerText =`${battery_voltage || 0}V / ${battery_current || 0}A`
+		document.getElementById("info-bat").innerText =`${battery_voltage || 0}V / ${battery_current/100.0 || 0}A`
 		//===============================
 		//  hôm nay
 		document.getElementById("st-pv").innerText = formatPower2(pv_today)
