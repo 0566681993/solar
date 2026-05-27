@@ -46,7 +46,7 @@ jobs:
         git config --global user.name "github-actions"
         git config --global user.email "actions@github.com"
 
-        git add firmware.bin
+        git add solar.bin
         git commit -m "Auto update solar.bin" || echo "No changes"
 
         git push
