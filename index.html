@@ -10,8 +10,8 @@
 	<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌞</text></svg>">
     <style>
         body { background-color: #f1f5f9; margin: 0; display: flex; flex-direction: column; align-items: center; font-family: 'Inter', sans-serif;; padding-top: 15px; }
-        .wrapper { position: relative; width: 360px; height: 350px; background: #fff; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 5px; }
-        .node { position: absolute; width: 73px; height: 73px; border: 0px solid #cbd5e1; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #fff; z-index: 2; font-weight: bold; color: #64748b; }
+        .wrapper{position:relative;width:360px;height:350px;background:radial-gradient(circle at 20% 22%,rgba(255,255,255,0.28) 0 55px,transparent 70px),radial-gradient(circle at 75% 18%,rgba(255,255,255,0.22) 0 70px,transparent 85px),radial-gradient(circle at 55% 40%,rgba(255,255,255,0.18) 0 60px,transparent 75px),linear-gradient(to bottom,rgba(80,180,255,0.22),rgba(180,230,255,0.12));border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.18);overflow:hidden;}
+        .node{position:absolute;width:73px;height:73px;border:0px solid rgba(255,255,255,0.18);border-radius:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:transparent;z-index:2;font-weight:bold;color:#ffffff;box-shadow:none;}
         .node span { font-size: 10px; }
         .node .val { font-size: 11px; color: #0f172a; margin-top: 2px; }
 		body{padding-bottom:60px;}
@@ -26,10 +26,28 @@
         svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .base-line { stroke: #e2e8f0; stroke-width: 0.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
         .flow-line { stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; display: none; }
-        .particle { fill: #ffffff; stroke: currentColor; stroke-width: 2.5; display: none; }
+
+@keyframes flowMove{
+	from{
+		stroke-dashoffset:0;
+	}
+	to{
+		stroke-dashoffset:-18;
+	}
+}
+        .particle{
+	fill:#fff;
+	stroke:currentColor;
+	stroke-width:2.5;
+	display:none;
+
+	filter:
+		drop-shadow(0 0 2px currentColor)
+		drop-shadow(0 0 6px currentColor);
+}
 
         /* Style phần bổ sung */
-        .stats-container { width: 360px; background: #fff; border-radius: 20px; padding: 20px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom:5px; }
+        .stats-container{width:360px;background:radial-gradient(circle at 20% 20%,rgba(255,255,255,0.25) 0 55px,transparent 70px),radial-gradient(circle at 80% 18%,rgba(255,255,255,0.18) 0 70px,transparent 85px),linear-gradient(to bottom,rgba(90,180,255,0.18),rgba(180,230,255,0.10));border-radius:20px;padding:20px;box-sizing:border-box;box-shadow:0 4px 15px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.18);}
         .stats-title { font-size: 14px; font-weight: bold; margin-bottom: 15px; color: #334155; }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px;  }
         .stat-item { display: flex; align-items: center; gap: 10px; }
@@ -40,12 +58,12 @@
 		#today_{color:#ff9800;font-size:15px;font-weight:700;}
 
         /* Layout Tổng sản lượng mới */
-        .total-container { width: 360px; background: #fff; border-radius: 20px; padding: 20px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 5px; }
+		.total-container{width:360px;background:radial-gradient(circle at 25% 25%,rgba(255,255,255,0.22) 0 50px,transparent 65px),radial-gradient(circle at 70% 15%,rgba(255,255,255,0.16) 0 65px,transparent 80px),linear-gradient(to bottom,rgba(80,170,255,0.16),rgba(190,235,255,0.08));border-radius:20px;padding:20px;box-sizing:border-box;box-shadow:0 4px 15px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.18);}
         .total-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .total-item { display: flex; flex-direction: column; }
         .total-label { font-size: 10px; color: #64748b; margin-bottom: 2px; }
         .total-value { font-size: 13px; font-weight: bold; color: #0f172a; }
-		body, div, span {-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;text-rendering: optimizeLegibility;
+		body, div, span {-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;text-rendering: optimizeLegibility;}
 		/* model máy */
 		#v-inv{
 		position: absolute;
@@ -116,15 +134,7 @@
 			display:block;
 		}
 		
-		.bms-card{
-			width:360px;
-			background:#fff;
-			border-radius:20px;
-			padding:18px;
-			box-sizing:border-box;
-			margin-bottom:15px;
-			box-shadow:0 4px 15px rgba(0,0,0,0.08);
-		}
+		.bms-card{width:360px;background:radial-gradient(circle at 18% 22%,rgba(255,255,255,0.24) 0 55px,transparent 70px),radial-gradient(circle at 78% 20%,rgba(255,255,255,0.18) 0 70px,transparent 85px),linear-gradient(to bottom,rgba(70,160,255,0.18),rgba(170,225,255,0.10));border-radius:20px;padding:18px;box-sizing:border-box;margin-bottom:15px;box-shadow:0 4px 15px rgba(0,0,0,0.06);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.18);}
 
 		.bms-top{
 			display:flex;
