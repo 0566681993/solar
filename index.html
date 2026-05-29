@@ -447,22 +447,22 @@
 				<svg id="svg-layer">
 					<!-- BASE LINE -->
 					<path class="base-line" d="
-						M 140,150 L 85,150 Q 75,150 75,140 L 75,102
-						M 140,195 L 85,195 Q 75,195 75,205 L 75,250
+						M 139,150 L 85,150 Q 75,150 75,140 L 75,102
+						M 139,195 L 85,195 Q 75,195 75,205 L 75,250
 						M 222,150 L 275,150 Q 285,150 285,140 L 285,102
 						M 222,195 L 275,195 Q 285,195 285,205 L 285,250
 						M 181,212 L 181,250
 					"/>
 
 					<!-- FLOW LINES -->
-					<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 140,150 L 85,150 Q 75,150 75,140 L 75,102"/>
-					<path id="l-bat" class="flow-line" style="stroke:#00e676;" d="M 140,195 L 85,195 Q 75,195 75,205 L 75,250"/>
+					<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 139,150 L 85,150 Q 75,150 75,140 L 75,102"/>
+					<path id="l-bat" class="flow-line" style="stroke:#00e676;" d="M 139,195 L 85,195 Q 75,195 75,205 L 75,250"/>
 					<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 222,150 L 275,150 Q 285,150 285,140 L 285,102"/>
 					<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 222,195 L 275,195 Q 285,195 285,205 L 285,250"/>
 					<path id="l-bu" class="flow-line" style="stroke:#a855f7;" d="M 181,212 L 181,250"/>
 
-					<circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 140,150 L 85,150 Q 75,150 75,140 L 75,102" /></circle>
-					<circle id="p-bat" class="particle" style="color:#00e676;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 140,195 L 85,195 Q 75,195 75,205 L 75,250" /></circle>
+					<circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 139,150 L 85,150 Q 75,150 75,140 L 75,102" /></circle>
+					<circle id="p-bat" class="particle" style="color:#00e676;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 139,195 L 85,195 Q 75,195 75,205 L 75,250" /></circle>
 					<circle id="p-grid" class="particle" style="color:#ef4444;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 222,150 L 275,150 Q 285,150 285,140 L 285,102" /></circle>
 					<circle id="p-home" class="particle" style="color:#00b0ff;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 222,195 L 275,195 Q 285,195 285,205 L 285,250" /></circle>
 					<circle id="p-bu" class="particle" style="color:#a855f7;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 181,212 L 181,250" /></circle>
@@ -1320,7 +1320,7 @@ async function loadData() {
 
 // START
 loadData()
-setInterval(loadData, 2000)
+setInterval(loadData, 1000)
 
 </script>
 </body>
