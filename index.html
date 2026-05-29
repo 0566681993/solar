@@ -14,9 +14,9 @@
         .node{position:absolute;width:73px;height:73px;border:0px solid rgba(255,255,255,0.18);border-radius:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:transparent;z-index:2;font-weight:bold;color:#ffffff;box-shadow:none;}
         .node span { font-size: 10px; }
         .node .val { font-size: 11px; color: #0f172a; margin-top: 2px; }
-		body{padding-bottom:60px;}
 
-        #node-inv { left: 144px; top: 130px; height: 75px; border: 2px solid #22c55e; color: #16a34a; }
+
+        #node-inv{left:139.5px;top:130px;width:78px;height:78px;border-radius:15px;background:linear-gradient(145deg,rgba(255,255,255,0.18),rgba(255,255,255,0.04));border:2px solid rgba(255,255,255,0.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 6px 18px rgba(0,0,0,0.15),inset 0 1px 0 rgba(255,255,255,0.55),inset 0 -2px 6px rgba(0,0,0,0.08);display:flex;flex-direction:column;align-items:center;justify-content:center;position:absolute;overflow:hidden;}
         #node-bu  { left: 150px; top: 250px; width: 60px; height: 60px; border-top: 3px solid #a855f7; }
         #node-bat { left: 38px;  top: 250px; border-top: 3px solid #00e676; }
         #node-home{ left: 248px; top: 250px; border-top: 3px solid #00b0ff; }
@@ -24,7 +24,7 @@
 		#node-grid{left:250px;top:25px;border-bottom:3px solid #ef4444;}
 		
         svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        .base-line { stroke: #e2e8f0; stroke-width: 0.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        .base-line { stroke: #808080; stroke-width: 0.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
         .flow-line { stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; display: none; }
 
 @keyframes flowMove{
@@ -80,18 +80,8 @@
 		backdrop-filter: blur(4px);
 		}
 		
-
-		#node-inv{
-		background:transparent;
-		box-shadow:none;
-		border:none;
-		}
-		.inv-img{
-			width:72px;
-			height:85px;
-
-			margin-top:7px;
-		}	
+		.inv-header{position:absolute;top:0;left:0;width:100%;height:14px;background:linear-gradient(to bottom,rgba(255,255,255,0.55),rgba(255,255,255,0.05));border-bottom:1px solid rgba(255,255,255,0.25);}
+		.inv-brand{position:absolute;bottom:12px;font-size:11px;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,0.9);}.inv-led{position:absolute;top:18px;right:10px;width:7px;height:7px;border-radius:999px;background:#22c55e;box-shadow:0 0 5px #22c55e,0 0 10px #22c55e;animation:blink 1.4s infinite;}@keyframes blink{0%{opacity:1;}50%{opacity:.35;}100%{opacity:1;}}	
 		/* =========================
 		TAB
 		========================= */
@@ -370,12 +360,7 @@
 		  font-weight: 600;
 		}
 
-		/* 1. Thiết lập cơ bản */
-		body {
-			margin: 0;
-			padding: 0;
-			background-color: #f4f4f4; /* Màu nền trang */
-		}
+
 
 		/* 2. Thanh header cố định */
 		.status-header {
@@ -406,11 +391,14 @@
 		}
 		/* 3. ĐẨY NỘI DUNG XUỐNG - Chìa khóa nằm ở đây */
 		.content-wrapper {
-			/* Đẩy toàn bộ nội dung xuống dưới chiều cao của header + notch */
-			padding-top: calc(40px + env(safe-area-inset-top));
-			width: 100%;
-			box-sizing: border-box; /* Quan trọng để padding không làm vỡ layout */
-		}
+    padding-top: calc(40px + env(safe-area-inset-top));
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 		.user-name {
 			color: #fff;
@@ -425,604 +413,600 @@
 	<header class="status-header">
 	  <div class="user-name">🌤️Phạm Đình Tân🌤️</div>
 	</header>
-
-	<main class="content-wrapper">
-	  <div class="container">    </div>
-	</main>
 	<div class="tabs">
-		<button class="tab-btn active" onclick="showTab('home')">
+		<button class="tab-btn active" onclick="showTab('home',this)">
 			Biến tần
 		</button>
-		<button class="tab-btn bms" onclick="showTab('bms')">
+		<button class="tab-btn bms" onclick="showTab('bms',this)">
 			BMS JK
 		</button>
 	</div>
-	<!-- PAGE inverter -->
-	
-	<div id="home" class="page active">
-		<div class="wrapper">
-			<div id="v-inv">0 °C</div>
-			<div class="node" id="node-pv">🌞<div class="val" id="v-pv">0W</div>
-			<div style="font-size:9px;color:#94a3b8" id="info-pv">0V | 0A
-			</div></div>
-			<div class="node" id="node-bat">🔋<div class="val" id="v-bat">0W</div>
-			<div style="font-size:9px;color:#94a3b8" id="info-bat">0V | 0A
-			</div></div>
-			<div class="node" id="node-grid">⚡<div class="val" id="v-grid">0W</div>
-			<div style="font-size:9px;color:#94a3b8" id="info-gid">0V | 0A
-			</div></div>
-			<div class="node" id="node-home">🏠<div class="val" id="v-home">0W</div>
-			<div style="font-size:9px;color:#94a3b8" id="info-home">0V | 0A
-			</div></div>
-			<div class="node" id="node-inv"><img src="inv.png" class="inv-img"></div>
-			<div class="node" id="node-bu">💡<div class="val" id="v-bu">0W</div>
-			<div style="font-size:9px;color:#94a3b8" id="info-eps">0V | 0A
-			</div></div>
+	<main class="content-wrapper">
+		<!-- PAGE inverter -->
+		<div id="home" class="page active">
+			<div class="wrapper">
+				<div id="v-inv">0 °C</div>
+				<div class="node" id="node-pv">🌞<div class="val" id="v-pv">0W</div>
+				<div style="font-size:9px;color:#94a3b8" id="info-pv">0V | 0A
+				</div></div>
+				<div class="node" id="node-bat">🔋<div class="val" id="v-bat">0W</div>
+				<div style="font-size:9px;color:#94a3b8" id="info-bat">0V | 0A
+				</div></div>
+				<div class="node" id="node-grid">⚡<div class="val" id="v-grid">0W</div>
+				<div style="font-size:9px;color:#94a3b8" id="info-grid">0V | 0A
+				</div></div>
+				<div class="node" id="node-home">🏠<div class="val" id="v-home">0W</div>
+				<div style="font-size:9px;color:#94a3b8" id="info-home">0V | 0A
+				</div></div>
+				<div class="node" id="node-inv"><div class="inv-header"></div><div class="inv-screen">🤖</div><div class="inv-brand">SENERGY</div><div class="inv-led"></div></div>
+				<div class="node" id="node-bu">💡<div class="val" id="v-bu">0W</div>
+				<div style="font-size:9px;color:#94a3b8" id="info-eps">0V | 0A
+				</div></div>
 
-			<svg id="svg-layer">
-				<!-- BASE LINE -->
-				<path class="base-line" d="
-					M 145,150 L 85,150 Q 75,150 75,140 L 75,95
-					M 145,195 L 85,195 Q 75,195 75,205 L 75,250
-					M 210,150 L 275,150 Q 285,150 285,140 L 285,95
-					M 210,195 L 275,195 Q 285,195 285,205 L 285,250
-					M 181,215 L 181,250
-				"/>
+				<svg id="svg-layer">
+					<!-- BASE LINE -->
+					<path class="base-line" d="
+						M 140,150 L 85,150 Q 75,150 75,140 L 75,102
+						M 140,195 L 85,195 Q 75,195 75,205 L 75,250
+						M 222,150 L 275,150 Q 285,150 285,140 L 285,102
+						M 222,195 L 275,195 Q 285,195 285,205 L 285,250
+						M 181,212 L 181,250
+					"/>
 
-				<!-- FLOW LINES -->
-				<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 145,150 L 85,150 Q 75,150 75,140 L 75,95"/>
-				<path id="l-bat" class="flow-line" style="stroke:#00e676;" d="M 145,195 L 85,195 Q 75,195 75,205 L 75,250"/>
-				<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 210,150 L 275,150 Q 285,150 285,140 L 285,95"/>
-				<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 210,195 L 275,195 Q 285,195 285,205 L 285,250"/>
-				<path id="l-bu" class="flow-line" style="stroke:#a855f7;" d="M 181,215 L 181,250"/>
+					<!-- FLOW LINES -->
+					<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 140,150 L 85,150 Q 75,150 75,140 L 75,102"/>
+					<path id="l-bat" class="flow-line" style="stroke:#00e676;" d="M 140,195 L 85,195 Q 75,195 75,205 L 75,250"/>
+					<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 222,150 L 275,150 Q 285,150 285,140 L 285,102"/>
+					<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 222,195 L 275,195 Q 285,195 285,205 L 285,250"/>
+					<path id="l-bu" class="flow-line" style="stroke:#a855f7;" d="M 181,212 L 181,250"/>
 
-				<circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 145,150 L 85,150 Q 75,150 75,140 L 75,95" /></circle>
-				<circle id="p-bat" class="particle" style="color:#00e676;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 145,195 L 85,195 Q 75,195 75,205 L 75,250" /></circle>
-				<circle id="p-grid" class="particle" style="color:#ef4444;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 215,150 L 275,150 Q 285,150 285,140 L 285,95" /></circle>
-				<circle id="p-home" class="particle" style="color:#00b0ff;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 215,195 L 275,195 Q 285,195 285,205 L 285,250" /></circle>
-				<circle id="p-bu" class="particle" style="color:#a855f7;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 181,215 L 181,250" /></circle>
-			</svg>
-		</div>
-
-		<div class="stats-container">
-				<div class="title-row">
-				<div class="stats-title">Hôm nay</div>
-				<div class="stat-val" id="today_">0 kWh</div>
+					<circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 140,150 L 85,150 Q 75,150 75,140 L 75,102" /></circle>
+					<circle id="p-bat" class="particle" style="color:#00e676;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 140,195 L 85,195 Q 75,195 75,205 L 75,250" /></circle>
+					<circle id="p-grid" class="particle" style="color:#ef4444;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 222,150 L 275,150 Q 285,150 285,140 L 285,102" /></circle>
+					<circle id="p-home" class="particle" style="color:#00b0ff;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 222,195 L 275,195 Q 285,195 285,205 L 285,250" /></circle>
+					<circle id="p-bu" class="particle" style="color:#a855f7;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 181,212 L 181,250" /></circle>
+				</svg>
 			</div>
 
-			<div class="stats-grid">
-				<div class="stat-item">🌞<div><div class="stat-text">Tạo ra</div><div class="stat-val" id="st-pv">0 kWh</div></div></div>
-				<div class="stat-item">🛒<div><div class="stat-text" id="grid-buy-label">Lấy lưới</div><div class="stat-val" id="st-grid-buy">0 kWh</div></div></div>
-				<div class="stat-item">💪<div><div class="stat-text">Công suất đỉnh</div><div class="stat-val" id="st-peak">0 kWh</div></div></div>
-				<div class="stat-item">💸<div><div class="stat-text">Đẩy lưới</div><div class="stat-val" id="st-grid-sell">0 kWh</div></div></div>
-				<div class="stat-item">🔋<div><div class="stat-text">Nạp pin</div><div class="stat-val" id="st-bat-charge">0 kWh</div></div></div>
-				<div class="stat-item">🪫<div><div class="stat-text">Xả pin</div><div class="stat-val" id="st-bat-discharge">0 kWh</div></div></div>
-			</div>
-
-
-
-		</div>
-
-		<div class="total-container">
-			<div class="stats-title">Tổng sản lượng</div>
-			<div class="total-grid">
-				<div class="total-item"><div class="total-label">Sản lượng PV</div><span id="total_pv">0 kWh</span></div>
-				<div class="total-item"><div class="total-label">Tiêu thụ</div><span id="total_sd">0 kWh</span></div>
-				<div class="total-item"><div class="total-label">Nạp pin</div><span id="total_bat">0 kWh</span></div>
-				<div class="total-item"><div class="total-label">Xả pin</div><span id="total_bat2">0 kWh</span></div>
-			</div>
-		</div>
-		<!-- SETTING ivt -->
-		<div class="ivtsetting-card">
-
-			<div class="ivtsetting-title">
-				<span>Cài đặt biến tần</span><button class="login-btn" onclick="openLogin()">🔒</button></div>
-			
-			<div class="ivtsetting-row">
-				<div class="ivtsetting-name">
-					Chế độ hoạt động
-				</div>
-				<input
-					class="ivtsetting-input"
-					value="0.00"
-				>
-				<button class="ivtsetting-btn">
-					OK
-				</button>				
-			</div>
-			<div class="ivtsetting-row">
-				<div class="ivtsetting-name">
-					Loại pin
-				</div>
-				<input
-					class="ivtsetting-input"
-					value="0.00"
-				>
-				<button class="ivtsetting-btn">
-					OK
-				</button>				
-			</div>
-			<div class="ivtsetting-row">
-				<div class="ivtsetting-name">
-					Điện áp dừng sạc.(V)
-				</div>
-				<input
-					class="ivtsetting-input"
-					value="0.00"
-				>
-				<button class="ivtsetting-btn">
-					OK
-				</button>				
-			</div>
-			<div class="ivtsetting-row">
-				<div class="ivtsetting-name">
-					Điện áp dừng xả.(V)
-				</div>
-				<input
-					class="ivtsetting-input"
-					value="0.00"
-				>
-				<button class="ivtsetting-btn">
-					OK
-				</button>				
-			</div>			
-			<div class="ivtsetting-row">
-				<div class="ivtsetting-name">
-					Sạc từ lưới
-				</div>
-				<input
-					class="ivtsetting-input"
-					value="0.00"
-				>
-				<button class="ivtsetting-btn">
-					OK
-				</button>				
-			</div>			
-			<div class="ivtsetting-row">
-				<div class="ivtsetting-name">
-					Công suất sạc từ lưới.(W)
+			<div class="stats-container">
+					<div class="title-row">
+					<div class="stats-title">Hôm nay</div>
+					<div class="stat-val" id="today_">0 kWh</div>
 				</div>
 
-				<input
-					class="ivtsetting-input"
-					value="0.00"
-				>
-				<button class="ivtsetting-btn">
-					OK
-				</button>
-			</div>
-
-			<div class="ivtsetting-row">
-				<div class="ivtsetting-name">
-					Phần trăm dừng sạc từ lưới.(%)
-				</div>
-				<input
-					class="ivtsetting-input"
-					value="0.00"
-				>
-				<button class="ivtsetting-btn">
-					OK
-				</button>				
-			</div>
-			<div class="ivtsetting-row">
-				<div class="ivtsetting-name">
-					Công suất sạc từ pv. (W)
-				</div>
-				<input
-					class="ivtsetting-input"
-					value="0.00"
-				>
-				<button class="ivtsetting-btn">
-					OK
-				</button>				
-			</div>			
-			<div class="ivtsetting-row">
-				<div class="ivtsetting-name">
-					Phần trăm dừng sạc từ pv.(%)
+				<div class="stats-grid">
+					<div class="stat-item">🌞<div><div class="stat-text">Tạo ra</div><div class="stat-val" id="st-pv">0 kWh</div></div></div>
+					<div class="stat-item">🛒<div><div class="stat-text" id="grid-buy-label">Lấy lưới</div><div class="stat-val" id="st-grid-buy">0 kWh</div></div></div>
+					<div class="stat-item">💪<div><div class="stat-text">Công suất đỉnh</div><div class="stat-val" id="st-peak">0 kWh</div></div></div>
+					<div class="stat-item">💸<div><div class="stat-text">Đẩy lưới</div><div class="stat-val" id="st-grid-sell">0 kWh</div></div></div>
+					<div class="stat-item">🔋<div><div class="stat-text">Nạp pin</div><div class="stat-val" id="st-bat-charge">0 kWh</div></div></div>
+					<div class="stat-item">🪫<div><div class="stat-text">Xả pin</div><div class="stat-val" id="st-bat-discharge">0 kWh</div></div></div>
 				</div>
 
-				<input
-					class="ivtsetting-input"
-					value="0.00"
-				>
-				<button class="ivtsetting-btn">
-					OK
-				</button>
-			</div>
 
-			<div class="ivtsetting-row">
-				<div class="ivtsetting-name">
-					Công suất xả.(W)
-				</div>
-				<input
-					class="ivtsetting-input"
-					value="0.00"
-				>
-				<button class="ivtsetting-btn">
-					OK
-				</button>				
-			</div>
-			<div class="ivtsetting-row">
-				<div class="ivtsetting-name">
-					Phần trăn dừng xả(%)
-				</div>
-
-				<input
-					class="ivtsetting-input"
-					value="0.00"
-				>
-				<button class="ivtsetting-btn">
-					OK
-				</button>
-			</div>
-			
-			<div class="ivtsetting-row">
-				<div class="ivtsetting-name">
-					Dòng xả.(A)
-				</div>
-				<input
-					class="ivtsetting-input"
-					value="0.00"
-				>
-				<button class="ivtsetting-btn">
-					OK
-				</button>				
-			</div>
-			<div class="ivtsetting-row">
-				<div class="ivtsetting-name">
-					Dòng sạc(A)
-				</div>
-
-				<input
-					class="ivtsetting-input"
-					value="0.00"
-				>
-				<button class="ivtsetting-btn">
-					OK
-				</button>
-			</div>	
-		</div>	
-		
-	</div>
-	<!-- PAGE CHART -->
-	<div id="bms" class="page">
-
-		<!-- CARD TỔNG -->
-		<div class="bms-card">
-
-			<div class="bms-top">
-				<div class="bms-status">Sạc: <span>On</span></div>
-				<div class="bms-status">Xả: <span>On</span></div>
-				<div class="bms-status">Cân bằng: <span>On</span></div>
-			</div>
-
-			<div class="bms-main">
-
-				<div class="bms-big">
-					<div class="bms-value" id="bms-voltage">29.07V</div>
-					<div class="bms-label">Điện áp</div>
-				</div>
-
-				<div class="bms-big">
-					<div class="bms-value" id="bms-current">0.0A</div>
-					<div class="bms-label">Dòng</div>
-				</div>
 
 			</div>
 
-			<!-- INFO -->
-			<div class="bms-grid">
-
-				<div class="bms-item">
-					<span>Công suất</span>
-					<b id="bms-power">0W</b>
+			<div class="total-container">
+				<div class="stats-title">Tổng sản lượng</div>
+				<div class="total-grid">
+					<div class="total-item"><div class="total-label">Sản lượng PV</div><span id="total_pv">0 kWh</span></div>
+					<div class="total-item"><div class="total-label">Tiêu thụ</div><span id="total_sd">0 kWh</span></div>
+					<div class="total-item"><div class="total-label">Nạp pin</div><span id="total_bat">0 kWh</span></div>
+					<div class="total-item"><div class="total-label">Xả pin</div><span id="total_bat2">0 kWh</span></div>
 				</div>
-
-				<div class="bms-item">
-					<span>Dung lượng</span>
-					<b id="bms-cap">10Ah</b>
-				</div>
-
-				<div class="bms-item">
-					<span>Phần trăm</span>
-					<b id="bms-soc">96%</b>
-				</div>
-
-				<div class="bms-item">
-					<span>Chu kỳ sạc</span>
-					<b id="bms-cycle">0</b>
-				</div>
-
-				<div class="bms-item">
-					<span>Nhiệt độ</span>
-					<b id="bms-mos">32°C</b>
-				</div>
-
-				<div class="bms-item">
-					<span>Chênh lệch cell</span>
-					<b id="bms-delta">0.027V</b>
-				</div>
-
 			</div>
+			<!-- SETTING ivt -->
+			<div class="ivtsetting-card">
 
-		</div>
+				<div class="ivtsetting-title">
+					<span>Cài đặt biến tần</span><button class="login-btn" onclick="openLogin()">🔒</button></div>
+				
+				<div class="ivtsetting-row">
+					<div class="ivtsetting-name">
+						Chế độ hoạt động
+					</div>
+					<input
+						class="ivtsetting-input"
+						value="0.00"
+					>
+					<button class="ivtsetting-btn">
+						OK
+					</button>				
+				</div>
+				<div class="ivtsetting-row">
+					<div class="ivtsetting-name">
+						Loại pin
+					</div>
+					<input
+						class="ivtsetting-input"
+						value="0.00"
+					>
+					<button class="ivtsetting-btn">
+						OK
+					</button>				
+				</div>
+				<div class="ivtsetting-row">
+					<div class="ivtsetting-name">
+						Điện áp dừng sạc.(V)
+					</div>
+					<input
+						class="ivtsetting-input"
+						value="0.00"
+					>
+					<button class="ivtsetting-btn">
+						OK
+					</button>				
+				</div>
+				<div class="ivtsetting-row">
+					<div class="ivtsetting-name">
+						Điện áp dừng xả.(V)
+					</div>
+					<input
+						class="ivtsetting-input"
+						value="0.00"
+					>
+					<button class="ivtsetting-btn">
+						OK
+					</button>				
+				</div>			
+				<div class="ivtsetting-row">
+					<div class="ivtsetting-name">
+						Sạc từ lưới
+					</div>
+					<input
+						class="ivtsetting-input"
+						value="0.00"
+					>
+					<button class="ivtsetting-btn">
+						OK
+					</button>				
+				</div>			
+				<div class="ivtsetting-row">
+					<div class="ivtsetting-name">
+						Công suất sạc từ lưới.(W)
+					</div>
 
-		<!-- CELL VOLTAGE -->
-		<div class="bms-card">
-
-			<div class="stats-title">
-				Điện áp cell
-			</div>
-
-			<div class="cell-grid">
-
-				<div class="cell">
-					<span>01</span>
-					<b>4.154V</b>
+					<input
+						class="ivtsetting-input"
+						value="0.00"
+					>
+					<button class="ivtsetting-btn">
+						OK
+					</button>
 				</div>
 
-				<div class="cell">
-					<span>02</span>
-					<b>4.154V</b>
+				<div class="ivtsetting-row">
+					<div class="ivtsetting-name">
+						Phần trăm dừng sạc từ lưới.(%)
+					</div>
+					<input
+						class="ivtsetting-input"
+						value="0.00"
+					>
+					<button class="ivtsetting-btn">
+						OK
+					</button>				
+				</div>
+				<div class="ivtsetting-row">
+					<div class="ivtsetting-name">
+						Công suất sạc từ pv. (W)
+					</div>
+					<input
+						class="ivtsetting-input"
+						value="0.00"
+					>
+					<button class="ivtsetting-btn">
+						OK
+					</button>				
+				</div>			
+				<div class="ivtsetting-row">
+					<div class="ivtsetting-name">
+						Phần trăm dừng sạc từ pv.(%)
+					</div>
+
+					<input
+						class="ivtsetting-input"
+						value="0.00"
+					>
+					<button class="ivtsetting-btn">
+						OK
+					</button>
 				</div>
 
-				<div class="cell">
-					<span>03</span>
-					<b>4.155V</b>
+				<div class="ivtsetting-row">
+					<div class="ivtsetting-name">
+						Công suất xả.(W)
+					</div>
+					<input
+						class="ivtsetting-input"
+						value="0.00"
+					>
+					<button class="ivtsetting-btn">
+						OK
+					</button>				
 				</div>
+				<div class="ivtsetting-row">
+					<div class="ivtsetting-name">
+						Phần trăn dừng xả(%)
+					</div>
 
-				<div class="cell">
-					<span>04</span>
-					<b>4.147V</b>
+					<input
+						class="ivtsetting-input"
+						value="0.00"
+					>
+					<button class="ivtsetting-btn">
+						OK
+					</button>
 				</div>
+				
+				<div class="ivtsetting-row">
+					<div class="ivtsetting-name">
+						Dòng xả.(A)
+					</div>
+					<input
+						class="ivtsetting-input"
+						value="0.00"
+					>
+					<button class="ivtsetting-btn">
+						OK
+					</button>				
+				</div>
+				<div class="ivtsetting-row">
+					<div class="ivtsetting-name">
+						Dòng sạc(A)
+					</div>
 
-				<div class="cell">
-					<span>05</span>
-					<b>4.154V</b>
-				</div>
-
-				<div class="cell">
-					<span>06</span>
-					<b>4.148V</b>
-				</div>
-
-				<div class="cell">
-					<span>07</span>
-					<b>4.156V</b>
-				</div>
-				<div class="cell">
-					<span>08</span>
-					<b>4.154V</b>
-				</div>
-
-				<div class="cell">
-					<span>09</span>
-					<b>4.154V</b>
-				</div>
-
-				<div class="cell">
-					<span>10</span>
-					<b>4.155V</b>
-				</div>
-
-				<div class="cell">
-					<span>11</span>
-					<b>4.147V</b>
-				</div>
-
-				<div class="cell">
-					<span>12</span>
-					<b>4.154V</b>
-				</div>
-
-				<div class="cell">
-					<span>13</span>
-					<b>4.148V</b>
-				</div>
-
-				<div class="cell">
-					<span>14</span>
-					<b>4.156V</b>
-				</div>				
-				<div class="cell">
-					<span>15</span>
-					<b>4.148V</b>
-				</div>
-
-				<div class="cell">
-					<span>16</span>
-					<b>4.156V</b>
+					<input
+						class="ivtsetting-input"
+						value="0.00"
+					>
+					<button class="ivtsetting-btn">
+						OK
+					</button>
 				</div>	
-			</div>
-
-		</div>
-		<!-- SETTING BMS -->
-		<div class="setting-card">
-
-			<div class="setting-title">
-				Cài đặt BMS
-			</div>
-			<div class="setting-row">
-				<div class="setting-name">
-					Cell Count
-				</div>
-				<input
-					class="setting-input"
-					value="0.00"
-				>
-				<button class="setting-btn">
-					OK
-				</button>				
-			</div>
-			<div class="setting-row">
-				<div class="setting-name">
-					Battery Capacity(Ah)
-				</div>
-				<input
-					class="setting-input"
-					value="0.00"
-				>
-				<button class="setting-btn">
-					OK
-				</button>				
-			</div>
-			<div class="setting-row">
-				<div class="setting-name">
-					Balance Trig. Volt.(V)
-				</div>
-				<input
-					class="setting-input"
-					value="0.00"
-				>
-				<button class="setting-btn">
-					OK
-				</button>				
-			</div>			
-			<div class="setting-row">
-				<div class="setting-name">
-					Start balance Volt.(V)
-				</div>
-
-				<input
-					class="setting-input"
-					value="0.00"
-				>
-				<button class="setting-btn">
-					OK
-				</button>
-			</div>
-
-			<div class="setting-row">
-				<div class="setting-name">
-					Max Blance Cur.(A)
-				</div>
-				<input
-					class="setting-input"
-					value="0.00"
-				>
-				<button class="setting-btn">
-					OK
-				</button>				
-			</div>
-			<div class="setting-row">
-				<div class="setting-name">
-					Cell OVP.(V)
-				</div>
-				<input
-					class="setting-input"
-					value="0.00"
-				>
-				<button class="setting-btn">
-					OK
-				</button>				
-			</div>			
-			<div class="setting-row">
-				<div class="setting-name">
-					Vol.Cell RCV.(V)
-				</div>
-
-				<input
-					class="setting-input"
-					value="0.00"
-				>
-				<button class="setting-btn">
-					OK
-				</button>
-			</div>
-
-			<div class="setting-row">
-				<div class="setting-name">
-					SOC 100% Volt.(V)
-				</div>
-				<input
-					class="setting-input"
-					value="0.00"
-				>
-				<button class="setting-btn">
-					OK
-				</button>				
-			</div>
-			<div class="setting-row">
-				<div class="setting-name">
-					Cell OVPR(V)
-				</div>
-
-				<input
-					class="setting-input"
-					value="0.00"
-				>
-				<button class="setting-btn">
-					OK
-				</button>
-			</div>
-
-			<div class="setting-row">
-				<div class="setting-name">
-					Cell UVPR(V)
-				</div>
-				<input
-					class="setting-input"
-					value="0.00"
-				>
-				<button class="setting-btn">
-					OK
-				</button>				
-			</div>			
-			<div class="setting-row">
-				<div class="setting-name">
-					SOC 0% Volt.(V)
-				</div>
-				<input
-					class="setting-input"
-					value="0.00"
-				>
-				<button class="setting-btn">
-					OK
-				</button>				
-			</div>
-			<div class="setting-row">
-				<div class="setting-name">
-					Cell UVP(V)
-				</div>
-
-				<input
-					class="setting-input"
-					value="0.00"
-				>
-				<button class="setting-btn">
-					OK
-				</button>
-			</div>
-
-			<div class="setting-row">
-				<div class="setting-name">
-					Power Off Vol.(V)
-				</div>
-				<input
-					class="setting-input"
-					value="0.00"
-				>
-				<button class="setting-btn">
-					OK
-				</button>				
 			</div>	
-
-			<div class="setting-row">
-				<div class="setting-name">
-					Vol.Smart Sleep.(V)
-				</div>
-				<input
-					class="setting-input"
-					value="0.00"
-				>
-				<button class="setting-btn">
-					OK
-				</button>				
-			</div>			
+			
 		</div>
+		<!-- PAGE CHART -->
+		<div id="bms" class="page">
 
-	</div>
+			<!-- CARD TỔNG -->
+			<div class="bms-card">
 
+				<div class="bms-top">
+					<div class="bms-status">Sạc: <span>On</span></div>
+					<div class="bms-status">Xả: <span>On</span></div>
+					<div class="bms-status">Cân bằng: <span>On</span></div>
+				</div>
+
+				<div class="bms-main">
+
+					<div class="bms-big">
+						<div class="bms-value" id="bms-voltage">29.07V</div>
+						<div class="bms-label">Điện áp</div>
+					</div>
+
+					<div class="bms-big">
+						<div class="bms-value" id="bms-current">0.0A</div>
+						<div class="bms-label">Dòng</div>
+					</div>
+
+				</div>
+
+				<!-- INFO -->
+				<div class="bms-grid">
+
+					<div class="bms-item">
+						<span>Công suất</span>
+						<b id="bms-power">0W</b>
+					</div>
+
+					<div class="bms-item">
+						<span>Dung lượng</span>
+						<b id="bms-cap">10Ah</b>
+					</div>
+
+					<div class="bms-item">
+						<span>Phần trăm</span>
+						<b id="bms-soc">96%</b>
+					</div>
+
+					<div class="bms-item">
+						<span>Chu kỳ sạc</span>
+						<b id="bms-cycle">0</b>
+					</div>
+
+					<div class="bms-item">
+						<span>Nhiệt độ</span>
+						<b id="bms-mos">32°C</b>
+					</div>
+
+					<div class="bms-item">
+						<span>Chênh lệch cell</span>
+						<b id="bms-delta">0.027V</b>
+					</div>
+
+				</div>
+
+			</div>
+
+			<!-- CELL VOLTAGE -->
+			<div class="bms-card">
+
+				<div class="stats-title">
+					Điện áp cell
+				</div>
+
+				<div class="cell-grid">
+
+					<div class="cell">
+						<span>01</span>
+						<b>4.154V</b>
+					</div>
+
+					<div class="cell">
+						<span>02</span>
+						<b>4.154V</b>
+					</div>
+
+					<div class="cell">
+						<span>03</span>
+						<b>4.155V</b>
+					</div>
+
+					<div class="cell">
+						<span>04</span>
+						<b>4.147V</b>
+					</div>
+
+					<div class="cell">
+						<span>05</span>
+						<b>4.154V</b>
+					</div>
+
+					<div class="cell">
+						<span>06</span>
+						<b>4.148V</b>
+					</div>
+
+					<div class="cell">
+						<span>07</span>
+						<b>4.156V</b>
+					</div>
+					<div class="cell">
+						<span>08</span>
+						<b>4.154V</b>
+					</div>
+
+					<div class="cell">
+						<span>09</span>
+						<b>4.154V</b>
+					</div>
+
+					<div class="cell">
+						<span>10</span>
+						<b>4.155V</b>
+					</div>
+
+					<div class="cell">
+						<span>11</span>
+						<b>4.147V</b>
+					</div>
+
+					<div class="cell">
+						<span>12</span>
+						<b>4.154V</b>
+					</div>
+
+					<div class="cell">
+						<span>13</span>
+						<b>4.148V</b>
+					</div>
+
+					<div class="cell">
+						<span>14</span>
+						<b>4.156V</b>
+					</div>				
+					<div class="cell">
+						<span>15</span>
+						<b>4.148V</b>
+					</div>
+
+					<div class="cell">
+						<span>16</span>
+						<b>4.156V</b>
+					</div>	
+				</div>
+
+			</div>
+			<!-- SETTING BMS -->
+			<div class="setting-card">
+
+				<div class="setting-title">
+					Cài đặt BMS
+				</div>
+				<div class="setting-row">
+					<div class="setting-name">
+						Cell Count
+					</div>
+					<input
+						class="setting-input"
+						value="0.00"
+					>
+					<button class="setting-btn">
+						OK
+					</button>				
+				</div>
+				<div class="setting-row">
+					<div class="setting-name">
+						Battery Capacity(Ah)
+					</div>
+					<input
+						class="setting-input"
+						value="0.00"
+					>
+					<button class="setting-btn">
+						OK
+					</button>				
+				</div>
+				<div class="setting-row">
+					<div class="setting-name">
+						Balance Trig. Volt.(V)
+					</div>
+					<input
+						class="setting-input"
+						value="0.00"
+					>
+					<button class="setting-btn">
+						OK
+					</button>				
+				</div>			
+				<div class="setting-row">
+					<div class="setting-name">
+						Start balance Volt.(V)
+					</div>
+
+					<input
+						class="setting-input"
+						value="0.00"
+					>
+					<button class="setting-btn">
+						OK
+					</button>
+				</div>
+
+				<div class="setting-row">
+					<div class="setting-name">
+						Max Blance Cur.(A)
+					</div>
+					<input
+						class="setting-input"
+						value="0.00"
+					>
+					<button class="setting-btn">
+						OK
+					</button>				
+				</div>
+				<div class="setting-row">
+					<div class="setting-name">
+						Cell OVP.(V)
+					</div>
+					<input
+						class="setting-input"
+						value="0.00"
+					>
+					<button class="setting-btn">
+						OK
+					</button>				
+				</div>			
+				<div class="setting-row">
+					<div class="setting-name">
+						Vol.Cell RCV.(V)
+					</div>
+
+					<input
+						class="setting-input"
+						value="0.00"
+					>
+					<button class="setting-btn">
+						OK
+					</button>
+				</div>
+
+				<div class="setting-row">
+					<div class="setting-name">
+						SOC 100% Volt.(V)
+					</div>
+					<input
+						class="setting-input"
+						value="0.00"
+					>
+					<button class="setting-btn">
+						OK
+					</button>				
+				</div>
+				<div class="setting-row">
+					<div class="setting-name">
+						Cell OVPR(V)
+					</div>
+
+					<input
+						class="setting-input"
+						value="0.00"
+					>
+					<button class="setting-btn">
+						OK
+					</button>
+				</div>
+
+				<div class="setting-row">
+					<div class="setting-name">
+						Cell UVPR(V)
+					</div>
+					<input
+						class="setting-input"
+						value="0.00"
+					>
+					<button class="setting-btn">
+						OK
+					</button>				
+				</div>			
+				<div class="setting-row">
+					<div class="setting-name">
+						SOC 0% Volt.(V)
+					</div>
+					<input
+						class="setting-input"
+						value="0.00"
+					>
+					<button class="setting-btn">
+						OK
+					</button>				
+				</div>
+				<div class="setting-row">
+					<div class="setting-name">
+						Cell UVP(V)
+					</div>
+
+					<input
+						class="setting-input"
+						value="0.00"
+					>
+					<button class="setting-btn">
+						OK
+					</button>
+				</div>
+
+				<div class="setting-row">
+					<div class="setting-name">
+						Power Off Vol.(V)
+					</div>
+					<input
+						class="setting-input"
+						value="0.00"
+					>
+					<button class="setting-btn">
+						OK
+					</button>				
+				</div>	
+
+				<div class="setting-row">
+					<div class="setting-name">
+						Vol.Smart Sleep.(V)
+					</div>
+					<input
+						class="setting-input"
+						value="0.00"
+					>
+					<button class="setting-btn">
+						OK
+					</button>				
+				</div>			
+			</div>
+
+		</div>
+	</main>
 
 <script>
 
@@ -1046,13 +1030,7 @@ function formatPower2(value) {
     }
     return Math.round(value).toFixed(1) + " Wh"
 }
-function formatPower3(value) {
-    value = Number(value) || 0
-    if (Math.abs(value) >= 1000) {
-        return (value /100).toFixed(1) + " kWh"
-    }
-    return Math.round(value) + " Wh"
-}
+
 function openLogin(){
 
 	const phone = prompt("Nhập số điện thoại")
@@ -1157,20 +1135,19 @@ function setFlow(name, value, d) {
     }
 }
 
-function showTab(id){
+function showTab(id,el){
 
-	document.querySelectorAll(".page").forEach(el=>{
-		el.classList.remove("active")
+	document.querySelectorAll(".page").forEach(e=>{
+		e.classList.remove("active")
 	})
 
-	document.querySelectorAll(".tab-btn").forEach(el=>{
-		el.classList.remove("active")
+	document.querySelectorAll(".tab-btn").forEach(e=>{
+		e.classList.remove("active")
 	})
 
 	document.getElementById(id).classList.add("active")
-
-	event.target.classList.add("active")
-	}
+	el.classList.add("active")
+}
 async function loadData() {
 
     try {
@@ -1274,9 +1251,20 @@ async function loadData() {
 
 		const use_total = load_today + eps_today
 		const bat_disch = battery_changer_today*10
-		const solar_percent = (pv_today-bat_disch)/load_today *100
-		const bat_percent = (battery_dischanger_today / load_today) * 100
-		const grid_percent = (grid_buy_today / load_today) * 100		
+		const solar_percent =
+			load_today > 0
+				? ((pv_today - bat_disch) / load_today) * 100
+				: 0
+
+		const bat_percent =
+			load_today > 0
+				? (battery_dischanger_today / load_today) * 100
+				: 0
+
+		const grid_percent =
+			load_today > 0
+				? (grid_buy_today / load_today) * 100
+				: 0	
 		
         // =========================
         // UI TEXT
@@ -1287,7 +1275,7 @@ async function loadData() {
         document.getElementById("v-bu").innerText = formatPower(bu)
         document.getElementById("v-bat").innerText = formatPower(bat)
 		document.getElementById("info-pv").innerText =`${pv1_voltage || 0}V / ${pv1_current || 0}A`
-		document.getElementById("info-gid").innerText =`${grid_voltage|| 0}V / ${grid_current || 0}A`
+		document.getElementById("info-grid").innerText =`${grid_voltage|| 0}V / ${grid_current || 0}A`
 		document.getElementById("info-eps").innerText =`${eps_voltage|| 0}V / ${eps_current || 0}A`
 		document.getElementById("info-home").innerText =`${load_voltage|| 0}V / ${load_current || 0}A`
 		document.getElementById("info-bat").innerText =`${battery_voltage || 0}V / ${battery_current || 0}A`
