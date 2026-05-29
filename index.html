@@ -9,45 +9,38 @@
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 	<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌞</text></svg>">
     <style>
-        body { background-color: #f1f5f9; margin: 0; display: flex; flex-direction: column; align-items: center; font-family: 'Inter', sans-serif;; padding-top: 20px; }
-        .wrapper { position: relative; width: 360px; height: 370px; background: #fff; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 10px; }
-        .node { position: absolute; width: 73px; height: 73px; border: 1px solid #cbd5e1; border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #fff; z-index: 2; font-weight: bold; color: #64748b; }
+        body { background-color: #f1f5f9; margin: 0; display: flex; flex-direction: column; align-items: center; font-family: 'Inter', sans-serif;; padding-top: 15px; }
+        .wrapper { position: relative; width: 360px; height: 350px; background: #fff; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 5px; }
+        .node { position: absolute; width: 73px; height: 73px; border: 0px solid #cbd5e1; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #fff; z-index: 2; font-weight: bold; color: #64748b; }
         .node span { font-size: 10px; }
         .node .val { font-size: 11px; color: #0f172a; margin-top: 2px; }
 		body{padding-bottom:60px;}
 
         #node-inv { left: 144px; top: 130px; height: 75px; border: 2px solid #22c55e; color: #16a34a; }
-        #node-bu  { left: 150px; top: 250px; width: 60px; height: 60px; border-top: 3px solid #00e676; }
-        #node-pv  { left: 38px;  top: 35px;  border-top: 3px solid #ffb300; }
-        #node-bat { left: 38px;  top: 250px; border-top: 3px solid #a855f7; }
-        #node-grid{ left: 250px; top: 35px;  border-top: 3px solid #ef4444; }
-        #node-home{ left: 250px; top: 250px; border-top: 3px solid #00b0ff; }
-
+        #node-bu  { left: 150px; top: 250px; width: 60px; height: 60px; border-top: 3px solid #a855f7; }
+        #node-bat { left: 38px;  top: 250px; border-top: 3px solid #00e676; }
+        #node-home{ left: 248px; top: 250px; border-top: 3px solid #00b0ff; }
+		#node-pv{left:38px;top:25px;border-bottom:3px solid #ffb300;}
+		#node-grid{left:250px;top:25px;border-bottom:3px solid #ef4444;}
+		
         svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        .base-line { stroke: #e2e8f0; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-        .flow-line { stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; display: none; }
-        .particle { fill: #ffffff; stroke: currentColor; stroke-width: 1.5; display: none; }
+        .base-line { stroke: #e2e8f0; stroke-width: 0.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        .flow-line { stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; display: none; }
+        .particle { fill: #ffffff; stroke: currentColor; stroke-width: 2.5; display: none; }
 
         /* Style phần bổ sung */
-        .stats-container { width: 360px; background: #fff; border-radius: 20px; padding: 20px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 10px; }
+        .stats-container { width: 360px; background: #fff; border-radius: 20px; padding: 20px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom:5px; }
         .stats-title { font-size: 14px; font-weight: bold; margin-bottom: 15px; color: #334155; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px;  }
         .stat-item { display: flex; align-items: center; gap: 10px; }
         .stat-text { font-size: 11px; color: #64748b; }
         .stat-val { font-size: 13px; font-weight: bold; color: #0f172a; }
-        
-        .bar-container { margin-bottom: 15px; }
-        .bar-label { font-size: 12px; color: #334155; margin-bottom: 5px; display: flex; justify-content: space-between; }
-        .progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; display: flex; }
-        .bar-seg { height: 100%; }
-        .bar-legend { display: flex; justify-content: space-between; margin-top: 6px; font-size: 10px; color: #64748b; }
-        .legend-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-        .legend-row { display: flex; align-items: center; gap: 4px; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; }
-        .legend-val { font-weight: bold; color: #0f172a; }
-		
+		.title-row .stats-title{margin-bottom:0;}
+        .title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;}
+		#today_{color:#ff9800;font-size:15px;font-weight:700;}
+
         /* Layout Tổng sản lượng mới */
-        .total-container { width: 360px; background: #fff; border-radius: 20px; padding: 20px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 10px; }
+        .total-container { width: 360px; background: #fff; border-radius: 20px; padding: 20px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 5px; }
         .total-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .total-item { display: flex; flex-direction: column; }
         .total-label { font-size: 10px; color: #64748b; margin-bottom: 2px; }
@@ -468,43 +461,35 @@
 
 				<!-- FLOW LINES -->
 				<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 145,150 L 85,150 Q 75,150 75,140 L 75,95"/>
-				<path id="l-bat" class="flow-line" style="stroke:#a855f7;" d="M 145,195 L 85,195 Q 75,195 75,205 L 75,250"/>
+				<path id="l-bat" class="flow-line" style="stroke:#00e676;" d="M 145,195 L 85,195 Q 75,195 75,205 L 75,250"/>
 				<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 210,150 L 275,150 Q 285,150 285,140 L 285,95"/>
 				<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 210,195 L 275,195 Q 285,195 285,205 L 285,250"/>
-				<path id="l-bu" class="flow-line" style="stroke:#00e676;" d="M 181,215 L 181,250"/>
+				<path id="l-bu" class="flow-line" style="stroke:#a855f7;" d="M 181,215 L 181,250"/>
 
 				<circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 145,150 L 85,150 Q 75,150 75,140 L 75,95" /></circle>
-				<circle id="p-bat" class="particle" style="color:#a855f7;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 145,195 L 85,195 Q 75,195 75,205 L 75,250" /></circle>
+				<circle id="p-bat" class="particle" style="color:#00e676;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 145,195 L 85,195 Q 75,195 75,205 L 75,250" /></circle>
 				<circle id="p-grid" class="particle" style="color:#ef4444;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 215,150 L 275,150 Q 285,150 285,140 L 285,95" /></circle>
 				<circle id="p-home" class="particle" style="color:#00b0ff;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 215,195 L 275,195 Q 285,195 285,205 L 285,250" /></circle>
-				<circle id="p-bu" class="particle" style="color:#00e676;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 181,215 L 181,250" /></circle>
+				<circle id="p-bu" class="particle" style="color:#a855f7;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 181,215 L 181,250" /></circle>
 			</svg>
 		</div>
 
 		<div class="stats-container">
-			<div class="stats-title">Hôm nay</div>
+				<div class="title-row">
+				<div class="stats-title">Hôm nay</div>
+				<div class="stat-val" id="today_">0 kWh</div>
+			</div>
+
 			<div class="stats-grid">
 				<div class="stat-item">🌞<div><div class="stat-text">Tạo ra</div><div class="stat-val" id="st-pv">0 kWh</div></div></div>
+				<div class="stat-item">🛒<div><div class="stat-text" id="grid-buy-label">Lấy lưới</div><div class="stat-val" id="st-grid-buy">0 kWh</div></div></div>
 				<div class="stat-item">💪<div><div class="stat-text">Công suất đỉnh</div><div class="stat-val" id="st-peak">0 kWh</div></div></div>
 				<div class="stat-item">💸<div><div class="stat-text">Đẩy lưới</div><div class="stat-val" id="st-grid-sell">0 kWh</div></div></div>
-				<div class="stat-item">🛒<div><div class="stat-text">Lấy lưới</div><div class="stat-val" id="st-grid-buy">0 kWh</div></div></div>
 				<div class="stat-item">🔋<div><div class="stat-text">Nạp pin</div><div class="stat-val" id="st-bat-charge">0 kWh</div></div></div>
 				<div class="stat-item">🪫<div><div class="stat-text">Xả pin</div><div class="stat-val" id="st-bat-discharge">0 kWh</div></div></div>
 			</div>
 
-			<div class="bar-container">
-				<div class="bar-label"><span>Sử dụng hôm nay</span><span id="st-use-total">0 kWh</span></div>
-				<div class="progress-bar">
-					<div class="bar-seg" id="bar-use-solar" style="width: 28%; background:#fbbf24"></div>
-					<div class="bar-seg" id="bar-use-bat" style="width: 20%; background:#4ade80"></div>
-					<div class="bar-seg" id="bar-use-grid" style="width: 52%; background:#00b0ff"></div>
-				</div>
-				<div class="bar-legend">
-					<div class="legend-item"><div class="legend-row"><span class="dot" style="background:#fbbf24"></span>Solar</div><span id="st-use-solar">0% / 0kWh</span></div>
-					<div class="legend-item"><div class="legend-row"><span class="dot" style="background:#4ade80"></span>Pin</div><span id="st-use-bat">0% / 0kWh</span></div>
-					<div class="legend-item"><div class="legend-row"><span class="dot" style="background:#fb923c"></span>Lưới</div><span id="st-use-grid">0% / 0kWh</span></div>
-				</div>
-			</div>
+
 
 		</div>
 
@@ -1275,7 +1260,14 @@ async function loadData() {
         const battery_total_changer =
             Number(d.battery_total_changer) || 0			
         const battery_total_dischanger =
-            Number(d.battery_total_dischanger) || 0				
+            Number(d.battery_total_dischanger) || 0	
+
+		const use_total = load_today + eps_today
+		const bat_disch = battery_changer_today*10
+		const solar_percent = (pv_today-bat_disch)/load_today *100
+		const bat_percent = (battery_dischanger_today / load_today) * 100
+		const grid_percent = (grid_buy_today / load_today) * 100		
+		
         // =========================
         // UI TEXT
         // =========================
@@ -1291,13 +1283,14 @@ async function loadData() {
 		document.getElementById("info-bat").innerText =`${battery_voltage || 0}V / ${battery_current || 0}A`
 		//===============================
 		//  hôm nay
+		document.getElementById("today_").innerText = "Sử dụng:  "+formatPower2(use_total*10)
 		document.getElementById("st-pv").innerText = formatPower2(pv_today)
 		document.getElementById("st-peak").innerText =formatPower2(pv_peak/10)
 		document.getElementById("st-grid-buy").innerText = formatPower2(grid_buy_today*10)
 		document.getElementById("st-grid-sell").innerText = formatPower2(grid_sel_today*10)
 		document.getElementById("st-bat-charge").innerText = formatPower2(battery_changer_today*10)
 		document.getElementById("st-bat-discharge").innerText = formatPower2(battery_dischanger_today*10)
-		
+		document.getElementById("grid-buy-label").innerHTML =`Lấy lưới  <span style="color:#00b0ff">${grid_percent.toFixed(0)}%</span>`
 		// tổng sản lượng
 			
 		document.getElementById("total_pv").innerText = (pv_total||0).toFixed(1)+" kWh "
@@ -1306,24 +1299,6 @@ async function loadData() {
 		document.getElementById("total_bat2").innerText = (battery_total_dischanger/100||0).toFixed(1)+" kWh "
 		//=============================================
 		// =========================
-		// % LOGIC
-		// =========================
-		const use_total = load_today + eps_today
-		const bat_disch = battery_changer_today*10
-		const solar_percent = (pv_today-bat_disch)/load_today *100
-		const bat_percent = (battery_dischanger_today / load_today) * 100
-		const grid_percent = (grid_buy_today / load_today) * 100
-
-		// thanh bar %
-		document.getElementById("st-use-total").innerText = formatPower2(use_total*10)
-		document.getElementById("bar-use-solar").style.width = solar_percent/10 + "%"
-		document.getElementById("bar-use-bat").style.width = bat_percent + "%"
-		document.getElementById("bar-use-grid").style.width = grid_percent + "%"
-
-		// dưới thanh bar
-		document.getElementById("st-use-solar").innerText = (solar_percent/10).toFixed(2) + "% / " + formatPower2(pv_today- battery_changer_today*10)
-		document.getElementById("st-use-bat").innerText = bat_percent.toFixed(2) + "% / " + formatPower2(battery_dischanger_today*10)
-		document.getElementById("st-use-grid").innerText = grid_percent.toFixed(2) + "% / " + formatPower2(grid_buy_today*10) 
 		// nhiệt độ ivt
 		document.getElementById("v-inv").innerText =(Number(ivt_temp) || 0) + "°C"
 		
