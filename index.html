@@ -2,7 +2,6 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#FFA500"> 
 	<title>Solar siêu nhân</title>
@@ -401,12 +400,6 @@
     align-items: center;
 }
 
-		.user-name {
-			color: #fff;
-			font-weight: bold;
-			font-size: 18px;
-		}	
-
 	
     </style>
 </head>
@@ -503,18 +496,6 @@
 				<div class="ivtsetting-title">
 					<span>Cài đặt biến tần</span><button class="login-btn" onclick="openLogin()">🔒</button></div>
 				
-				<div class="ivtsetting-row">
-					<div class="ivtsetting-name">
-						Chế độ hoạt động
-					</div>
-					<input
-						class="ivtsetting-input"
-						value="0.00"
-					>
-					<button class="ivtsetting-btn">
-						OK
-					</button>				
-				</div>
 				<div class="ivtsetting-row">
 					<div class="ivtsetting-name">
 						Loại pin
@@ -1008,14 +989,8 @@
 
 		</div>
 	</main>
-
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 <script>
-
-const SUPABASE_URL =
-    "https://rtxdvcvzkepogytpnvsi.supabase.co"
-
-const SUPABASE_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0eGR2Y3Z6a2Vwb2d5dHBudnNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyNzI1NzksImV4cCI6MjA2ODg0ODU3OX0.SG_q8rnfAA7LAFoYYQyPsUFZPqsh1C13GbkGln4Z3JU"
 
 function formatPower(value) {
     value = Number(value) || 0
@@ -1149,178 +1124,130 @@ function showTab(id,el){
 	document.getElementById(id).classList.add("active")
 	el.classList.add("active")
 }
-async function loadData() {
-
-    try {
-
-        const response = await fetch(
-            `${SUPABASE_URL}/rest/v1/inverter_logs?device_id=eq.SEN ECO 6KW&select=*&order=created_at.desc&limit=1`,
-            {
-                headers: {
-                    "apikey": SUPABASE_KEY,
-                    "Authorization": `Bearer ${SUPABASE_KEY}`,
-                    "Content-Type": "application/json"
-                },
-                cache: "no-store"
-            }
-        )
-
-        const result = await response.json()
-
-        if (!Array.isArray(result) || result.length === 0) return
-
-        const d = result[0]
-
-        // =========================
-        // PV (LUÃ”N DÆ¯Æ NG â†’ inverter)
-        // =========================
-        const pv =
-            Number(d.pv1_power) || 0
-
-        // =========================
-        // GRID (GIá»® SIGN)
-        // =========================
-        const grid =
-            Number(d.grid_power) || 0
-        const grid_current =
-            Number(d.grid_current) || 0
-        const grid_voltage =
-            Number(d.grid_voltage) || 0
-        const grid_buy_today =
-            Number(d.grid_buy_today) || 0
-        const grid_sel_today =
-            Number(d.grid_sel_today) || 0	
-	
-		// pv
-		const pv1_power =
-            Number(d.pv1_power) || 0
-        const pv1_current =
-            Number(d.pv1_current) || 0
-        const pv1_voltage =
-            Number(d.pv1_voltage) || 0
-        const pv_today =
-            Number(d.pv_today) || 0
-        const pv_total =
-            Number(d.pv_total) || 0
-		const pv_peak =
-            Number(d.pv_power_peak) || 0
-
-			
-        // =========================
-        // LOAD
-        // =========================
-        const home =
-            Number(d.load_power) || 0
-        const load_current =
-            Number(d.load_current) || 0
-        const load_voltage =
-            Number(d.load_voltage) || 0
-        const load_today =
-            Number(d.load_today) || 0
-        const load_total =
-            Number(d.load_total) || 0
-        // =========================
-        // EPS
-        // =========================
-        const bu =
-            Number(d.eps_power) || 0
-        const eps_voltage =
-            Number(d.eps_voltage) || 0
-        const eps_current =
-            Number(d.eps_current) || 0
-        const eps_today =
-            Number(d.eps_today) || 0
-        const ivt_temp =
-            Number(d.ivt_temp) || 0			
-        // =========================
-        // BATTERY (QUAN TRá»ŒNG)
-        // =========================
-        const bat =
-            Number(d.battery_power) || 0
-        const battery_voltage =
-            Number(d.battery_voltage) || 0
-        const battery_current =
-            Number(d.battery_current) || 0			
-        const battery_changer_today =
-            Number(d.battery_changer_today) || 0			
-        const battery_dischanger_today =
-            Number(d.battery_dischanger_today) || 0			
-        const battery_total_changer =
-            Number(d.battery_total_changer) || 0			
-        const battery_total_dischanger =
-            Number(d.battery_total_dischanger) || 0	
-
-		const use_total = load_today + eps_today
-		const bat_disch = battery_changer_today*10
-		const solar_percent =
-			load_today > 0
-				? ((pv_today - bat_disch) / load_today) * 100
-				: 0
-
-		const bat_percent =
-			load_today > 0
-				? (battery_dischanger_today / load_today) * 100
-				: 0
-
-		const grid_percent =
-			load_today > 0
-				? (grid_buy_today / load_today) * 100
-				: 0	
-		
-        // =========================
-        // UI TEXT
-        // =========================
-        document.getElementById("v-pv").innerText = formatPower(pv)
-        document.getElementById("v-grid").innerText = formatPower(grid)
-        document.getElementById("v-home").innerText = formatPower(home)
-        document.getElementById("v-bu").innerText = formatPower(bu)
-        document.getElementById("v-bat").innerText = formatPower(bat)
-		document.getElementById("info-pv").innerText =`${pv1_voltage || 0}V / ${pv1_current || 0}A`
-		document.getElementById("info-grid").innerText =`${grid_voltage|| 0}V / ${grid_current || 0}A`
-		document.getElementById("info-eps").innerText =`${eps_voltage|| 0}V / ${eps_current || 0}A`
-		document.getElementById("info-home").innerText =`${load_voltage|| 0}V / ${load_current || 0}A`
-		document.getElementById("info-bat").innerText =`${battery_voltage || 0}V / ${battery_current || 0}A`
-		//===============================
-		//  hôm nay
-		document.getElementById("today_").innerText = "Sử dụng:  "+formatPower2(use_total*10)
-		document.getElementById("st-pv").innerText = formatPower2(pv_today)
-		document.getElementById("st-peak").innerText =formatPower2(pv_peak/10)
-		document.getElementById("st-grid-buy").innerText = formatPower2(grid_buy_today*10)
-		document.getElementById("st-grid-sell").innerText = formatPower2(grid_sel_today*10)
-		document.getElementById("st-bat-charge").innerText = formatPower2(battery_changer_today*10)
-		document.getElementById("st-bat-discharge").innerText = formatPower2(battery_dischanger_today*10)
-		document.getElementById("grid-buy-label").innerHTML =`Lấy lưới  <span style="color:#00b0ff">${grid_percent.toFixed(0)}%</span>`
-		// tổng sản lượng
-			
-		document.getElementById("total_pv").innerText = (pv_total||0).toFixed(1)+" kWh "
-		document.getElementById("total_sd").innerText = (load_total/100||0).toFixed(1)+" kWh "
-		document.getElementById("total_bat").innerText = (battery_total_changer/100||0).toFixed(1)+" kWh "
-		document.getElementById("total_bat2").innerText = (battery_total_dischanger/100||0).toFixed(1)+" kWh "
-		//=============================================
-		// =========================
-		// nhiệt độ ivt
-		document.getElementById("v-inv").innerText =(Number(ivt_temp) || 0) + "°C"
-		
-        // =========================
-        // FLOW CONTROL
-        // =========================
-		setFlow("pv", pv, d)
-		setFlow("grid", grid, d)
-		setFlow("home", home, d)
-		setFlow("bu", bu, d)
-		setFlow("bat", bat, d)
-		
-		// TAB
-
-
-    } catch (e) {
-        console.log("LOAD ERROR:", e)
+const client = mqtt.connect(
+    'wss://272917f2a9904b409d89a9f5a3d8d058.s1.eu.hivemq.cloud:8884/mqtt',
+    {
+        username: '0566681993',
+        password: 'Anhtan1993'
     }
-}
+)
 
-// START
-loadData()
-setInterval(loadData, 1000)
+client.on('connect', () => {
+
+    console.log("MQTT CONNECTED")
+
+    client.subscribe('solar/inverter/data')
+
+})
+client.on('message', (topic, payload) => {
+
+    const d = JSON.parse(payload.toString())
+
+    // PV
+    const pv = Number(d.pv_power)||0
+    const pv1_current=Number(d.pv1_current)||0
+    const pv1_voltage=Number(d.pv1_voltage)||0
+    const pv_today=Number(d.pv_today)||0
+    const pv_total=Number(d.pv_total)||0
+    const pv_peak=Number(d.pv_power_peak)||0
+
+    // GRID
+    const grid=Number(d.grid_power)||0
+    const grid_current=Number(d.grid_current)||0
+    const grid_voltage=Number(d.grid_voltage)||0
+    const grid_buy_today=Number(d.grid_buy_today)||0
+    const grid_sel_today=Number(d.grid_sel_today)||0
+
+    // LOAD
+    const home=Number(d.load_power)||0
+    const load_current=Number(d.load_current)||0
+    const load_voltage=Number(d.load_voltage)||0
+    const load_today=Number(d.load_today)||0
+    const load_total=Number(d.load_total)||0
+
+    // EPS
+    const bu=Number(d.eps_power)||0
+    const eps_voltage=Number(d.eps_voltage)||0
+    const eps_current=Number(d.eps_current)||0
+    const eps_today=Number(d.eps_today)||0
+
+    // BATTERY
+    const bat=Number(d.battery_power)||0
+    const battery_voltage=Number(d.battery_voltage)||0
+    const battery_current=Number(d.battery_current)||0
+    const battery_changer_today=Number(d.battery_changer_today)||0
+    const battery_dischanger_today=Number(d.battery_dischanger_today)||0
+    const battery_total_changer=Number(d.battery_total_changer)||0
+    const battery_total_dischanger=Number(d.battery_total_dischanger)||0
+
+    const ivt_temp=Number(d.ivt_temp)||0
+
+    const use_total=load_today+eps_today
+
+    const grid_percent=
+        load_today>0
+        ? (grid_buy_today/load_today)*100
+        :0
+
+    // UI
+    document.getElementById("v-pv").innerText=formatPower(pv)
+    document.getElementById("v-grid").innerText=formatPower(grid)
+    document.getElementById("v-home").innerText=formatPower(home)
+    document.getElementById("v-bu").innerText=formatPower(bu)
+    document.getElementById("v-bat").innerText=formatPower(bat)
+
+    document.getElementById("info-pv").innerText=
+        `${pv1_voltage}V / ${pv1_current}A`
+
+    document.getElementById("info-grid").innerText=
+        `${grid_voltage}V / ${grid_current}A`
+
+    document.getElementById("info-home").innerText=
+        `${load_voltage}V / ${load_current}A`
+
+    document.getElementById("info-eps").innerText=
+        `${eps_voltage}V / ${eps_current}A`
+
+    document.getElementById("info-bat").innerText=
+        `${battery_voltage}V / ${battery_current}A`
+
+    document.getElementById("today_").innerText=
+        "Sử dụng: "+formatPower2(use_total)
+
+    document.getElementById("st-pv").innerText=formatPower2(pv_today)
+    document.getElementById("st-peak").innerText=formatPower2(pv_peak)
+    document.getElementById("st-grid-buy").innerText=formatPower2(grid_buy_today)
+    document.getElementById("st-grid-sell").innerText=formatPower2(grid_sel_today)
+    document.getElementById("st-bat-charge").innerText=formatPower2(battery_changer_today)
+    document.getElementById("st-bat-discharge").innerText=formatPower2(battery_dischanger_today)
+
+    document.getElementById("grid-buy-label").innerHTML=
+        `Lấy lưới <span style="color:#00b0ff">
+        ${grid_percent.toFixed(0)}%
+        </span>`
+
+    document.getElementById("total_pv").innerText=
+        pv_total.toFixed(1)+" kWh"
+
+    document.getElementById("total_sd").innerText=
+        load_total.toFixed(1)+" kWh"
+
+    document.getElementById("total_bat").innerText=
+        battery_total_changer.toFixed(1)+" kWh"
+
+    document.getElementById("total_bat2").innerText=
+        battery_total_dischanger.toFixed(1)+" kWh"
+
+    document.getElementById("v-inv").innerText=
+        ivt_temp+"°C"
+
+    setFlow("pv",pv,d)
+    setFlow("grid",grid,d)
+    setFlow("home",home,d)
+    setFlow("bu",bu,d)
+    setFlow("bat",bat,d)
+
+})
 
 </script>
 </body>
