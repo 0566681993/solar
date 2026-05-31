@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#FFA500"> 
 	<title>Solar siêu nhân</title>
@@ -399,6 +400,12 @@
     flex-direction: column;
     align-items: center;
 }
+
+		.user-name {
+			color: #fff;
+			font-weight: bold;
+			font-size: 18px;
+		}	
 
 	
     </style>
@@ -1144,7 +1151,7 @@ client.on('message', (topic, payload) => {
     const d = JSON.parse(payload.toString())
 
     // PV
-    const pv = Number(d.pv_power)||0
+    const pv = Number(d.pv1_power)||0
     const pv1_current=Number(d.pv1_current)||0
     const pv1_voltage=Number(d.pv1_voltage)||0
     const pv_today=Number(d.pv_today)||0
@@ -1212,34 +1219,25 @@ client.on('message', (topic, payload) => {
         `${battery_voltage}V / ${battery_current}A`
 
     document.getElementById("today_").innerText=
-        "Sử dụng: "+formatPower2(use_total)
+        "Sử dụng: "+formatPower2(use_total*10)
 
     document.getElementById("st-pv").innerText=formatPower2(pv_today)
     document.getElementById("st-peak").innerText=formatPower2(pv_peak)
-    document.getElementById("st-grid-buy").innerText=formatPower2(grid_buy_today)
-    document.getElementById("st-grid-sell").innerText=formatPower2(grid_sel_today)
-    document.getElementById("st-bat-charge").innerText=formatPower2(battery_changer_today)
-    document.getElementById("st-bat-discharge").innerText=formatPower2(battery_dischanger_today)
+    document.getElementById("st-grid-buy").innerText=formatPower2(grid_buy_today*10)
+    document.getElementById("st-grid-sell").innerText=formatPower2(grid_sel_today*10)
+    document.getElementById("st-bat-charge").innerText=formatPower2(battery_changer_today*10)
+    document.getElementById("st-bat-discharge").innerText=formatPower2(battery_dischanger_today*10)
 
     document.getElementById("grid-buy-label").innerHTML=
         `Lấy lưới <span style="color:#00b0ff">
         ${grid_percent.toFixed(0)}%
         </span>`
 
-    document.getElementById("total_pv").innerText=
-        pv_total.toFixed(1)+" kWh"
-
-    document.getElementById("total_sd").innerText=
-        load_total.toFixed(1)+" kWh"
-
-    document.getElementById("total_bat").innerText=
-        battery_total_changer.toFixed(1)+" kWh"
-
-    document.getElementById("total_bat2").innerText=
-        battery_total_dischanger.toFixed(1)+" kWh"
-
-    document.getElementById("v-inv").innerText=
-        ivt_temp+"°C"
+    document.getElementById("total_pv").innerText=formatPower2(pv_total)
+    document.getElementById("total_sd").innerText=formatPower2(load_total*10)
+    document.getElementById("total_bat").innerText=formatPower2(battery_total_changer*10)
+    document.getElementById("total_bat2").innerText=formatPower2(battery_total_dischanger*10)
+    document.getElementById("v-inv").innerText=ivt_temp+"°C"
 
     setFlow("pv",pv,d)
     setFlow("grid",grid,d)
