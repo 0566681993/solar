@@ -1099,8 +1099,8 @@ client.on('message', (topic, payload) => {
 		const pack_current= d.pack_current
 		const pack_power= d.pack_power
 		document.getElementById("bms-voltage").innerText=pack_volt+" V"
-		document.getElementById("bms-current").innerText=pack_volt+" A"
-		document.getElementById("bms-power").innerText=pack_volt+" W"
+		document.getElementById("bms-current").innerText=pack_current+" A"
+		document.getElementById("bms-power").innerText=pack_power+" W"
         renderCells(cells)
 
         return
