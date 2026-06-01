@@ -666,12 +666,12 @@
 				<div class="bms-main">
 
 					<div class="bms-big">
-						<div class="bms-value" id="bms-voltage">29.07V</div>
+						<div class="bms-value" id="bms-voltage">0V</div>
 						<div class="bms-label">Điện áp</div>
 					</div>
 
 					<div class="bms-big">
-						<div class="bms-value" id="bms-current">0.0A</div>
+						<div class="bms-value" id="bms-current">0A</div>
 						<div class="bms-label">Dòng</div>
 					</div>
 
@@ -1098,7 +1098,8 @@ client.on('message', (topic, payload) => {
     if(topic === "solar/bms/data"){
 
         const cells = d.cell || []
-
+		const pack_volt= d.pack
+		document.getElementById("bms-voltage").innerText=pack_volt+" V"
         renderCells(cells)
 
         return
