@@ -945,21 +945,19 @@ function openLogin(){
 }
 function renderCells(cells){
 
-    const grid=document.getElementById("cell-grid")
+    const grid = document.getElementById("cell-grid")
 
-    grid.innerHTML=""
+    grid.innerHTML = ""
 
-    const max=Math.max(...cells)
-    const min=Math.min(...cells)
+    const minIndex = cells.indexOf(Math.min(...cells))
 
     cells.forEach((v,i)=>{
 
-        let color="#22c55e"
+        let color = "#22c55e"
 
-        if(v===max) color="#ef4444"
-        if(v===min) color="#3b82f6"
+        if(i === minIndex) color = "#ef4444"
 
-        grid.innerHTML+=`
+        grid.innerHTML += `
         <div class="cell">
             <span>${String(i+1).padStart(2,'0')}</span>
             <b style="color:${color}">
@@ -968,7 +966,6 @@ function renderCells(cells){
         </div>
         `
     })
-
 }
 /* =========================
    FLOW ON/OFF
