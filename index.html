@@ -1096,7 +1096,11 @@ client.on('message', (topic, payload) => {
 
         const cells = d.cell || []
 		const pack_volt= d.pack
+		const pack_current= d.pack_current
+		const pack_power= d.pack_power
 		document.getElementById("bms-voltage").innerText=pack_volt+" V"
+		document.getElementById("bms-current").innerText=pack_volt+" A"
+		document.getElementById("bms-power").innerText=pack_volt+" W"
         renderCells(cells)
 
         return
