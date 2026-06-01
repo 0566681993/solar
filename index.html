@@ -720,88 +720,8 @@
 				<div class="stats-title">
 					Điện áp cell
 				</div>
-
-				<div class="cell-grid">
-
-					<div class="cell">
-						<span>01</span>
-						<b>4.154V</b>
-					</div>
-
-					<div class="cell">
-						<span>02</span>
-						<b>4.154V</b>
-					</div>
-
-					<div class="cell">
-						<span>03</span>
-						<b>4.155V</b>
-					</div>
-
-					<div class="cell">
-						<span>04</span>
-						<b>4.147V</b>
-					</div>
-
-					<div class="cell">
-						<span>05</span>
-						<b>4.154V</b>
-					</div>
-
-					<div class="cell">
-						<span>06</span>
-						<b>4.148V</b>
-					</div>
-
-					<div class="cell">
-						<span>07</span>
-						<b>4.156V</b>
-					</div>
-					<div class="cell">
-						<span>08</span>
-						<b>4.154V</b>
-					</div>
-
-					<div class="cell">
-						<span>09</span>
-						<b>4.154V</b>
-					</div>
-
-					<div class="cell">
-						<span>10</span>
-						<b>4.155V</b>
-					</div>
-
-					<div class="cell">
-						<span>11</span>
-						<b>4.147V</b>
-					</div>
-
-					<div class="cell">
-						<span>12</span>
-						<b>4.154V</b>
-					</div>
-
-					<div class="cell">
-						<span>13</span>
-						<b>4.148V</b>
-					</div>
-
-					<div class="cell">
-						<span>14</span>
-						<b>4.156V</b>
-					</div>				
-					<div class="cell">
-						<span>15</span>
-						<b>4.148V</b>
-					</div>
-
-					<div class="cell">
-						<span>16</span>
-						<b>4.156V</b>
-					</div>	
+				<div class="cell-grid" id="cell-grid">
 				</div>
-
 			</div>
 			<!-- SETTING BMS -->
 			<div class="setting-card">
@@ -1023,6 +943,33 @@ function openLogin(){
 		alert("Sai tài khoản hoặc mật khẩu")
 	}
 }
+function renderCells(cells){
+
+    const grid=document.getElementById("cell-grid")
+
+    grid.innerHTML=""
+
+    const max=Math.max(...cells)
+    const min=Math.min(...cells)
+
+    cells.forEach((v,i)=>{
+
+        let color="#22c55e"
+
+        if(v===max) color="#ef4444"
+        if(v===min) color="#3b82f6"
+
+        grid.innerHTML+=`
+        <div class="cell">
+            <span>${String(i+1).padStart(2,'0')}</span>
+            <b style="color:${color}">
+                ${Number(v).toFixed(3)}V
+            </b>
+        </div>
+        `
+    })
+
+}
 /* =========================
    FLOW ON/OFF
 ========================= */
@@ -1138,11 +1085,29 @@ client.on('connect', () => {
     console.log("MQTT CONNECTED")
 
     client.subscribe('solar/inverter/data')
+    client.subscribe('solar/bms/data')
 
 })
 client.on('message', (topic, payload) => {
 
     const d = JSON.parse(payload.toString())
+
+    // =========================
+    // BMS DATA
+    // =========================
+    if(topic === "solar/bms/data"){
+
+        const cells = d.cell || []
+
+        renderCells(cells)
+
+        return
+    }
+
+    // =========================
+    // INVERTER DATA
+    // =========================
+    if(topic !== "solar/inverter/data") return
 
     // PV
     const pv = Number(d.pv1_power)||0
@@ -1216,7 +1181,7 @@ client.on('message', (topic, payload) => {
         "Sử dụng: "+formatPower2(use_total*10)
 
     document.getElementById("st-pv").innerText=formatPower2(pv_today)
-    document.getElementById("st-peak").innerText=formatPower2(pv_peak)
+    document.getElementById("st-peak").innerText=formatPower2(pv_peak/10)
     document.getElementById("st-grid-buy").innerText=formatPower2(grid_buy_today*10)
     document.getElementById("st-grid-sell").innerText=formatPower2(grid_sel_today*10)
     document.getElementById("st-bat-charge").innerText=formatPower2(battery_changer_today*10)
@@ -1231,7 +1196,9 @@ client.on('message', (topic, payload) => {
     document.getElementById("total_sd").innerText=formatPower2(load_total*10)
     document.getElementById("total_bat").innerText=formatPower2(battery_total_changer*10)
     document.getElementById("total_bat2").innerText=formatPower2(battery_total_dischanger*10)
-    document.getElementById("v-inv").innerText=ivt_temp+"°C"
+
+    document.getElementById("v-inv").innerText=
+        ivt_temp+"°C"
 
     setFlow("pv",pv,d)
     setFlow("grid",grid,d)
