@@ -177,6 +177,7 @@
 			display:flex;
 			flex-direction:column;
 			gap:4px;
+			
 		}
 
 		.bms-item span{
@@ -222,7 +223,7 @@
 			border-radius:20px;
 			padding:18px;
 			box-sizing:border-box;
-			margin-bottom:15px;
+		    margin-bottom: calc(60px + env(safe-area-inset-bottom));
 			box-shadow:0 4px 15px rgba(0,0,0,0.08);
 		}
 
@@ -276,7 +277,7 @@
 			border-radius:20px;
 			padding:18px;
 			box-sizing:border-box;
-			margin-bottom:15px;
+			margin-bottom: calc(60px + env(safe-area-inset-bottom));
 			box-shadow:0 4px 15px rgba(0,0,0,0.08);
 		}
 
@@ -348,6 +349,30 @@
 		.login-btn:active{
 			transform:scale(0.95);
 		}	
+		.setting-title{
+		    display:flex;
+		    justify-content:space-between;
+		    align-items:center;
+		
+		    font-size:14px;
+		    font-weight:700;
+		    margin-bottom:10px;
+		    color:#0f172a;
+		}
+		
+		.setting-toggle{
+		    width:32px;
+		    height:32px;
+		    border:none;
+		    border-radius:10px;
+		    background:#f1f5f9;
+		    cursor:pointer;
+		    font-size:16px;
+		}
+		
+		.setting-toggle:active{
+		    transform:scale(.95);
+		}
 		/* Import font từ Google Fonts */
 		@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
 
@@ -495,159 +520,165 @@
 			<div class="ivtsetting-card">
 
 				<div class="ivtsetting-title">
-					<span>Cài đặt biến tần</span><button class="login-btn" onclick="openLogin()">🔒</button></div>
-				
-				<div class="ivtsetting-row">
-					<div class="ivtsetting-name">
-						Loại pin
+					<span>Cài đặt biến tần</span>
+                    <button
+					    class="setting-toggle"
+					    onclick="toggleSetting('ivt-setting-content',this)">
+					    🔧
+					</button></div>
+				<div id="ivt-setting-content" style="display:none;">
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">
+							Loại pin
+						</div>
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>				
 					</div>
-					<input
-						class="ivtsetting-input"
-						value="0.00"
-					>
-					<button class="ivtsetting-btn">
-						OK
-					</button>				
-				</div>
-				<div class="ivtsetting-row">
-					<div class="ivtsetting-name">
-						Điện áp dừng sạc.(V)
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">
+							Điện áp dừng sạc.(V)
+						</div>
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>				
 					</div>
-					<input
-						class="ivtsetting-input"
-						value="0.00"
-					>
-					<button class="ivtsetting-btn">
-						OK
-					</button>				
-				</div>
-				<div class="ivtsetting-row">
-					<div class="ivtsetting-name">
-						Điện áp dừng xả.(V)
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">
+							Điện áp dừng xả.(V)
+						</div>
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>				
+					</div>			
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">
+							Sạc từ lưới
+						</div>
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>				
+					</div>			
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">
+							Công suất sạc từ lưới.(W)
+						</div>
+	
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>
 					</div>
-					<input
-						class="ivtsetting-input"
-						value="0.00"
-					>
-					<button class="ivtsetting-btn">
-						OK
-					</button>				
-				</div>			
-				<div class="ivtsetting-row">
-					<div class="ivtsetting-name">
-						Sạc từ lưới
+	
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">
+							Phần trăm dừng sạc từ lưới.(%)
+						</div>
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>				
 					</div>
-					<input
-						class="ivtsetting-input"
-						value="0.00"
-					>
-					<button class="ivtsetting-btn">
-						OK
-					</button>				
-				</div>			
-				<div class="ivtsetting-row">
-					<div class="ivtsetting-name">
-						Công suất sạc từ lưới.(W)
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">
+							Công suất sạc từ pv. (W)
+						</div>
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>				
+					</div>			
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">
+							Phần trăm dừng sạc từ pv.(%)
+						</div>
+	
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>
 					</div>
-
-					<input
-						class="ivtsetting-input"
-						value="0.00"
-					>
-					<button class="ivtsetting-btn">
-						OK
-					</button>
-				</div>
-
-				<div class="ivtsetting-row">
-					<div class="ivtsetting-name">
-						Phần trăm dừng sạc từ lưới.(%)
+	
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">
+							Công suất xả.(W)
+						</div>
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>				
 					</div>
-					<input
-						class="ivtsetting-input"
-						value="0.00"
-					>
-					<button class="ivtsetting-btn">
-						OK
-					</button>				
-				</div>
-				<div class="ivtsetting-row">
-					<div class="ivtsetting-name">
-						Công suất sạc từ pv. (W)
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">
+							Phần trăn dừng xả(%)
+						</div>
+	
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>
 					</div>
-					<input
-						class="ivtsetting-input"
-						value="0.00"
-					>
-					<button class="ivtsetting-btn">
-						OK
-					</button>				
-				</div>			
-				<div class="ivtsetting-row">
-					<div class="ivtsetting-name">
-						Phần trăm dừng sạc từ pv.(%)
+					
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">
+							Dòng xả.(A)
+						</div>
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>				
 					</div>
-
-					<input
-						class="ivtsetting-input"
-						value="0.00"
-					>
-					<button class="ivtsetting-btn">
-						OK
-					</button>
-				</div>
-
-				<div class="ivtsetting-row">
-					<div class="ivtsetting-name">
-						Công suất xả.(W)
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">
+							Dòng sạc(A)
+						</div>
+	
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>
 					</div>
-					<input
-						class="ivtsetting-input"
-						value="0.00"
-					>
-					<button class="ivtsetting-btn">
-						OK
-					</button>				
-				</div>
-				<div class="ivtsetting-row">
-					<div class="ivtsetting-name">
-						Phần trăn dừng xả(%)
-					</div>
-
-					<input
-						class="ivtsetting-input"
-						value="0.00"
-					>
-					<button class="ivtsetting-btn">
-						OK
-					</button>
-				</div>
-				
-				<div class="ivtsetting-row">
-					<div class="ivtsetting-name">
-						Dòng xả.(A)
-					</div>
-					<input
-						class="ivtsetting-input"
-						value="0.00"
-					>
-					<button class="ivtsetting-btn">
-						OK
-					</button>				
-				</div>
-				<div class="ivtsetting-row">
-					<div class="ivtsetting-name">
-						Dòng sạc(A)
-					</div>
-
-					<input
-						class="ivtsetting-input"
-						value="0.00"
-					>
-					<button class="ivtsetting-btn">
-						OK
-					</button>
-				</div>	
+		        </div>		
 			</div>	
 			
 		</div>
@@ -727,185 +758,193 @@
 			<div class="setting-card">
 
 				<div class="setting-title">
-					Cài đặt BMS
-				</div>
-				<div class="setting-row">
-					<div class="setting-name">
-						Cell Count
-					</div>
-					<input
-						class="setting-input"
-						value="0.00"
-					>
-					<button class="setting-btn">
-						OK
-					</button>				
-				</div>
-				<div class="setting-row">
-					<div class="setting-name">
-						Battery Capacity(Ah)
-					</div>
-					<input
-						class="setting-input"
-						value="0.00"
-					>
-					<button class="setting-btn">
-						OK
-					</button>				
-				</div>
-				<div class="setting-row">
-					<div class="setting-name">
-						Balance Trig. Volt.(V)
-					</div>
-					<input
-						class="setting-input"
-						value="0.00"
-					>
-					<button class="setting-btn">
-						OK
-					</button>				
-				</div>			
-				<div class="setting-row">
-					<div class="setting-name">
-						Start balance Volt.(V)
-					</div>
-
-					<input
-						class="setting-input"
-						value="0.00"
-					>
-					<button class="setting-btn">
-						OK
+					<span>Cài đặt BMS</span>
+					
+					<button
+					    class="setting-toggle"
+					    onclick="toggleSetting('bms-setting-content',this)">
+					    🔧
 					</button>
-				</div>
-
-				<div class="setting-row">
-					<div class="setting-name">
-						Max Blance Cur.(A)
 					</div>
-					<input
-						class="setting-input"
-						value="0.00"
-					>
-					<button class="setting-btn">
-						OK
-					</button>				
-				</div>
-				<div class="setting-row">
-					<div class="setting-name">
-						Cell OVP.(V)
+                <div id="bms-setting-content" style="display:none;">
+					<div class="setting-row">
+						<div class="setting-name">
+							Cell Count
+						</div>
+						<input
+							class="setting-input"
+							value="0.00"
+						>
+						<button class="setting-btn">
+							OK
+						</button>				
 					</div>
-					<input
-						class="setting-input"
-						value="0.00"
-					>
-					<button class="setting-btn">
-						OK
-					</button>				
-				</div>			
-				<div class="setting-row">
-					<div class="setting-name">
-						Vol.Cell RCV.(V)
+					<div class="setting-row">
+						<div class="setting-name">
+							Battery Capacity(Ah)
+						</div>
+						<input
+							class="setting-input"
+							value="0.00"
+						>
+						<button class="setting-btn">
+							OK
+						</button>				
 					</div>
-
-					<input
-						class="setting-input"
-						value="0.00"
-					>
-					<button class="setting-btn">
-						OK
-					</button>
-				</div>
-
-				<div class="setting-row">
-					<div class="setting-name">
-						SOC 100% Volt.(V)
+					<div class="setting-row">
+						<div class="setting-name">
+							Balance Trig. Volt.(V)
+						</div>
+						<input
+							class="setting-input"
+							value="0.00"
+						>
+						<button class="setting-btn">
+							OK
+						</button>				
+					</div>			
+					<div class="setting-row">
+						<div class="setting-name">
+							Start balance Volt.(V)
+						</div>
+	
+						<input
+							class="setting-input"
+							value="0.00"
+						>
+						<button class="setting-btn">
+							OK
+						</button>
 					</div>
-					<input
-						class="setting-input"
-						value="0.00"
-					>
-					<button class="setting-btn">
-						OK
-					</button>				
-				</div>
-				<div class="setting-row">
-					<div class="setting-name">
-						Cell OVPR(V)
+	
+					<div class="setting-row">
+						<div class="setting-name">
+							Max Blance Cur.(A)
+						</div>
+						<input
+							class="setting-input"
+							value="0.00"
+						>
+						<button class="setting-btn">
+							OK
+						</button>				
 					</div>
-
-					<input
-						class="setting-input"
-						value="0.00"
-					>
-					<button class="setting-btn">
-						OK
-					</button>
-				</div>
-
-				<div class="setting-row">
-					<div class="setting-name">
-						Cell UVPR(V)
+					<div class="setting-row">
+						<div class="setting-name">
+							Cell OVP.(V)
+						</div>
+						<input
+							class="setting-input"
+							value="0.00"
+						>
+						<button class="setting-btn">
+							OK
+						</button>				
+					</div>			
+					<div class="setting-row">
+						<div class="setting-name">
+							Vol.Cell RCV.(V)
+						</div>
+	
+						<input
+							class="setting-input"
+							value="0.00"
+						>
+						<button class="setting-btn">
+							OK
+						</button>
 					</div>
-					<input
-						class="setting-input"
-						value="0.00"
-					>
-					<button class="setting-btn">
-						OK
-					</button>				
-				</div>			
-				<div class="setting-row">
-					<div class="setting-name">
-						SOC 0% Volt.(V)
+	
+					<div class="setting-row">
+						<div class="setting-name">
+							SOC 100% Volt.(V)
+						</div>
+						<input
+							class="setting-input"
+							value="0.00"
+						>
+						<button class="setting-btn">
+							OK
+						</button>				
 					</div>
-					<input
-						class="setting-input"
-						value="0.00"
-					>
-					<button class="setting-btn">
-						OK
-					</button>				
-				</div>
-				<div class="setting-row">
-					<div class="setting-name">
-						Cell UVP(V)
+					<div class="setting-row">
+						<div class="setting-name">
+							Cell OVPR(V)
+						</div>
+	
+						<input
+							class="setting-input"
+							value="0.00"
+						>
+						<button class="setting-btn">
+							OK
+						</button>
 					</div>
-
-					<input
-						class="setting-input"
-						value="0.00"
-					>
-					<button class="setting-btn">
-						OK
-					</button>
-				</div>
-
-				<div class="setting-row">
-					<div class="setting-name">
-						Power Off Vol.(V)
+	
+					<div class="setting-row">
+						<div class="setting-name">
+							Cell UVPR(V)
+						</div>
+						<input
+							class="setting-input"
+							value="0.00"
+						>
+						<button class="setting-btn">
+							OK
+						</button>				
+					</div>			
+					<div class="setting-row">
+						<div class="setting-name">
+							SOC 0% Volt.(V)
+						</div>
+						<input
+							class="setting-input"
+							value="0.00"
+						>
+						<button class="setting-btn">
+							OK
+						</button>				
 					</div>
-					<input
-						class="setting-input"
-						value="0.00"
-					>
-					<button class="setting-btn">
-						OK
-					</button>				
-				</div>	
-
-				<div class="setting-row">
-					<div class="setting-name">
-						Vol.Smart Sleep.(V)
+					<div class="setting-row">
+						<div class="setting-name">
+							Cell UVP(V)
+						</div>
+	
+						<input
+							class="setting-input"
+							value="0.00"
+						>
+						<button class="setting-btn">
+							OK
+						</button>
 					</div>
-					<input
-						class="setting-input"
-						value="0.00"
-					>
-					<button class="setting-btn">
-						OK
-					</button>				
-				</div>			
+	
+					<div class="setting-row">
+						<div class="setting-name">
+							Power Off Vol.(V)
+						</div>
+						<input
+							class="setting-input"
+							value="0.00"
+						>
+						<button class="setting-btn">
+							OK
+						</button>				
+					</div>	
+	
+					<div class="setting-row">
+						<div class="setting-name">
+							Vol.Smart Sleep.(V)
+						</div>
+						<input
+							class="setting-input"
+							value="0.00"
+						>
+						<button class="setting-btn">
+							OK
+						</button>				
+					</div>
+	            </div>				
 			</div>
 
 		</div>
@@ -1056,6 +1095,35 @@ function setFlow(name, value, d) {
     }
 }
 
+let settingLogin = false;
+
+function toggleSetting(contentId, btn){
+
+    const box = document.getElementById(contentId);
+
+    if(box.style.display === "none"){
+
+        if(!settingLogin){
+
+            const pass = prompt("Nhập mật khẩu");
+
+            if(pass !== "123456"){
+                alert("Sai mật khẩu");
+                return;
+            }
+
+            settingLogin = true;
+        }
+
+        box.style.display = "block";
+        btn.innerHTML = "🔽";
+
+    }else{
+
+        box.style.display = "none";
+        btn.innerHTML = "🔧";
+    }
+}
 function showTab(id,el){
 
 	document.querySelectorAll(".page").forEach(e=>{
