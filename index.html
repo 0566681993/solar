@@ -658,9 +658,9 @@
 			<div class="bms-card">
 
 				<div class="bms-top">
-					<div class="bms-status-changer">Sạc: <span>On</span></div>
-					<div class="bms-status-dischanger">Xả: <span>On</span></div>
-					<div class="bms-status-balance">Cân bằng: <span>On</span></div>
+					<div class="bms-status" id="bms_charge">Sạc: Off</div>
+					<div class="bms-status"id="bms_discharge">Xả: Off</div>
+					<div class="bms-status"id="bms_balance">Cân bằng: Off</div>
 				</div>
 
 				<div class="bms-main">
@@ -1104,6 +1104,9 @@ client.on('message', (topic, payload) => {
         const bms_capacity2= d.bms_capacity2
         const bms_temp= d.bms_temp
         const bms_cycle= d.bms_cycle
+        const bms_charge= Number (d.bms_charge)
+        const bms_discharge= Number (d.bms_discharge)
+        const bms_balance= Number(d.bms_balance)
 		document.getElementById("bms-voltage").innerText=pack_volt+" V"
 		document.getElementById("bms-current").innerText=pack_current+" A"
 		document.getElementById("bms-power").innerText=pack_power+" W"
@@ -1112,8 +1115,13 @@ client.on('message', (topic, payload) => {
         document.getElementById("bms-mos").innerText=bms_temp+" °C"
         document.getElementById("bms-capacity").innerText=bms_capacity2+" Ah"
         document.getElementById("bms-cycle").innerText=bms_cycle
-
-renderCells(cells)
+        document.getElementById("bms_charge").innerHTML ="Sạc:"+
+   ( bms_charge ? "ON" : "OFF");
+        document.getElementById("bms_discharge").innerHTML ="Xả:"+
+   ( bms_discharge ? "ON" : "OFF");
+        document.getElementById("bms_balance").innerHTML ="Cân bằng:"+
+    (bms_balance ? "ON" : "OFF");
+        renderCells(cells)
 
         return
     }
