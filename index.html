@@ -1099,12 +1099,22 @@ client.on('message', (topic, payload) => {
 		const bms_volt_dif= d.bms_volt_dif
 		const pack_current= d.pack_current
 		const pack_power= d.pack_power
-		const pack_soc= d.bms_capacity
+		const bms_soc= d.bms_soc
+  const bms_capacity= d.bms_capacity
+  const bms_capacity2= d.bms_capacity2
+  const bms_temp= d.bms_temp
 		document.getElementById("bms-voltage").innerText=pack_volt+" V"
 		document.getElementById("bms-current").innerText=pack_current+" A"
 		document.getElementById("bms-power").innerText=pack_power+" W"
 		document.getElementById("bms-delta").innerText=bms_volt_dif+" mV"
-		document.getElementById("bms-soc").innerText=pack_soc+" %"
+		document.getElementById("bms-soc").innerText=bms_soc+"%"+ "|"+bms_capacity+"Ah"
+
+document.getElementById("bms-mos").innerText=bms_temp+" °C"
+
+document.getElementById("bms-capacity2").innerText=bms_capacity2+" Ah"
+
+
+
         renderCells(cells)
 
         return
