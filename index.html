@@ -692,7 +692,7 @@
 
 					<div class="bms-item">
 						<span>Phần trăm</span>
-						<b id="bms-soc">96%</b>
+						<b id="bms-soc">0 %</b>
 					</div>
 
 					<div class="bms-item">
@@ -707,7 +707,7 @@
 
 					<div class="bms-item">
 						<span>Chênh lệch cell</span>
-						<b id="bms-delta">0.027V</b>
+						<b id="bms-delta">0.0V</b>
 					</div>
 
 				</div>
@@ -1096,11 +1096,15 @@ client.on('message', (topic, payload) => {
 
         const cells = d.cell || []
 		const pack_volt= d.pack
+		const bms_volt_dif= d.bms_volt_dif
 		const pack_current= d.pack_current
 		const pack_power= d.pack_power
+		const pack_soc= d.bms_capacity
 		document.getElementById("bms-voltage").innerText=pack_volt+" V"
 		document.getElementById("bms-current").innerText=pack_current+" A"
 		document.getElementById("bms-power").innerText=pack_power+" W"
+		document.getElementById("bms-delta").innerText=bms_volt_dif+" mV"
+		document.getElementById("bms-soc").innerText=pack_soc+" %"
         renderCells(cells)
 
         return
