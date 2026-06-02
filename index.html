@@ -687,7 +687,7 @@
 
 					<div class="bms-item">
 						<span>Dung lượng</span>
-						<b id="bms-cap">10Ah</b>
+						<b id="bms-capacity">0Ah</b>
 					</div>
 
 					<div class="bms-item">
@@ -702,7 +702,7 @@
 
 					<div class="bms-item">
 						<span>Nhiệt độ</span>
-						<b id="bms-mos">32°C</b>
+						<b id="bms-mos">0°C</b>
 					</div>
 
 					<div class="bms-item">
@@ -1107,7 +1107,7 @@ client.on('message', (topic, payload) => {
 		document.getElementById("bms-current").innerText=pack_current+" A"
 		document.getElementById("bms-power").innerText=pack_power+" W"
 		document.getElementById("bms-delta").innerText=bms_volt_dif+" mV"
-		document.getElementById("bms-soc").innerText=bms_soc+"%"+ "|"+bms_capacity+"Ah"
+		document.getElementById("bms-soc").innerText=bms_soc+" %"+ " | "+bms_capacity+" Ah"
 
 document.getElementById("bms-mos").innerText=bms_temp+" °C"
 
