@@ -30,7 +30,7 @@ jobs:
         arduino-cli lib install "modbus-esp8266"
         arduino-cli lib install "Adafruit NeoPixel"
         arduino-cli lib install "PubSubClient"
-        arduino-cli lib install "NimBLEDevice"
+        arduino-cli lib install "NimBLE-Arduino"
 
     - name: Compile Firmware
       run: |
