@@ -87,11 +87,33 @@ bool otaRunning = false;
 float bms_pack_voltage = 0;
 float bms_pack_power = 0;
 float bms_pack_current = 0;
-float bms_cell[16] = {0};
+float bms_maxcharge=0;
+float bms_maxdischarge=0;
+float bms_charge =0;
+float bms_discharge=0;
+float bms_balance=0;
+float bms_volt_dif=0;
+float bms_soc=0;
+float bms_temp=0;
+float bms_capacity=0;
+float bms_cycle=0;
+float bms_oncharge=0;
+float bms_ondischarge=0;
+float bms_onbalance=0;
 float bms_uvp = 0;
 float bms_ovp = 0;
-float bms_volt_dif=0;
-float bms_capacity=0;
+float bms_uvpr = 0;
+float bms_ovpr = 0;
+float bms_rfv=0;
+float bms_rcv=0;
+float bms_soc100 =0;
+float bms_soc0=0;
+float bms_celloff=0;
+    
+//======== MQTT
+bool readBmsSettingReq = false;
+bool readIvtSettingReq = false;
+ 
 // =====================================================
 // WEB CONFIG
 // =====================================================
@@ -234,7 +256,6 @@ void checkWiFi() {
 
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("\nWIFI RECONNECTED");
-
     setLED(0, 255, 0);
   }
 }
@@ -249,16 +270,11 @@ void startAP() {
     "Solar-SETUP",
     "12345678"
   );
-
   Serial.println("AP STARTED");
-
   Serial.print("AP IP: ");
   Serial.println(WiFi.softAPIP());
-
   server.on("/", handleRoot);
-
   server.on("/save", handleSave);
-
   server.begin();
 }
 
@@ -665,6 +681,10 @@ void connectMQTT() {
     if (ok) {
 
       Serial.println("MQTT CONNECTED");
+      mqtt.subscribe("solar/bms/cmd");
+
+      mqtt.subscribe("solar/inverter/cmd"); 
+      Serial.println("SUBSCRIBE OK");          
 
     }
     else {
@@ -679,125 +699,31 @@ void connectMQTT() {
     }
   }
 }
-// =====================================================
-// SUPABASE
-// =====================================================
-void sendSupabase() {
+void mqttCallback(char* topic, byte* payload, unsigned int length)
+{
+    String msg;
 
-  if (WiFi.status() != WL_CONNECTED)
-    return;
+    for(unsigned int i=0;i<length;i++)
+        msg += (char)payload[i];
 
-  HTTPClient http;
+    Serial.print("MQTT RX ");
+    Serial.print(topic);
+    Serial.print(" = ");
+    Serial.println(msg);
 
-  String url =
-    String(SUPABASE_URL) +
-    "/rest/v1/" +
-    TABLE_NAME +
-    "?on_conflict=device_id";
+    if(String(topic) == "solar/bms/cmd")
+    {
+        if(msg == "read_setting")
+            readBmsSettingReq = true;
+    }
 
-  http.begin(url);
-  http.setTimeout(3000);
-
-  http.addHeader("apikey", SUPABASE_KEY);
-
-  http.addHeader(
-    "Authorization",
-    String("Bearer ") + SUPABASE_KEY
-  );
-
-  http.addHeader(
-    "Content-Type",
-    "application/json"
-  );
-
-  http.addHeader(
-    "Prefer",
-    "resolution=merge-duplicates"
-  );
-
-  // ================= SAFE LAMBDA =================
-  auto f = [](float v) -> String {
-    if (isnan(v) || isinf(v)) return "0";
-    return String(v, 2);
-  };
-
-  auto i = [](int v) -> String {
-    if (isnan(v) || isinf(v)) return "0";
-    return String(v);
-  };
-
-  auto s = [](String v) -> String {
-    if (v.length() == 0) return "UNKNOWN";
-    return v;
-  };
-
-  String json =
-    "{"
-    "\"device_id\":\"SEN ECO 6KW\",";
-
-  // ================= GRID =================
-  json += "\"grid_voltage\":" + f(grid_voltage) + ",";
-  json += "\"grid_current\":" + f(grid_current) + ",";
-  json += "\"grid_frequency\":" + f(grid_frequency) + ",";
-  json += "\"grid_power\":" + f(grid_power) + ",";
-  json += "\"grid_buy_today\":" + f(grid_buy_today) + ",";
-  json += "\"grid_sel_today\":" + f(grid_sel_today) + ",";
-
-  // ================= PV =================
-  json += "\"pv1_voltage\":" + f(pv1_voltage) + ",";
-  json += "\"pv1_current\":" + f(pv1_current) + ",";
-  json += "\"pv1_power\":" + f(pv1_power) + ",";
-  json += "\"pv2_voltage\":" + f(pv2_voltage) + ",";
-  json += "\"pv2_current\":" + f(pv2_current) + ",";
-  json += "\"pv2_power\":" + f(pv2_power) + ",";
-  json += "\"pv_power\":" + f(pv_power) + ",";
-  json += "\"pv_power_peak\":" + f(pv_power_peak) + ",";
-  json += "\"pv_today\":" + f(pv_today) + ",";
-  json += "\"pv_total\":" + f(pv_total) + ",";
-
-  // ================= BATTERY =================
-  json += "\"battery_voltage\":" + f(battery_voltage) + ",";
-  json += "\"battery_power\":" + f(battery_power) + ",";
-  json += "\"battery_soc\":" + i(battery_soc) + ",";
-  json += "\"battery_temp\":" + f(battery_temp) + ",";
-  json += "\"battery_current\":" + f(battery_current) + ",";
-  json += "\"battery_changer_today\":" + f(battery_changer_today) + ",";
-  json += "\"battery_total_changer\":" + f(battery_total_changer) + ",";
-  json += "\"battery_dischanger_today\":" + f(battery_dischanger_today) + ",";
-  json += "\"battery_total_dischanger\":" + f(battery_total_dischanger) + ",";
-
-  // ================= LOAD =================
-  json += "\"load_voltage\":" + f(load_voltage) + ",";
-  json += "\"load_current\":" + f(load_current) + ",";
-  json += "\"load_power\":" + f(load_power) + ",";
-  json += "\"load_today\":" + f(load_today) + ",";
-  json += "\"load_total\":" + f(load_total) + ",";
-
-  // ================= EPS =================
-  json += "\"eps_voltage\":" + f(eps_voltage) + ",";
-  json += "\"eps_frequency\":" + f(eps_frequency) + ",";
-  json += "\"eps_power\":" + f(eps_power) + ",";
-  json += "\"eps_current\":" + f(eps_current) + ",";
-  json += "\"eps_today\":" + f(eps_today) + ",";
-  json += "\"eps_total\":" + f(eps_total) + ",";
-
-  // ================= SN + TEMP =================
-  json += "\"ivt_sn\":\"" + s(ivt_sn) + ",";
-  json += "\"ivt_temp\":" + f(ivt_temp)+",";
-
-  // Parameter
-  json += "\"prm_mode\":" + f(prm_mode) + ",";
-  json += "\"prm_bat_type\":" + f(prm_bat_type)+ ",";
-  json += "\"prm_dischanger\":" + f(prm_dischanger);
-  json += "}";
-
-  // ================= DEBUG ================
-
-  int code = http.POST(json);
-
-  Serial.println(code);
-  http.end();
+    if(String(topic) == "solar/inverter/cmd")
+    {
+        if(msg == "read_setting")
+            readIvtSettingReq = true;
+    }
 }
+
 void sendMQTT() {
 
   if (!mqtt.connected())
@@ -878,8 +804,198 @@ void sendMQTT() {
 //
 //BMS/////////////////////
 // ===== GLOBAL =====
+// send Mqtt setting
+void sendBMSSettingMQTT()
+{
+    if(!mqtt.connected()) return;
 
+    String json = "{";
+    json += "\"bms_uvpr\":" + String(bms_uvpr,3) + ",";
+    json += "\"bms_ovpr\":" + String(bms_ovpr,3) + ",";
+    json += "\"bms_rcv\":" + String(bms_rcv,3) + ",";
+    json += "\"bms_rfv\":" + String(bms_rfv,3) + ",";
+    json += "\"bms_soc100\":" + String(bms_soc100,3) + ",";
+    json += "\"bms_soc0\":" + String(bms_soc0,3) + ",";
+    json += "\"bms_celloff\":" + String(bms_celloff,3) + ",";
+    json += "\"bms_maxcharge\":" + String(bms_maxcharge,0) + ",";
+    json += "\"bms_maxdischarge\":" + String(bms_maxdischarge,0) + ",";
+    json += "\"bms_oncharge\":" + String(bms_oncharge,0) + ",";
+    json += "\"bms_ondischarge\":" + String(bms_ondischarge,0) + ",";
+    json += "\"bms_onbalance\":" + String(bms_onbalance,0) + ",";
+                        
+    json += "\"bms_uvp\":" + String(bms_uvp,3) + ",";
+    json += "\"bms_ovp\":" + String(bms_ovp,3);
 
+    json += "}";
+
+    mqtt.publish(
+        "solar/bms/setting",
+        json.c_str(),
+        true
+    );
+ 
+    Serial.println(json);
+}
+
+// ===== PARSE FULL FRAME =====
+void parseFrame(uint8_t* data, uint16_t len)
+{
+    
+    if(len < 6) return;
+
+    uint8_t type = data[4];
+
+    // ===== 0x01 SETTINGS =====
+    if(type == 0x01)
+    {
+        if(len < 22) return;
+
+        bms_uvp =
+            ((uint32_t)data[10] |
+            ((uint32_t)data[11] << 8) |
+            ((uint32_t)data[12] << 16) |
+            ((uint32_t)data[13] << 24))
+            /1000.0f;
+        bms_uvpr =
+            ((uint32_t)data[14] |
+            ((uint32_t)data[15] << 8) |
+            ((uint32_t)data[16] << 16) |
+            ((uint32_t)data[17] << 24))
+            /1000.0f;
+        
+        bms_ovp =
+            ((uint32_t)data[18] |
+            ((uint32_t)data[19] << 8) |
+            ((uint32_t)data[20] << 16) |
+            ((uint32_t)data[21] << 24))
+            /1000.0f;
+        bms_ovpr =
+            ((uint32_t)data[22] |
+            ((uint32_t)data[23] << 8) |
+            ((uint32_t)data[24] << 16) |
+            ((uint32_t)data[25] << 24))
+            /1000.0f;
+        bms_soc100 =
+            ((uint32_t)data[30] |
+            ((uint32_t)data[31] << 8) |
+            ((uint32_t)data[32] << 16) |
+            ((uint32_t)data[33] << 24))
+            /1000.0f;
+        bms_soc0 =
+            ((uint32_t)data[34] |
+            ((uint32_t)data[35] << 8) |
+            ((uint32_t)data[36] << 16) |
+            ((uint32_t)data[37] << 24))
+            /1000.0f;
+        bms_rcv =
+            ((uint32_t)data[38] |
+            ((uint32_t)data[39] << 8) |
+            ((uint32_t)data[40] << 16) |
+            ((uint32_t)data[41] << 24))
+            /1000.0f;
+        bms_rfv =
+            ((uint32_t)data[42] |
+            ((uint32_t)data[43] << 8) |
+            ((uint32_t)data[44] << 16) |
+            ((uint32_t)data[45] << 24))
+            /1000.0f;
+        bms_celloff =
+            ((uint32_t)data[46] |
+            ((uint32_t)data[47] << 8) |
+            ((uint32_t)data[48] << 16) |
+            ((uint32_t)data[49] << 24))
+            /1000.0f;
+        bms_maxcharge =
+            ((uint32_t)data[50] |
+            ((uint32_t)data[51] << 8) |
+            ((uint32_t)data[52] << 16) |
+            ((uint32_t)data[53] << 24))
+            /1000.0f;
+        bms_maxdischarge =
+            ((uint32_t)data[62] |
+            ((uint32_t)data[63] << 8) |
+            ((uint32_t)data[64] << 16) |
+            ((uint32_t)data[65] << 24))
+            /1000.0f;
+        bms_oncharge =
+            ((uint32_t)data[118] |
+            ((uint32_t)data[119] << 8) |
+            ((uint32_t)data[120] << 16) |
+            ((uint32_t)data[121] << 24))
+            /1000.0f;
+        bms_ondischarge =
+            ((uint32_t)data[122] |
+            ((uint32_t)data[123] << 8) |
+            ((uint32_t)data[124] << 16) |
+            ((uint32_t)data[125] << 24))
+            /1000.0f;
+        bms_onbalance =
+            ((uint32_t)data[126] |
+            ((uint32_t)data[127] << 8) |
+            ((uint32_t)data[128] << 16) |
+            ((uint32_t)data[129] << 24))
+            /1000.0f;
+                                                                                        
+        sendBMSSettingMQTT();
+    }
+    // ===== 0x02 CELL INFO =====
+    else if(type == 0x02)
+    {
+        if(len < 300) return;
+                
+        bms_pack_voltage =
+            ((uint32_t)data[150] |
+            ((uint32_t)data[151] << 8) |
+            ((uint32_t)data[152] << 16) |
+            ((uint32_t)data[153] << 24))
+            *0.001f;
+        bms_pack_power =
+              ((uint32_t)data[154] |
+              ((uint32_t)data[155] << 8) |
+              ((uint32_t)data[156] << 16) |
+              ((uint32_t)data[157] << 24))
+              *0.001f;
+        bms_volt_dif =
+                ((uint32_t)data[76] |
+                ((uint32_t)data[77] << 8))
+                /1000.0f;
+        bms_soc =(uint8_t)data[173] ;
+        
+        bms_capacity =
+              ((uint32_t)data[174] |
+              ((uint32_t)data[175] << 8) |
+              ((uint32_t)data[176] << 16) |
+              ((uint32_t)data[177] << 24))
+              *0.001f;
+
+        bms_cycle =
+              ((uint32_t)data[182] |
+              ((uint32_t)data[183] << 8) |
+              ((uint32_t)data[184] << 16) |
+              ((uint32_t)data[185] << 24))
+              ;
+
+        bms_charge    = data[198];
+        bms_discharge = data[199];
+        bms_balance     = data[201];                                                
+        bms_temp =
+            ((uint16_t)data[144] |
+            ((uint16_t)data[145] << 8))*0.1f
+            ;
+        
+        int32_t rawCurrent =
+            (int32_t)(
+                ((uint32_t)data[158]) |
+                ((uint32_t)data[159] << 8) |
+                ((uint32_t)data[160] << 16) |
+                ((uint32_t)data[161] << 24)
+            );
+        bms_pack_current =rawCurrent * 0.001f;
+
+    }
+
+}
+        
 // CRC SUM8
 uint8_t calcCRC(const uint8_t* data, uint16_t len)
 {
@@ -911,20 +1027,16 @@ void notifyCallback(
         data[2]==0xEB &&
         data[3]==0x90;
 
-    Serial.printf(
-        "\nNOTIFY len=%u header=%d\n",
-        len,
-        header
-    );
+    //Serial.printf(
+   //     "\nNOTIFY len=%u header=%d\n",len,header);
 
     // ignore AT\r\n or random packets
     if(!header &&
        len<=8 &&
        frameLen==0)
     {
-        Serial.println(
-            "IGNORE stray packet"
-        );
+       // Serial.println(
+       // "IGNORE stray packet" );
         return;
     }
 
@@ -946,23 +1058,8 @@ void notifyCallback(
             uint8_t crcRecv =
                 frameBuf[frameLen-1];
 
-            Serial.printf(
-                "CHECK type=%02X len=%u\n",
-                type,
-                frameLen
-            );
-
-            Serial.printf(
-                "CRC calc=%02X recv=%02X\n",
-                crcCalc,
-                crcRecv
-            );
-
             if(crcCalc==crcRecv)
             {
-                Serial.println(
-                    "CRC OK"
-                );
 
                 parseFrame(
                     frameBuf,
@@ -971,9 +1068,9 @@ void notifyCallback(
             }
             else
             {
-                Serial.println(
-                    "CRC FAIL DROP"
-                );
+               // Serial.println(
+                //    "CRC FAIL DROP"
+               // );
             }
         }
 
@@ -985,18 +1082,13 @@ void notifyCallback(
        len<=8 &&
        frameLen>0)
     {
-        Serial.println(
-            "SKIP tiny junk"
-        );
+
         return;
     }
 
     if(frameLen+len >
        sizeof(frameBuf))
     {
-        Serial.println(
-            "OVERFLOW DROP"
-        );
 
         frameLen=0;
         return;
@@ -1009,96 +1101,11 @@ void notifyCallback(
     );
 
     frameLen += len;
-
-    Serial.printf(
-        "BUFFER=%u\n",
-        frameLen
-    );
-
     if(frameLen>320)
     {
-        Serial.println(
-            "FRAME >320 DROP"
-        );
 
         frameLen=0;
     }
-}
-// ===== PARSE FULL FRAME =====
-void parseFrame(uint8_t* data, uint16_t len)
-{
-    if(len < 6) return;
-
-    uint8_t type = data[4];
-
-
-
-    // ===== 0x01 SETTINGS =====
-    if(type == 0x01)
-    {
-        if(len < 22) return;
-
-        bms_uvp =
-            ((uint32_t)data[10] |
-            ((uint32_t)data[11] << 8) |
-            ((uint32_t)data[12] << 16) |
-            ((uint32_t)data[13] << 24))
-            /1000.0f;
-
-        bms_ovp =
-            ((uint32_t)data[18] |
-            ((uint32_t)data[19] << 8) |
-            ((uint32_t)data[20] << 16) |
-            ((uint32_t)data[21] << 24))
-            /1000.0f;
-    }
-
-    // ===== 0x02 CELL INFO =====
-    else if(type == 0x02)
-    {
-        if(len < 300) return;
-        for(int i=0;i<16;i++)
-        {
-            int o = 6 + i*2;
-
-            bms_cell[i] =
-                (data[o] |
-                (data[o+1] << 8))
-                /1000.0f;
-        }
-        bms_pack_voltage =
-            ((uint32_t)data[150] |
-            ((uint32_t)data[151] << 8) |
-            ((uint32_t)data[152] << 16) |
-            ((uint32_t)data[153] << 24))
-            *0.001f;
-        bms_pack_power =
-              ((uint32_t)data[154] |
-              ((uint32_t)data[155] << 8) |
-              ((uint32_t)data[156] << 16) |
-              ((uint32_t)data[157] << 24))
-              *0.001f;
-        bms_volt_dif =
-                ((uint32_t)data[76] |
-                ((uint32_t)data[77] << 8))
-                /1000.0f;
-        bms_capacity =
-                (uint32_t)data[173] ;
-
-      
-        int32_t rawCurrent =
-            (int32_t)(
-                ((uint32_t)data[158]) |
-                ((uint32_t)data[159] << 8) |
-                ((uint32_t)data[160] << 16) |
-                ((uint32_t)data[161] << 24)
-            );
-        bms_pack_current =rawCurrent * 0.001f;
-
-        
-
-    }
-
 }
 
 
@@ -1129,13 +1136,8 @@ void sendCommand(uint8_t cmd)
     else if(ffe1->canWriteNoResponse())
         ok=ffe1->writeValue(frame,20,false);
 
-    Serial.printf(
-        "SEND CMD=%02X CRC=%02X %s\n",
-        cmd,
-        frame[19],
-        ok?"OK":"FAIL"
-    );
 }
+
 void sendBMSMQTT()
 {
     if (!mqtt.connected()) return;
@@ -1144,15 +1146,14 @@ void sendBMSMQTT()
     json += "\"pack\":" + String(bms_pack_voltage, 2) + ",";
     json += "\"pack_power\":" + String(bms_pack_power,0) + ",";
     json += "\"pack_current\":" + String(bms_pack_current, 2) + ",";
+    json += "\"bms_temp\":" + String(bms_temp, 1) + ",";
+    json += "\"bms_capacity\":" + String(bms_capacity, 0) + ",";
+    json += "\"bms_capacity2\":" + String(bms_charge,0) + ",";
+    json += "\"bms_discharge\":" + String(bms_discharge,0) + ",";
+    json += "\"bms_balance\":" + String(bms_balance,0) + ",";
+    json += "\"bms_cycle\":" + String(bms_cycle,0) + ",";                    
     json += "\"bms_volt_dif\":" + String(bms_volt_dif, 4) + ",";
-    json += "\"bms_capacity\":" + String(bms_capacity) + ",";
-    json += "\"cell\":[";
-    for (int i = 0; i < 16; i++)
-    {
-        json += String(bms_cell[i], 2);
-        if (i < 15) json += ",";
-    }
-
+    json += "\"bms_soc\":" + String(bms_soc);
     json += "]}";
 
     mqtt.publish("solar/bms/data", json.c_str(), true);
@@ -1164,7 +1165,7 @@ void setup() {
 
   Serial.begin(115200);
   led.begin();
-  led.setBrightness(10);
+  led.setBrightness(5);
   led.show(); // tắt ban đầu
   WiFi.setAutoReconnect(true);
   WiFi.persistent(true);
@@ -1183,7 +1184,7 @@ void setup() {
       MQTT_SERVER,
       MQTT_PORT
   );
-  
+  mqtt.setCallback(mqttCallback);
   mqtt.setKeepAlive(60);
   mqtt.setBufferSize(4096);
   mb.client();
@@ -1258,6 +1259,16 @@ void loop() {
     }
     
     mqtt.loop();
+    if(readBmsSettingReq)
+{
+    readBmsSettingReq = false;
+
+    Serial.println("SEND 0x97");
+
+    sendCommand(0x97);
+    delay(1000);
+    sendCommand(0x96);
+}
   if (millis() - lastRun >= interval) {
 
     lastRun = millis();
@@ -1295,8 +1306,7 @@ void loop() {
     {
         lastBMS = millis();
         sendBMSMQTT();
-    }    
-
-
+    } 
+    
   }
 }
