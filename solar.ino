@@ -1154,7 +1154,7 @@ void sendBMSMQTT()
     json += "\"bms_cycle\":" + String(bms_cycle,0) + ",";                    
     json += "\"bms_volt_dif\":" + String(bms_volt_dif, 4) + ",";
     json += "\"bms_soc\":" + String(bms_soc);
-    json += "]}";
+    json += "}";
 
     mqtt.publish("solar/bms/data", json.c_str(), true);
 }
