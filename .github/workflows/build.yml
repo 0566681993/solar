@@ -44,14 +44,24 @@ jobs:
         BIN_FILE=$(find build -name "*.bin" | head -n 1)
         cp "$BIN_FILE" solar.bin
 
+
     - name: Commit and Push BIN
       run: |
         git config user.name "github-actions"
         git config user.email "actions@github.com"
-
-        git pull --rebase origin main
-
+    
         git add solar.bin
-        git commit -m "Auto update solar.bin" || echo "No changes"
-
+    
+        if git diff --cached --quiet; then
+          echo "No changes"
+          exit 0
+        fi
+    
+        git commit -m "Auto update solar.bin"
+    
+        git fetch origin main
+        git rebase origin/main
+    
         git push origin HEAD:main
+
+
