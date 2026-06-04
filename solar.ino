@@ -37,7 +37,7 @@ String bmsRaw = "";
 // MAC BMS
 
 // ================= VERSION =================
-String currentVersion = "1.0.2";
+String currentVersion = "1.0.3";
 
 // ================= OTA =================
 String firmwareURL =
