@@ -190,11 +190,7 @@
 			font-size:15px;
 		}
 
-		.cell-grid{
-			display:grid;
-			grid-template-columns:1fr 1fr 1fr;
-			gap:8px;
-		}
+
 
 		.cell{
 			background:#f8fafc;
@@ -416,13 +412,62 @@
 		}
 		/* 3. ĐẨY NỘI DUNG XUỐNG - Chìa khóa nằm ở đây */
 		.content-wrapper {
-    padding-top: calc(40px + env(safe-area-inset-top));
-    width: 100%;
-    box-sizing: border-box;
+		padding-top: calc(40px + env(safe-area-inset-top));
+		width: 100%;
+		box-sizing: border-box;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		.setting-row2{
+			display:flex;
+			align-items:center;
+			justify-content:space-between; /* đẩy 2 đầu */
+			width:100%;
+		}
+
+		.switch {
+			position: relative;
+			display: inline-block;
+			width: 50px;
+			height: 26px;
+			flex-shrink: 0;
+		}
+
+		.switch input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+
+		.slider {
+			position: absolute;
+			inset: 0;
+			cursor: pointer;
+			background: #ccc;
+			transition: .3s;
+			border-radius: 26px;
+		}
+
+		.slider:before {
+			content: "";
+			position: absolute;
+			width: 20px;
+			height: 20px;
+			left: 3px;
+			top: 3px;
+			background: #fff;
+			border-radius: 50%;
+			transition: .3s;
+		}
+
+		input:checked + .slider {
+			background: #4CAF50;
+		}
+
+		input:checked + .slider:before {
+			transform: translateX(24px);
+		}
 }
 
 
@@ -524,12 +569,12 @@
                     <button
 					    class="setting-toggle"
 					    onclick="toggleSetting('ivt-setting-content',this)">
-					    🔧
+					    🛠
 					</button></div>
 				<div id="ivt-setting-content" style="display:none;">
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Loại pin
+							Công suất sạc (A)
 						</div>
 						<input
 							class="ivtsetting-input"
@@ -541,7 +586,7 @@
 					</div>
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Điện áp dừng sạc.(V)
+							Công suất xả (A)
 						</div>
 						<input
 							class="ivtsetting-input"
@@ -553,7 +598,7 @@
 					</div>
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Điện áp dừng xả.(V)
+							Bảo vệ áp cao(OVP)
 						</div>
 						<input
 							class="ivtsetting-input"
@@ -565,7 +610,7 @@
 					</div>			
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Sạc từ lưới
+							Điện áp sạc nhanh (RCV)
 						</div>
 						<input
 							class="ivtsetting-input"
@@ -577,7 +622,7 @@
 					</div>			
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Công suất sạc từ lưới.(W)
+							Điện áp đầy 100%
 						</div>
 	
 						<input
@@ -591,7 +636,7 @@
 	
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Phần trăm dừng sạc từ lưới.(%)
+							Điện áp phục hồi cao(OVPR)
 						</div>
 						<input
 							class="ivtsetting-input"
@@ -603,7 +648,7 @@
 					</div>
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Công suất sạc từ pv. (W)
+							Điện áp phục hồi thấp(UVPR)
 						</div>
 						<input
 							class="ivtsetting-input"
@@ -629,7 +674,7 @@
 	
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Công suất xả.(W)
+							Điện áp pin 0%
 						</div>
 						<input
 							class="ivtsetting-input"
@@ -641,7 +686,7 @@
 					</div>
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Phần trăn dừng xả(%)
+							Bảo vệ áp thấp(UVP)
 						</div>
 	
 						<input
@@ -655,7 +700,7 @@
 					
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Dòng xả.(A)
+							Điện áp tắt BMS
 						</div>
 						<input
 							class="ivtsetting-input"
@@ -666,8 +711,8 @@
 						</button>				
 					</div>
 					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">
-							Dòng sạc(A)
+						<div class="setting-name">
+							Điện áp sạc nổi(RFV)
 						</div>
 	
 						<input
@@ -745,15 +790,7 @@
 
 			</div>
 
-			<!-- CELL VOLTAGE -->
-			<div class="bms-card">
 
-				<div class="stats-title">
-					Điện áp cell
-				</div>
-				<div class="cell-grid" id="cell-grid">
-				</div>
-			</div>
 			<!-- SETTING BMS -->
 			<div class="setting-card">
 
@@ -763,187 +800,191 @@
 					<button
 					    class="setting-toggle"
 					    onclick="toggleSetting('bms-setting-content',this)">
-					    🔧
+					    🛠
 					</button>
 					</div>
                 <div id="bms-setting-content" style="display:none;">
 					<div class="setting-row">
 						<div class="setting-name">
-							Cell Count
+							Công suất sạc (A)
 						</div>
 						<input
-							class="setting-input"
+							class="ivtsetting-input"
 							value="0.00"
 						>
-						<button class="setting-btn">
+						<button class="ivtsetting-btn">
 							OK
 						</button>				
 					</div>
 					<div class="setting-row">
 						<div class="setting-name">
-							Battery Capacity(Ah)
+							Công suất xả (A)
 						</div>
 						<input
-							class="setting-input"
+							class="ivtsetting-input"
 							value="0.00"
 						>
-						<button class="setting-btn">
+						<button class="ivtsetting-btn">
 							OK
 						</button>				
 					</div>
 					<div class="setting-row">
 						<div class="setting-name">
-							Balance Trig. Volt.(V)
+							Bảo vệ áp cao(OVP)
 						</div>
 						<input
-							class="setting-input"
+							class="ivtsetting-input"
 							value="0.00"
 						>
-						<button class="setting-btn">
-							OK
-						</button>				
-					</div>			
-					<div class="setting-row">
-						<div class="setting-name">
-							Start balance Volt.(V)
-						</div>
-	
-						<input
-							class="setting-input"
-							value="0.00"
-						>
-						<button class="setting-btn">
-							OK
-						</button>
-					</div>
-	
-					<div class="setting-row">
-						<div class="setting-name">
-							Max Blance Cur.(A)
-						</div>
-						<input
-							class="setting-input"
-							value="0.00"
-						>
-						<button class="setting-btn">
-							OK
-						</button>				
-					</div>
-					<div class="setting-row">
-						<div class="setting-name">
-							Cell OVP.(V)
-						</div>
-						<input
-							class="setting-input"
-							value="0.00"
-						>
-						<button class="setting-btn">
+						<button class="ivtsetting-btn">
 							OK
 						</button>				
 					</div>			
 					<div class="setting-row">
 						<div class="setting-name">
-							Vol.Cell RCV.(V)
-						</div>
-	
-						<input
-							class="setting-input"
-							value="0.00"
-						>
-						<button class="setting-btn">
-							OK
-						</button>
-					</div>
-	
-					<div class="setting-row">
-						<div class="setting-name">
-							SOC 100% Volt.(V)
+							Điện áp sạc nhanh (RCV)
 						</div>
 						<input
-							class="setting-input"
+							class="ivtsetting-input"
 							value="0.00"
 						>
-						<button class="setting-btn">
-							OK
-						</button>				
-					</div>
-					<div class="setting-row">
-						<div class="setting-name">
-							Cell OVPR(V)
-						</div>
-	
-						<input
-							class="setting-input"
-							value="0.00"
-						>
-						<button class="setting-btn">
-							OK
-						</button>
-					</div>
-	
-					<div class="setting-row">
-						<div class="setting-name">
-							Cell UVPR(V)
-						</div>
-						<input
-							class="setting-input"
-							value="0.00"
-						>
-						<button class="setting-btn">
+						<button class="ivtsetting-btn">
 							OK
 						</button>				
 					</div>			
 					<div class="setting-row">
 						<div class="setting-name">
-							SOC 0% Volt.(V)
-						</div>
-						<input
-							class="setting-input"
-							value="0.00"
-						>
-						<button class="setting-btn">
-							OK
-						</button>				
-					</div>
-					<div class="setting-row">
-						<div class="setting-name">
-							Cell UVP(V)
+							Điện áp đầy 100%
 						</div>
 	
 						<input
-							class="setting-input"
+							class="ivtsetting-input"
 							value="0.00"
 						>
-						<button class="setting-btn">
+						<button class="ivtsetting-btn">
 							OK
 						</button>
 					</div>
 	
 					<div class="setting-row">
 						<div class="setting-name">
-							Power Off Vol.(V)
+							Điện áp phục hồi cao(OVPR)
 						</div>
 						<input
-							class="setting-input"
+							class="ivtsetting-input"
 							value="0.00"
 						>
-						<button class="setting-btn">
-							OK
-						</button>				
-					</div>	
-	
-					<div class="setting-row">
-						<div class="setting-name">
-							Vol.Smart Sleep.(V)
-						</div>
-						<input
-							class="setting-input"
-							value="0.00"
-						>
-						<button class="setting-btn">
+						<button class="ivtsetting-btn">
 							OK
 						</button>				
 					</div>
+					<div class="setting-row">
+						<div class="setting-name">
+							Điện áp phục hồi thấp(UVPR)
+						</div>
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>				
+					</div>			
+					<div class="setting-row">
+						<div class="setting-name">
+							Phần trăm dừng sạc từ pv.(%)
+						</div>
+	
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>
+					</div>
+	
+					<div class="setting-row">
+						<div class="setting-name">
+							Điện áp pin 0%
+						</div>
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>				
+					</div>
+					<div class="setting-row">
+						<div class="setting-name">
+							Bảo vệ áp thấp(UVP)
+						</div>
+	
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>
+					</div>
+					
+					<div class="setting-row">
+						<div class="setting-name">
+							Điện áp tắt BMS
+						</div>
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>				
+					</div>
+					<div class="setting-row">
+						<div class="setting-name">
+							Điện áp sạc nổi(RFV)
+						</div>
+	
+						<input
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn">
+							OK
+						</button>
+					</div>
+					<div class="setting-row2">
+						<div class="setting-name">
+							Sạc
+						</div>
+	
+						<label class="switch">
+							<input type="checkbox" id="balanceSwitch">
+							<span class="slider"></span>
+						</label>
+					</div>					
+					<div class="setting-row2">
+						<div class="setting-name">
+							Xả
+						</div>
+	
+						<label class="switch">
+							<input type="checkbox" id="balanceSwitch">
+							<span class="slider"></span>
+						</label>
+					</div>					
+					<div class="setting-row2">
+						<div class="setting-name">
+							Cân bằng
+						</div>
+
+						<label class="switch">
+							<input type="checkbox" id="balanceSwitch">
+							<span class="slider"></span>
+						</label>
+					</div>					
 	            </div>				
 			</div>
 
@@ -982,30 +1023,21 @@ function openLogin(){
 		alert("Sai tài khoản hoặc mật khẩu")
 	}
 }
-function renderCells(cells){
+const client = mqtt.connect(
+    'wss://272917f2a9904b409d89a9f5a3d8d058.s1.eu.hivemq.cloud:8884/mqtt',
+    {
+        username: '0566681993',
+        password: 'Anhtan1993'
+    }
+)
 
-    const grid = document.getElementById("cell-grid")
+client.on('connect', () => {
 
-    grid.innerHTML = ""
+    console.log("MQTT CONNECTED")
+    client.subscribe('solar/inverter/data')
+    client.subscribe('solar/bms/data')
 
-    const minIndex = cells.indexOf(Math.min(...cells))
-
-    cells.forEach((v,i)=>{
-
-        let color = "#22c55e"
-
-        if(i === minIndex) color = "#ef4444"
-
-        grid.innerHTML += `
-        <div class="cell">
-            <span>${String(i+1).padStart(2,'0')}</span>
-            <b style="color:${color}">
-                ${Number(v).toFixed(3)}V
-            </b>
-        </div>
-        `
-    })
-}
+})
 /* =========================
    FLOW ON/OFF
 ========================= */
@@ -1097,7 +1129,7 @@ function setFlow(name, value, d) {
 
 let settingLogin = false;
 
-function toggleSetting(contentId, btn){
+function toggleSetting(contentId, btn, topic){
 
     const box = document.getElementById(contentId);
 
@@ -1105,23 +1137,31 @@ function toggleSetting(contentId, btn){
 
         if(!settingLogin){
 
-            const pass = prompt("Nhập mật khẩu");
+            const pass = prompt("PASS WORD");
 
             if(pass !== "123456"){
-                alert("Sai mật khẩu");
+                alert("Sai Pass");
                 return;
             }
 
             settingLogin = true;
         }
 
+        if(client.connected){
+            client.publish(topic, "read_setting");
+  
+        }else{
+            alert("MQTT chưa kết nối");
+            return;
+        }
+
         box.style.display = "block";
-        btn.innerHTML = "🔽";
+        btn.innerHTML = "🛠";
 
     }else{
 
         box.style.display = "none";
-        btn.innerHTML = "🔧";
+        btn.innerHTML = "🛠";
     }
 }
 function showTab(id,el){
@@ -1137,22 +1177,7 @@ function showTab(id,el){
 	document.getElementById(id).classList.add("active")
 	el.classList.add("active")
 }
-const client = mqtt.connect(
-    'wss://272917f2a9904b409d89a9f5a3d8d058.s1.eu.hivemq.cloud:8884/mqtt',
-    {
-        username: '0566681993',
-        password: 'Anhtan1993'
-    }
-)
 
-client.on('connect', () => {
-
-    console.log("MQTT CONNECTED")
-
-    client.subscribe('solar/inverter/data')
-    client.subscribe('solar/bms/data')
-
-})
 client.on('message', (topic, payload) => {
 
     const d = JSON.parse(payload.toString())
