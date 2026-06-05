@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#FFA500"> 
-	<title>Solar siêu nhân</title>
+	<title>Solar</title>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 	<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌞</text></svg>">
     <style>
@@ -154,7 +154,7 @@
 		}
 
 		.bms-value{
-			font-size:38px;
+			font-size:35px;
 			font-weight:700;
 			color:#22c55e;
 		}
@@ -424,13 +424,15 @@
 			align-items:center;
 			justify-content:space-between; /* đẩy 2 đầu */
 			width:100%;
+			margin-top: 10px;
+			margin-bottom: 10px;
 		}
 
 		.switch {
 			position: relative;
 			display: inline-block;
-			width: 50px;
-			height: 26px;
+			width: 44px;
+			height: 20px;
 			flex-shrink: 0;
 		}
 
@@ -446,14 +448,14 @@
 			cursor: pointer;
 			background: #ccc;
 			transition: .3s;
-			border-radius: 26px;
+			border-radius: 20px;
 		}
 
 		.slider:before {
 			content: "";
 			position: absolute;
-			width: 20px;
-			height: 20px;
+			width: 14px;
+			height: 14px;
 			left: 3px;
 			top: 3px;
 			background: #fff;
@@ -466,7 +468,7 @@
 		}
 
 		input:checked + .slider:before {
-			transform: translateX(24px);
+			transform: translateX(18px);
 		}
 }
 
@@ -960,7 +962,7 @@
 						</div>
 	
 						<label class="switch">
-							<input type="checkbox" id="balanceSwitch">
+							<input type="checkbox" id="chargeSwitch">
 							<span class="slider"></span>
 						</label>
 					</div>					
@@ -970,7 +972,7 @@
 						</div>
 	
 						<label class="switch">
-							<input type="checkbox" id="balanceSwitch">
+							<input type="checkbox" id="dischargeSwitch">
 							<span class="slider"></span>
 						</label>
 					</div>					
@@ -1022,7 +1024,26 @@ client.on('connect', () => {
     client.subscribe('solar/inverter/data')
     client.subscribe('solar/bms/data')
 	client.subscribe("solar/bms/setting");
+	
+    document.getElementById("chargeSwitch").addEventListener("change", function () {
+        client.publish("solar/bms/cmd", JSON.stringify({
+            bms_oncharge: this.checked ? 1 : 0
+        }));
+    });
 
+    // Xả
+    document.getElementById("dischargeSwitch").addEventListener("change", function () {
+        client.publish("solar/bms/cmd", JSON.stringify({
+            bms_ondischarge: this.checked ? 1 : 0
+        }));
+    });
+
+    // Cân bằng
+    document.getElementById("balanceSwitch").addEventListener("change", function () {
+        client.publish("solar/bms/cmd", JSON.stringify({
+            bms_onbalance: this.checked ? 1 : 0
+        }));
+    });
 })
 /* =========================
    FLOW ON/OFF
@@ -1179,7 +1200,7 @@ client.on('message', (topic, payload) => {
 			"bms_ovp","bms_rcv","bms_soc100","bms_ovpr","bms_uvpr",
 			"bms_soc0","bms_uvp",
 			"bms_celloff",
-			"bms_rfv",
+			"bms_rfv"
 			
 		].forEach(id => {
 			const el = document.getElementById(id);
@@ -1187,7 +1208,16 @@ client.on('message', (topic, payload) => {
 				el.value = d[id];
 			}
 		});
+		// Switch
+		document.getElementById("chargeSwitch").checked =
+			Number(d.bms_oncharge) === 1;
 
+		document.getElementById("dischargeSwitch").checked =
+			Number(d.bms_ondischarge) === 1;
+
+		document.getElementById("balanceSwitch").checked =
+			Number(d.bms_onbalance) === 1;
+	
 		return;
 	}
     // =========================
