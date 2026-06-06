@@ -369,8 +369,6 @@
 		.setting-toggle:active{
 		    transform:scale(.95);
 		}
-		/* Import font từ Google Fonts */
-		@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
 
 
 		.user-name {
@@ -498,7 +496,9 @@
 				</div></div>
 				<div class="node" id="node-bat">🔋<div class="val" id="v-bat">0W</div>
 				<div style="font-size:9px;color:#94a3b8" id="info-bat">0V | 0A
-				</div></div>
+				</div>
+				<div style="font-size:9px;color:#94a3b8" id="info-batc">0A</div>
+				</div>
 				<div class="node" id="node-grid">⚡<div class="val" id="v-grid">0W</div>
 				<div style="font-size:9px;color:#94a3b8" id="info-grid">0V | 0A
 				</div></div>
@@ -1068,7 +1068,7 @@ function setFlow(name, value, d) {
     const grid = Number(d.grid_power) || 0
     const bat = Number(d.battery_power) || 0
     const load = Number(d.load_power) || 0
-    const eps = Number(d.eps_voltage) || 0
+    const eps = Number(d.eps_power) || 0
 
     // =========================
     // PV: luôn chiều PV → inverter
@@ -1242,9 +1242,9 @@ client.on('message', (topic, payload) => {
 		document.getElementById("bms-current").innerText=pack_current+" A"
 		document.getElementById("bms-power").innerText=pack_power+" W"
 		document.getElementById("bms-delta").innerText=bms_volt_dif+" mV"
-		document.getElementById("bms-soc").innerText=bms_soc+" %"+ " | "+bms_capacity+" Ah"
+		document.getElementById("bms-soc").innerText=bms_soc+" %"
         document.getElementById("bms-mos").innerText=bms_temp+" °C"
-        document.getElementById("bms-capacity").innerText=bms_capacity2+" Ah"
+        document.getElementById("bms-capacity").innerText=bms_capacity+" Ah"
         document.getElementById("bms-cycle").innerText=bms_cycle
         document.getElementById("bms_charge").innerHTML ="Sạc:"+
    ( bms_charge ? "ON" : "OFF");
@@ -1292,6 +1292,7 @@ client.on('message', (topic, payload) => {
 
     // BATTERY
     const bat=Number(d.battery_power)||0
+	const bat_soc=Number(d.battery_soc)||0
     const battery_voltage=Number(d.battery_voltage)||0
     const battery_current=Number(d.battery_current)||0
     const battery_changer_today=Number(d.battery_changer_today)||0
@@ -1327,9 +1328,8 @@ client.on('message', (topic, payload) => {
     document.getElementById("info-eps").innerText=
         `${eps_voltage}V / ${eps_current}A`
 
-    document.getElementById("info-bat").innerText=
-        `${battery_voltage}V / ${battery_current}A`
-
+    document.getElementById("info-bat").innerText= bat_soc +"%"+" / "+ battery_voltage+"V"
+	document.getElementById("info-batc").innerText=battery_current +"A"
     document.getElementById("today_").innerText=
         "Sử dụng: "+formatPower2(use_total*10)
 
