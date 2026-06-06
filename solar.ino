@@ -39,7 +39,7 @@ String bmsRaw = "";
 // MAC BMS
 
 // ================= VERSION =================
-String currentVersion = "1.0.2";
+String currentVersion = "1.0.3";
 
 // ================= OTA =================
 String firmwareURL =
@@ -589,7 +589,7 @@ bool readInverter() {
   // READ R5
   // =====================================================
 
-  if (!mb.readHreg(remote, 0x2100, r5, 10))
+  if (!mb.readHreg(remote, 0x2100, r5, 34))
     return false;
 
   if (!waitModbus())
@@ -663,6 +663,8 @@ bool readInverter() {
   ivt_temp = r1[27];
   // parameter
   prm_mode = r5[0];
+  prm_bat_type = r5[6];
+  prm_dischanger = r5[9];
   return true;
 }
 
@@ -858,6 +860,9 @@ void sendMQTT() {
 
   // ===== PARAM =====
   json += "\"prm_mode\":"+String(prm_mode,0)+",";
+  json += "\"prm_bat_type\":"+String(prm_bat_type,0)+",";
+  json += "\"prm_dischanger\":"+String(prm_dischanger,0);
+
   json += "}";
 
   mqtt.publish(
@@ -1248,6 +1253,39 @@ void sendBMSMQTT()
 
     mqtt.publish("solar/bms/data", json.c_str(), true);
 }
+// Ghi dữ liệu bms
+void writeBalance(bool on)
+{
+    if (!ffe1) {
+        Serial.println("BLE not ready");
+        return;
+    }
+
+    uint8_t frame[300] = {0};
+
+    // ===== HEADER =====
+    frame[0] = 0x55;
+    frame[1] = 0xAA;
+    frame[2] = 0xEB;
+    frame[3] = 0x90;
+
+    // frame type
+    frame[4] = 0x01;
+
+    // counter
+    frame[5] = seqCounter++;
+
+    // ===== ONLY TEST FIELD =====
+    frame[126] = on ? 1 : 0;   // balance switch
+
+    // ===== CRC =====
+    frame[299] = calcCRC(frame, 299);
+
+    // DEBUG
+    Serial.println(on ? "BALANCE ON" : "BALANCE OFF");
+
+    ffe1->writeValue(frame, 300, true);
+}
 // =====================================================
 // SETUP
 // =====================================================
@@ -1302,6 +1340,9 @@ void setup() {
   sendCommand(0x97);
   delay(1000);
   sendCommand(0x96);
+  delay(1000);
+  writeBalance(true);
+  delay(1000);
 
 }
 
