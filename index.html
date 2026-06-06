@@ -20,7 +20,7 @@
         #node-bat { left: 38px;  top: 250px; border-top: 3px solid #00e676; }
         #node-home{ left: 248px; top: 250px; border-top: 3px solid #00b0ff; }
 		#node-pv{left:38px;top:25px;border-bottom:3px solid #ffb300;}
-		#node-grid{left:250px;top:25px;border-bottom:3px solid #ef4444;}
+		#node-grid{left:248px;top:25px;border-bottom:3px solid #ef4444;}
 		
         svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .base-line { stroke: #808080; stroke-width: 0.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
@@ -46,7 +46,7 @@
 }
 
         /* Style phần bổ sung */
-        .stats-container{width:360px;background:radial-gradient(circle at 20% 20%,rgba(255,255,255,0.25) 0 55px,transparent 70px),radial-gradient(circle at 80% 18%,rgba(255,255,255,0.18) 0 70px,transparent 85px),linear-gradient(to bottom,rgba(90,180,255,0.18),rgba(180,230,255,0.10));border-radius:20px;padding:20px;box-sizing:border-box;box-shadow:0 4px 15px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.18);}
+        .stats-container{width:360px;background:radial-gradient(circle at 20% 20%,rgba(255,255,255,0.25) 0 55px,transparent 70px),radial-gradient(circle at 80% 18%,rgba(255,255,255,0.18) 0 70px,transparent 85px),linear-gradient(to bottom,rgba(90,180,255,0.18),rgba(180,230,255,0.10));border-radius:20px;padding:20px;box-sizing:border-box;box-shadow:0 4px 15px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);}
         .stats-title { font-size: 14px; font-weight: bold; margin-bottom: 15px; color: #334155; }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px;  }
         .stat-item { display: flex; align-items: center; gap: 10px; }
@@ -54,20 +54,94 @@
         .stat-val { font-size: 13px; font-weight: bold; color: #0f172a; }
 		.title-row .stats-title{margin-bottom:0;}
         .title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;}
-		#today_{color:#ff9800;font-size:15px;font-weight:700;}
+
 
         /* Layout Tổng sản lượng mới */
-		.total-container{width:360px;background:radial-gradient(circle at 25% 25%,rgba(255,255,255,0.22) 0 50px,transparent 65px),radial-gradient(circle at 70% 15%,rgba(255,255,255,0.16) 0 65px,transparent 80px),linear-gradient(to bottom,rgba(80,170,255,0.16),rgba(190,235,255,0.08));border-radius:20px;padding:20px;box-sizing:border-box;box-shadow:0 4px 15px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.18);}
+		.total-container{width:360px;background:radial-gradient(circle at 25% 25%,rgba(255,255,255,0.22) 0 50px,transparent 65px),radial-gradient(circle at 70% 15%,rgba(255,255,255,0.16) 0 65px,transparent 80px),linear-gradient(to bottom,rgba(80,170,255,0.16),rgba(190,235,255,0.08));border-radius:20px;padding:20px;box-sizing:border-box;box-shadow:0 4px 15px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);}
         .total-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .total-item { display: flex; flex-direction: column; }
         .total-label { font-size: 10px; color: #64748b; margin-bottom: 2px; }
         .total-value { font-size: 13px; font-weight: bold; color: #0f172a; }
 		body, div, span {-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;text-rendering: optimizeLegibility;}
+		/* biểu đồ*/
+		.chart-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-top: 10px;
+			margin-bottom: 2px;
+		}
+
+		.chart-title {
+			font-weight: 200;
+			font-size: 14px;
+			color: #333;
+			bold;
+		}
+
+		.total-value {
+			font-weight: 300;
+			font-size: 14px;
+			color: #000;
+		}
+		.progress-bar {
+		  display: flex;
+		  height: 10px; /* Độ dày của thanh */
+		  width: 100%;
+		  border-radius: 5px;
+		  overflow: hidden; /* Giúp các đoạn bo góc chung */
+		  background-color: #eee;
+
+		  margin-bottom: 5px;
+		}
+
+		.bar {
+		  height: 100%;
+		}
+
+		/* Màu sắc tương ứng */
+		.solar { background-color: #FFC107; }
+		.battery { background-color: #00E676; }
+		.grid { background-color: #FF7043; }
+
+		/* Chú thích */
+		.legend {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 2px;
+		}
+
+		.legend-item {
+			display: flex;
+			flex-direction: column; /* Xếp chồng theo chiều dọc */
+			align-items: center;    /* Căn giữa icon và chữ */
+			font-size: 10px;
+		}
+
+		.legend-label {
+			display: flex;
+			align-items: center;
+			margin-bottom: 4px; /* Khoảng cách giữa tên và số liệu */
+			font-weight: 500;
+		}
+
+		.legend-value {
+			color: #555;
+			font-weight: bold;
+		}
+
+		.legend i {
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			margin-right: 5px;
+		}	
 		/* model máy */
 		#v-inv{
 		position: absolute;
-		left: 50.5%;
-		top: 105px;   /* chỉnh lên/xuống ở đây */
+		left: 50%;
+		top: 135px;   /* chỉnh lên/xuống ở đây */
 		transform: translateX(-50%);
 		font-size: 15px;
 		font-weight: 600;
@@ -78,10 +152,24 @@
 		border-radius: 6px;
 		backdrop-filter: blur(4px);
 		}
-		
+		.inv-clock{
+		position:absolute;
+
+		top:30px;
+		left:50%;
+
+		transform:translateX(-50%);
+
+		font-size:14px;
+		font-weight:600;
+
+		color:#00b0ff;
+
+		letter-spacing:1px;
+	}
 		.inv-header{position:absolute;top:0;left:0;width:100%;height:14px;background:linear-gradient(to bottom,rgba(255,255,255,0.55),rgba(255,255,255,0.05));border-bottom:1px solid rgba(255,255,255,0.25);}
 		.inv-brand{position:absolute;bottom:12px;font-size:11px;font-weight:700;letter-spacing:1px;color:rgba(0,0,255,0.9);}
-		.inv-led{position:absolute;top:10px;right:34px;width:8px;height:8px;border-radius:999px;background:#22c55e;box-shadow:0 0 5px #22c55e,0 0 10px #22c55e;animation:blink 1.2s infinite;}@keyframes blink{0%{opacity:1;}50%{opacity:.35;}100%{opacity:1;}}	
+	
 		/* =========================
 		TAB
 		========================= */
@@ -490,6 +578,10 @@
 		<!-- PAGE inverter -->
 		<div id="home" class="page active">
 			<div class="wrapper">
+				<!-- GIỜ -->
+				<div id="inv-clock" class="inv-clock">
+					00:00
+				</div>
 				<div id="v-inv">0 °C</div>
 				<div class="node" id="node-pv">🌞<div class="val" id="v-pv">0W</div>
 				<div style="font-size:9px;color:#94a3b8" id="info-pv">0V | 0A
@@ -505,7 +597,7 @@
 				<div class="node" id="node-home">🏠<div class="val" id="v-home">0W</div>
 				<div style="font-size:9px;color:#94a3b8" id="info-home">0V | 0A
 				</div></div>
-				<div class="node" id="node-inv"><div class="inv-header"></div><div class="inv-screen">🤖</div><div class="inv-brand">SENERGY</div><div class="inv-led"></div></div>
+				<div class="node" id="node-inv"><div class="inv-header"></div><div class="inv-screen">🤖</div><div class="inv-brand">SENERGY</div></div>
 				<div class="node" id="node-bu">💡<div class="val" id="v-bu">0W</div>
 				<div style="font-size:9px;color:#94a3b8" id="info-eps">0V | 0A
 				</div></div>
@@ -513,32 +605,31 @@
 				<svg id="svg-layer">
 					<!-- BASE LINE -->
 					<path class="base-line" d="
-						M 139,150 L 85,150 Q 75,150 75,140 L 75,102
+						M 139,150 L 85,150 Q 75,150 75,140 L 75,100
 						M 139,195 L 85,195 Q 75,195 75,205 L 75,250
-						M 222,150 L 275,150 Q 285,150 285,140 L 285,102
+						M 222,150 L 275,150 Q 285,150 285,140 L 285,100
 						M 222,195 L 275,195 Q 285,195 285,205 L 285,250
 						M 181,212 L 181,250
 					"/>
 
 					<!-- FLOW LINES -->
-					<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 139,150 L 85,150 Q 75,150 75,140 L 75,102"/>
+					<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 139,150 L 85,150 Q 75,150 75,140 L 75,100"/>
 					<path id="l-bat" class="flow-line" style="stroke:#00e676;" d="M 139,195 L 85,195 Q 75,195 75,205 L 75,250"/>
-					<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 222,150 L 275,150 Q 285,150 285,140 L 285,102"/>
+					<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 222,150 L 275,150 Q 285,150 285,140 L 285,100"/>
 					<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 222,195 L 275,195 Q 285,195 285,205 L 285,250"/>
 					<path id="l-bu" class="flow-line" style="stroke:#a855f7;" d="M 181,212 L 181,250"/>
 
-					<circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 139,150 L 85,150 Q 75,150 75,140 L 75,102" /></circle>
-					<circle id="p-bat" class="particle" style="color:#00e676;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 139,195 L 85,195 Q 75,195 75,205 L 75,250" /></circle>
-					<circle id="p-grid" class="particle" style="color:#ef4444;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 222,150 L 275,150 Q 285,150 285,140 L 285,102" /></circle>
-					<circle id="p-home" class="particle" style="color:#00b0ff;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 222,195 L 275,195 Q 285,195 285,205 L 285,250" /></circle>
-					<circle id="p-bu" class="particle" style="color:#a855f7;" r="5"><animateMotion dur="2s" repeatCount="indefinite" path="M 181,212 L 181,250" /></circle>
+					<circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="4s" repeatCount="indefinite" path="M 139,150 L 85,150 Q 75,150 75,140 L 75,100" /></circle>
+					<circle id="p-bat" class="particle" style="color:#00e676;" r="5"><animateMotion dur="4s" repeatCount="indefinite" path="M 139,195 L 85,195 Q 75,195 75,205 L 75,250" /></circle>
+					<circle id="p-grid" class="particle" style="color:#ef4444;" r="5"><animateMotion dur="4s" repeatCount="indefinite" path="M 222,150 L 275,150 Q 285,150 285,140 L 285,100" /></circle>
+					<circle id="p-home" class="particle" style="color:#00b0ff;" r="5"><animateMotion dur="4s" repeatCount="indefinite" path="M 222,195 L 275,195 Q 285,195 285,205 L 285,250" /></circle>
+					<circle id="p-bu" class="particle" style="color:#a855f7;" r="5"><animateMotion dur="4s" repeatCount="indefinite" path="M 181,212 L 181,250" /></circle>
 				</svg>
 			</div>
 
 			<div class="stats-container">
 					<div class="title-row">
 					<div class="stats-title">Hôm nay</div>
-					<div class="stat-val" id="today_">0 kWh</div>
 				</div>
 
 				<div class="stats-grid">
@@ -548,6 +639,38 @@
 					<div class="stat-item">💸<div><div class="stat-text">Đẩy lưới</div><div class="stat-val" id="st-grid-sell">0 kWh</div></div></div>
 					<div class="stat-item">🔋<div><div class="stat-text">Nạp pin</div><div class="stat-val" id="st-bat-charge">0 kWh</div></div></div>
 					<div class="stat-item">🪫<div><div class="stat-text">Xả pin</div><div class="stat-val" id="st-bat-discharge">0 kWh</div></div></div>
+				</div>
+				<div class="chart-header">
+					<span class="chart-title">Sử dụng điện</span>
+					<span id="total-usage" class="total-value">4.83 kWh</span>
+				</div>
+				<div id="usage-progress-bar" class="progress-bar">
+					<div id="solar-bar" class="bar solar" style="width: 0%;"></div>
+					<div id="battery-bar" class="bar battery" style="width: 0%;"></div>
+					<div id="grid-bar" class="bar grid" style="width: 0%;"></div>
+				</div>
+
+				<div class="legend">
+					<div class="legend-item">
+						<div class="legend-label">
+							<i style="background: #FFC107;"></i> Từ Solar
+						</div>
+						<div class="legend-value"><span id="solar-percent">0</span></div>
+					</div>
+
+					<div class="legend-item">
+						<div class="legend-label">
+							<i style="background: #00E676;"></i> Từ Pin
+						</div>
+						<div class="legend-value"><span id="battery-percent">0</span></div>
+					</div>
+
+					<div class="legend-item">
+						<div class="legend-label">
+							<i style="background: #FFC107;"></i> Từ lưới
+						</div>
+						<div class="legend-value"><span id="grid-percent">0</span></div>
+					</div>
 				</div>
 
 
@@ -570,160 +693,105 @@
 					<span>Cài đặt biến tần</span>
                     <button
 					    class="setting-toggle"
-					    onclick="toggleSetting('ivt-setting-content',this)">
+					    onclick="toggleSetting('ivt-setting-content',this,'solar/inverter/cmd')">
 					    🛠
 					</button></div>
 				<div id="ivt-setting-content" style="display:none;">
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Công suất sạc (A)
+							Giao tiếp PIN
+						</div>
+
+						<select
+							id="ivt_battery_mode"
+							class="ivtsetting-input">
+							<option value="0">OFF</option>
+							<option value="1">Điện áp</option>
+							<option value="2">SOC</option>
+						</select>
+
+						<button
+							class="ivtsetting-btn"
+							onclick="sendInvSetting('ivt_battery_mode','ivt_battery_mode')">
+							OK
+						</button>
+						<div class="ivtsetting-name">
+							Công suất sạc (W)
 						</div>
 						<input
+							id="ivt_max_charge_power"
 							class="ivtsetting-input"
 							value="0.00"
 						>
-						<button class="ivtsetting-btn">
+						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_max_charge_power','ivt_max_charge_power')">
 							OK
 						</button>				
 					</div>
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Công suất xả (A)
+							Công suất xả (W)
 						</div>
 						<input
+							id="ivt_max_discharge_power"
 							class="ivtsetting-input"
 							value="0.00"
 						>
-						<button class="ivtsetting-btn">
+						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_max_discharge_power','ivt_max_discharge_power')">
 							OK
 						</button>				
-					</div>
+					</div>		
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Bảo vệ áp cao(OVP)
+							Soc dừng xả (%)
 						</div>
 						<input
+							id="ivt_discharge_end_soc"
 							class="ivtsetting-input"
 							value="0.00"
 						>
-						<button class="ivtsetting-btn">
+						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_discharge_end_soc','ivt_discharge_end_soc')">
 							OK
 						</button>				
 					</div>			
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Điện áp sạc nhanh (RCV)
-						</div>
-						<input
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>				
-					</div>			
-					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">
-							Điện áp đầy 100%
+							Điện áp dừng xả (V)
 						</div>
 	
 						<input
+							id="ivt_dischargevolt"
 							class="ivtsetting-input"
 							value="0.00"
 						>
-						<button class="ivtsetting-btn">
+						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_dischargevolt','ivt_dischargevolt')">
 							OK
 						</button>
 					</div>
-	
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Điện áp phục hồi cao(OVPR)
-						</div>
-						<input
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>				
-					</div>
-					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">
-							Điện áp phục hồi thấp(UVPR)
-						</div>
-						<input
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>				
-					</div>			
-					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">
-							Phần trăm dừng sạc từ pv.(%)
+							Điện áp dừng sạc (V)
 						</div>
 	
 						<input
+							id="ivt_stopcharge"
 							class="ivtsetting-input"
 							value="0.00"
 						>
-						<button class="ivtsetting-btn">
+						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_stopcharge','ivt_stopcharge')">
 							OK
 						</button>
 					</div>
-	
-					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">
-							Điện áp pin 0%
+					<div class="ivtsetting-row" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
+						<div class="ivtsetting-name" style="color: #d32f2f; font-weight: bold;">
+							Khởi động lại ESP32
 						</div>
-						<input
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>				
-					</div>
-					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">
-							Bảo vệ áp thấp(UVP)
-						</div>
-	
-						<input
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
+						
+						<button class="ivtsetting-btn" onclick="sendResetCommand()" style="background-color: #d32f2f; color: white;">
+							RESET
 						</button>
 					</div>
-					
-					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">
-							Điện áp tắt BMS
-						</div>
-						<input
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>				
-					</div>
-					<div class="ivtsetting-row">
-						<div class="setting-name">
-							Điện áp sạc nổi(RFV)
-						</div>
 	
-						<input
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>
+
 					</div>
 		        </div>		
 			</div>	
@@ -1008,7 +1076,79 @@ function formatPower2(value) {
     }
     return Math.round(value).toFixed(1) + " Wh"
 }
+/* =========================
+   FLOW ON/OFF
+========================= */
+function setFlow(name, value, d) {
 
+    const line = UI["l-" + name] || document.getElementById("l-" + name);
+    const particle = UI["p-" + name] || document.getElementById("p-" + name);
+
+    if (!line || !particle) return;
+
+    const anim = particle.querySelector("animateMotion");
+    if (!anim) return;
+
+    const pv   = Number(d.pv1_power) || 0;
+    const grid = Number(d.grid_power) || 0;
+    const bat  = Number(d.battery_power) || 0;
+    const load = Number(d.load_power) || 0;
+    const eps  = Number(d.eps_power) || 0;
+
+    let show = false;
+    let reverse = false;
+
+    switch (name) {
+
+        case "pv":
+            show = pv > 0;
+            reverse = true;
+            break;
+
+        case "grid":
+            show = grid !== 0;
+            reverse = grid > 0;
+            break;
+
+        case "bat":
+            show = bat !== 0;
+            reverse = bat < 0;
+            break;
+
+        case "home":
+            show = load > 0;
+            break;
+
+        case "bu":
+            show = eps > 0;
+            break;
+    }
+
+    const display = show ? "block" : "none";
+
+    if (line.style.display !== display)
+        line.style.display = display;
+
+    if (particle.style.display !== display)
+        particle.style.display = display;
+
+    if (!show) return;
+
+    if (reverse) {
+
+        if (anim.getAttribute("keyPoints") !== "1;0") {
+            anim.setAttribute("keyPoints", "1;0");
+            anim.setAttribute("keyTimes", "0;1");
+        }
+
+    } else {
+
+        if (anim.hasAttribute("keyPoints")) {
+            anim.removeAttribute("keyPoints");
+            anim.removeAttribute("keyTimes");
+        }
+    }
+}
 
 const client = mqtt.connect(
     'wss://272917f2a9904b409d89a9f5a3d8d058.s1.eu.hivemq.cloud:8884/mqtt',
@@ -1045,95 +1185,36 @@ client.on('connect', () => {
         }));
     });
 })
-/* =========================
-   FLOW ON/OFF
-========================= */
-function setFlow(name, value, d) {
 
-    const line = document.getElementById("l-" + name)
-    const particle = document.getElementById("p-" + name)
+function sendResetCommand() {
+    if (confirm("Bạn có chắc chắn muốn khởi động lại thiết bị không?")) {
 
-    if (!line || !particle) return
-
-    const anim = particle.querySelector("animateMotion")
-    if (!anim) return
-
-    // =========================
-    // CHỐT: CHECK TỪ SUPABASE
-    // =========================
-    let show = false
-    let reverse = false
-
-    const pv = Number(d.pv1_power) || 0
-    const grid = Number(d.grid_power) || 0
-    const bat = Number(d.battery_power) || 0
-    const load = Number(d.load_power) || 0
-    const eps = Number(d.eps_power) || 0
-
-    // =========================
-    // PV: luôn chiều PV → inverter
-    // =========================
-    if (name === "pv") {
-        show = pv > 0
-        reverse = true
-    }
-
-    // =========================
-    // GRID: 2 chiều thật
-    // =========================
-	else if (name === "grid") {
-
-		const g = Number(grid) || 0
-
-		// chỉ cần có dấu là đủ
-		show = g !== 0
-
-		// +grid: lưới → inverter
-		// -grid: inverter → lưới
-		reverse = g > 0
-	}
-
-    // =========================
-    // BAT: sạc / xả
-    // =========================
-    else if (name === "bat") {
-        show = Math.abs(bat) > 0
-        reverse = bat < 0
-    }
-
-    // =========================
-    // LOAD (HOME): inverter → tải
-    // =========================
-    else if (name === "home") {
-        show = load > 0
-        reverse = false
-    }
-
-    // =========================
-    // EPS (backup)
-    // =========================
-    else if (name === "bu") {
-        show = eps > 0
-        reverse = false
-    }
-
-    // =========================
-    // APPLY
-    // =========================
-    line.style.display = show ? "block" : "none"
-    particle.style.display = show ? "block" : "none"
-
-    if (show) {
-        if (reverse) {
-            anim.setAttribute("keyPoints", "1;0")
-            anim.setAttribute("keyTimes", "0;1")
+        if (client && client.connected) {
+            client.publish("solar/esp32/cmd", "RESET");
+            alert("Đã gửi lệnh Reset!");
         } else {
-            anim.removeAttribute("keyPoints")
-            anim.removeAttribute("keyTimes")
+            alert("MQTT chưa kết nối!");
         }
     }
 }
 
+function sendInvSetting(inputId, mqttKey) {
+
+    const el = document.getElementById(inputId);
+    if (!el) return;
+
+    const value = Number(el.value);
+
+    if (!client || !client.connected) return;
+
+    client.publish(
+        "solar/inverter/cmd",
+        JSON.stringify({
+            key: mqttKey,
+            value: value
+        })
+    );
+}
 let settingLogin = false;
 
 function toggleSetting(contentId, btn, topic){
@@ -1187,6 +1268,65 @@ function showTab(id,el){
 
 
 //
+// =========================
+// CACHE DOM
+// =========================
+
+const UI = {};
+
+[
+    "chargeSwitch","dischargeSwitch","balanceSwitch",
+
+    "bms-voltage","bms-current","bms-power","bms-delta",
+    "bms-soc","bms-mos","bms-capacity","bms-cycle",
+    "bms_charge","bms_discharge","bms_balance",
+
+    "v-pv","v-grid","v-home","v-bu","v-bat",
+    "info-pv","info-grid","info-home","info-eps",
+    "info-bat","info-batc",
+
+    "st-pv","st-peak","st-grid-buy","st-grid-sell",
+    "st-bat-charge","st-bat-discharge",
+
+    "grid-buy-label",
+
+    "total-usage",
+    "solar-percent",
+    "battery-percent",
+    "grid-percent",
+
+    "solar-bar",
+    "battery-bar",
+    "grid-bar",
+
+    "total_pv",
+    "total_sd",
+    "total_bat",
+    "total_bat2",
+
+    "v-inv",
+
+    "bms_maxcharge",
+    "bms_maxdischarge",
+    "bms_ovp",
+    "bms_rcv",
+    "bms_soc100",
+    "bms_ovpr",
+    "bms_uvpr",
+    "bms_soc0",
+    "bms_uvp",
+    "bms_celloff",
+    "bms_rfv",
+	"ivt_stopcharge",
+	"ivt_dischargevolt",
+    "ivt_max_charge_power",
+    "ivt_max_discharge_power",
+    "ivt_discharge_end_soc",
+	"ivt_battery_mode",
+	"inv-clock"
+].forEach(id => {
+    UI[id] = document.getElementById(id);
+});
 client.on('message', (topic, payload) => {
 
     const d = JSON.parse(payload.toString())
@@ -1194,32 +1334,56 @@ client.on('message', (topic, payload) => {
 	///////////
 	if(topic === "solar/bms/setting"){
 
-		[
+		const fields = [
 			"bms_maxcharge",
 			"bms_maxdischarge",
-			"bms_ovp","bms_rcv","bms_soc100","bms_ovpr","bms_uvpr",
-			"bms_soc0","bms_uvp",
+			"bms_ovp",
+			"bms_rcv",
+			"bms_soc100",
+			"bms_ovpr",
+			"bms_uvpr",
+			"bms_soc0",
+			"bms_uvp",
 			"bms_celloff",
 			"bms_rfv"
-			
-		].forEach(id => {
-			const el = document.getElementById(id);
-			if(el && d[id] !== undefined){
-				el.value = d[id];
+		];
+
+		fields.forEach(id => {
+			if(d[id] !== undefined){
+				UI[id].value = d[id];
 			}
 		});
-		// Switch
-		document.getElementById("chargeSwitch").checked =
+
+		UI["chargeSwitch"].checked =
 			Number(d.bms_oncharge) === 1;
 
-		document.getElementById("dischargeSwitch").checked =
+		UI["dischargeSwitch"].checked =
 			Number(d.bms_ondischarge) === 1;
 
-		document.getElementById("balanceSwitch").checked =
+		UI["balanceSwitch"].checked =
 			Number(d.bms_onbalance) === 1;
-	
+
 		return;
 	}
+	// IVT setting
+	if(topic === "solar/inverter/setting"){
+		UI["ivt_battery_mode"].value =
+        String(d.battery ?? 0);
+		
+		const fields = [
+				"ivt_stopcharge",
+				"ivt_dischargevolt",
+				"ivt_max_charge_power",
+				"ivt_max_discharge_power",
+				"ivt_discharge_end_soc"
+		];
+		
+		fields.forEach(id => {
+			if(d[id] !== undefined){
+				UI[id].value = d[id];
+			}
+		});
+		}
     // =========================
     // BMS DATA
     // =========================
@@ -1235,24 +1399,41 @@ client.on('message', (topic, payload) => {
         const bms_capacity2= d.bms_capacity2
         const bms_temp= d.bms_temp
         const bms_cycle= d.bms_cycle
-        const bms_charge= Number (d.bms_charge)
+        const bms_charge= Number(d.bms_charge)
         const bms_discharge= Number (d.bms_discharge)
         const bms_balance= Number(d.bms_balance)
-		document.getElementById("bms-voltage").innerText=pack_volt+" V"
-		document.getElementById("bms-current").innerText=pack_current+" A"
-		document.getElementById("bms-power").innerText=pack_power+" W"
-		document.getElementById("bms-delta").innerText=bms_volt_dif+" mV"
-		document.getElementById("bms-soc").innerText=bms_soc+" %"
-        document.getElementById("bms-mos").innerText=bms_temp+" °C"
-        document.getElementById("bms-capacity").innerText=bms_capacity+" Ah"
-        document.getElementById("bms-cycle").innerText=bms_cycle
-        document.getElementById("bms_charge").innerHTML ="Sạc:"+
-   ( bms_charge ? "ON" : "OFF");
-        document.getElementById("bms_discharge").innerHTML ="Xả:"+
-   ( bms_discharge ? "ON" : "OFF");
-        document.getElementById("bms_balance").innerHTML ="Cân bằng:"+
-    (bms_balance ? "ON" : "OFF");
+		UI["bms-voltage"].textContent =
+			pack_volt + " V";
 
+		UI["bms-current"].textContent =
+			pack_current + " A";
+
+		UI["bms-power"].textContent =
+			pack_power + " W";
+
+		UI["bms-delta"].textContent =
+			bms_volt_dif + " mV";
+
+		UI["bms-soc"].textContent =
+			bms_soc + " %";
+
+		UI["bms-mos"].textContent =
+			bms_temp + " °C";
+
+		UI["bms-capacity"].textContent =
+			bms_capacity + " Ah";
+
+		UI["bms-cycle"].textContent =
+			bms_cycle;
+
+		UI["bms_charge"].textContent =
+			"Sạc:" + (bms_charge ? "ON" : "OFF");
+
+		UI["bms_discharge"].textContent =
+			"Xả:" + (bms_discharge ? "ON" : "OFF");
+
+		UI["bms_balance"].textContent =
+			"Cân bằng:" + (bms_balance ? "ON" : "OFF");
 
         return
     }
@@ -1301,66 +1482,142 @@ client.on('message', (topic, payload) => {
     const battery_total_dischanger=Number(d.battery_total_dischanger)||0
 
     const ivt_temp=Number(d.ivt_temp)||0
-
+	// BAR
     const use_total=load_today+eps_today
-
+	const use_pv=use_total-battery_dischanger_today-grid_buy_today||0
+	//%
+	const bar_pv = use_pv/use_total*100
+	const bar_battery =battery_dischanger_today/use_total*100
+	const bar_grid = grid_buy_today/use_total*100
     const grid_percent=
         load_today>0
         ? (grid_buy_today/load_today)*100
         :0
 
-    // UI
-    document.getElementById("v-pv").innerText=formatPower(pv)
-    document.getElementById("v-grid").innerText=formatPower(grid)
-    document.getElementById("v-home").innerText=formatPower(home)
-    document.getElementById("v-bu").innerText=formatPower(bu)
-    document.getElementById("v-bat").innerText=formatPower(bat)
+	// =========================
+	// UI
+	// =========================
 
-    document.getElementById("info-pv").innerText=
-        `${pv1_voltage}V / ${pv1_current}A`
+	UI["v-pv"].textContent = formatPower(pv);
+	UI["v-grid"].textContent = formatPower(grid);
+	UI["v-home"].textContent = formatPower(home);
+	UI["v-bu"].textContent = formatPower(bu);
+	UI["v-bat"].textContent = formatPower(bat);
 
-    document.getElementById("info-grid").innerText=
-        `${grid_voltage}V / ${grid_current}A`
+	UI["info-pv"].textContent =
+		`${pv1_voltage}V / ${pv1_current}A`;
 
-    document.getElementById("info-home").innerText=
-        `${load_voltage}V / ${load_current}A`
+	UI["info-grid"].textContent =
+		`${grid_voltage}V / ${grid_current}A`;
 
-    document.getElementById("info-eps").innerText=
-        `${eps_voltage}V / ${eps_current}A`
+	UI["info-home"].textContent =
+		`${load_voltage}V / ${load_current}A`;
 
-    document.getElementById("info-bat").innerText= bat_soc +"%"+" / "+ battery_voltage+"V"
-	document.getElementById("info-batc").innerText=battery_current +"A"
-    document.getElementById("today_").innerText=
-        "Sử dụng: "+formatPower2(use_total*10)
+	UI["info-eps"].textContent =
+		`${eps_voltage}V / ${eps_current}A`;
 
-    document.getElementById("st-pv").innerText=formatPower2(pv_today)
-    document.getElementById("st-peak").innerText=formatPower2(pv_peak/10)
-    document.getElementById("st-grid-buy").innerText=formatPower2(grid_buy_today*10)
-    document.getElementById("st-grid-sell").innerText=formatPower2(grid_sel_today*10)
-    document.getElementById("st-bat-charge").innerText=formatPower2(battery_changer_today*10)
-    document.getElementById("st-bat-discharge").innerText=formatPower2(battery_dischanger_today*10)
+	UI["info-bat"].textContent =
+		`${bat_soc}% / ${battery_voltage}V`;
 
-    document.getElementById("grid-buy-label").innerHTML=
-        `Lấy lưới <span style="color:#00b0ff">
-        ${grid_percent.toFixed(0)}%
-        </span>`
+	UI["info-batc"].textContent =
+		`${battery_current}A`;
 
-    document.getElementById("total_pv").innerText=formatPower2(pv_total)
-    document.getElementById("total_sd").innerText=formatPower2(load_total*10)
-    document.getElementById("total_bat").innerText=formatPower2(battery_total_changer*10)
-    document.getElementById("total_bat2").innerText=formatPower2(battery_total_dischanger*10)
 
-    document.getElementById("v-inv").innerText=
-        ivt_temp+"°C"
+	// =========================
+	// HÔM NAY
+	// =========================
 
-    setFlow("pv",pv,d)
-    setFlow("grid",grid,d)
-    setFlow("home",home,d)
-    setFlow("bu",bu,d)
-    setFlow("bat",bat,d)
+	UI["st-pv"].textContent =
+		formatPower2(pv_today);
+
+	UI["st-peak"].textContent =
+		formatPower2(pv_peak / 10);
+
+	UI["st-grid-buy"].textContent =
+		formatPower2(grid_buy_today * 10);
+
+	UI["st-grid-sell"].textContent =
+		formatPower2(grid_sel_today * 10);
+
+	UI["st-bat-charge"].textContent =
+		formatPower2(battery_changer_today * 10);
+
+	UI["st-bat-discharge"].textContent =
+		formatPower2(battery_dischanger_today * 10);
+
+	UI["grid-buy-label"].innerHTML =
+		`Lấy lưới <span style="color:#00b0ff">${grid_percent.toFixed(0)}%</span>`;
+
+
+	// =========================
+	// BIỂU ĐỒ
+	// =========================
+
+	UI["total-usage"].textContent =
+		formatPower2(use_total * 10);
+
+	UI["solar-percent"].textContent =
+		`${formatPower2(use_pv * 10)} (${bar_pv.toFixed(2)}%)`;
+
+	UI["battery-percent"].textContent =
+		`${formatPower2(battery_dischanger_today * 10)} (${bar_battery.toFixed(2)}%)`;
+
+	UI["grid-percent"].textContent =
+		`${formatPower2(grid_buy_today * 10)} (${bar_grid.toFixed(2)}%)`;
+
+	UI["solar-bar"].style.width =
+		`${bar_pv}%`;
+
+	UI["battery-bar"].style.width =
+		`${bar_battery}%`;
+
+	UI["grid-bar"].style.width =
+		`${bar_grid}%`;
+
+
+	// =========================
+	// TỔNG
+	// =========================
+
+	UI["total_pv"].textContent =
+		formatPower2(pv_total);
+
+	UI["total_sd"].textContent =
+		formatPower2(load_total * 10);
+
+	UI["total_bat"].textContent =
+		formatPower2(battery_total_changer * 10);
+
+	UI["total_bat2"].textContent =
+		formatPower2(battery_total_dischanger * 10);
+
+	UI["v-inv"].textContent =
+		`${ivt_temp}°C`;
+
+
+	// =========================
+	// FLOW
+	// =========================
+
+	setFlow("pv", pv, d);
+	setFlow("grid", grid, d);
+	setFlow("home", home, d);
+	setFlow("bu", bu, d);
+	setFlow("bat", bat, d);
 
 })
+function updateClock() {
 
+    const now = new Date();
+
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+
+    UI["inv-clock"].textContent = `${hh}:${mm}`;
+}
+
+updateClock();
+setInterval(updateClock, 1000);
 </script>
 </body>
 </html>
