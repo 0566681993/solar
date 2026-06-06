@@ -39,7 +39,7 @@ String bmsRaw = "";
 // MAC BMS
 
 // ================= VERSION =================
-String currentVersion = "1.0.3";
+String currentVersion = "1.0.2";
 
 // ================= OTA =================
 String firmwareURL =
@@ -80,7 +80,7 @@ unsigned long lastRun = 0;
 const unsigned long interval = 3000;
 
 unsigned long lastOTA = 0;
-const unsigned long otaInterval = 100000;
+const unsigned long otaInterval = 10000;
 
 // ================= OTA FLAG =================
 bool otaRunning = false;
@@ -589,7 +589,7 @@ bool readInverter() {
   // READ R5
   // =====================================================
 
-  if (!mb.readHreg(remote, 0x2100, r5, 34))
+  if (!mb.readHreg(remote, 0x2100, r5, 10))
     return false;
 
   if (!waitModbus())
@@ -663,8 +663,6 @@ bool readInverter() {
   ivt_temp = r1[27];
   // parameter
   prm_mode = r5[0];
-  prm_bat_type = r5[6];
-  prm_dischanger = r5[9];
   return true;
 }
 
@@ -860,9 +858,6 @@ void sendMQTT() {
 
   // ===== PARAM =====
   json += "\"prm_mode\":"+String(prm_mode,0)+",";
-  json += "\"prm_bat_type\":"+String(prm_bat_type,0)+",";
-  json += "\"prm_dischanger\":"+String(prm_dischanger,0);
-
   json += "}";
 
   mqtt.publish(
