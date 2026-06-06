@@ -39,7 +39,7 @@ String bmsRaw = "";
 // MAC BMS
 
 // ================= VERSION =================
-String currentVersion = "1.0.3";
+String currentVersion = "1.0.0";
 
 // ================= OTA =================
 String firmwareURL =
@@ -1243,7 +1243,7 @@ void sendBMSMQTT()
     json += "\"pack_current\":" + String(bms_pack_current, 2) + ",";
     json += "\"bms_temp\":" + String(bms_temp, 1) + ",";
     json += "\"bms_capacity\":" + String(bms_capacity, 0) + ",";
-    json += "\"bms_capacity2\":" + String(bms_charge,0) + ",";
+    json += "\"bms_charge\":" + String(bms_charge,0) + ",";
     json += "\"bms_discharge\":" + String(bms_discharge,0) + ",";
     json += "\"bms_balance\":" + String(bms_balance,0) + ",";
      json += "\"bms_cycle\":" + String(bms_cycle,0) + ",";                    
