@@ -10,6 +10,8 @@
 #include <Adafruit_NeoPixel.h>
 #include <PubSubClient.h>
 #include <NimBLEDevice.h>
+#include <ArduinoJson.h>
+
 
 static NimBLEAddress targetAddress("A4:C1:38:07:43:80", BLE_ADDR_PUBLIC);
 NimBLEClient* client = nullptr;
@@ -37,7 +39,7 @@ String bmsRaw = "";
 // MAC BMS
 
 // ================= VERSION =================
-String currentVersion = "1.0.2";
+String currentVersion = "1.0.3";
 
 // ================= OTA =================
 String firmwareURL =
@@ -97,9 +99,9 @@ float bms_soc=0;
 float bms_temp=0;
 float bms_capacity=0;
 float bms_cycle=0;
-float bms_oncharge=0;
-float bms_ondischarge=0;
-float bms_onbalance=0;
+bool bms_oncharge;
+bool bms_ondischarge;
+bool bms_onbalance;
 float bms_uvp = 0;
 float bms_ovp = 0;
 float bms_uvpr = 0;
@@ -256,6 +258,7 @@ void checkWiFi() {
 
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("\nWIFI RECONNECTED");
+
     setLED(0, 255, 0);
   }
 }
@@ -270,11 +273,16 @@ void startAP() {
     "Solar-SETUP",
     "12345678"
   );
+
   Serial.println("AP STARTED");
+
   Serial.print("AP IP: ");
   Serial.println(WiFi.softAPIP());
+
   server.on("/", handleRoot);
+
   server.on("/save", handleSave);
+
   server.begin();
 }
 
@@ -682,9 +690,7 @@ void connectMQTT() {
 
       Serial.println("MQTT CONNECTED");
       mqtt.subscribe("solar/bms/cmd");
-
-      mqtt.subscribe("solar/inverter/cmd"); 
-      Serial.println("SUBSCRIBE OK");          
+      mqtt.subscribe("solar/inverter/cmd");         
 
     }
     else {
@@ -699,31 +705,96 @@ void connectMQTT() {
     }
   }
 }
-void mqttCallback(char* topic, byte* payload, unsigned int length)
+extern uint8_t seqCounter;
+
+void writeMos(uint8_t reg, bool on)
 {
-    String msg;
+    uint8_t frame[20] = {0};
 
-    for(unsigned int i=0;i<length;i++)
-        msg += (char)payload[i];
+    frame[0] = 0xAA;
+    frame[1] = 0x55;
+    frame[2] = 0x90;
+    frame[3] = 0xEB;
 
-    Serial.print("MQTT RX ");
-    Serial.print(topic);
-    Serial.print(" = ");
-    Serial.println(msg);
+    frame[4] = reg;
+    frame[5] = 0x04;
 
-    if(String(topic) == "solar/bms/cmd")
-    {
-        if(msg == "read_setting")
-            readBmsSettingReq = true;
-    }
+    frame[6] = on ? 1 : 0;
 
-    if(String(topic) == "solar/inverter/cmd")
-    {
-        if(msg == "read_setting")
-            readIvtSettingReq = true;
-    }
+    frame[16] = seqCounter++;
+
+    frame[19] = calcCRC(frame,19);
+
+    for(int i=0;i<20;i++)
+        Serial.printf("%02X ", frame[i]);
+    Serial.println();
+
+    if(ffe1->canWrite())
+        ffe1->writeValue(frame,20,true);
 }
 
+void mqttCallback(char* topic, byte* payload, unsigned int length)
+{
+    if (strcmp(topic, "solar/bms/cmd") != 0)
+        return;
+
+    // Convert payload -> String (an toàn hơn concat)
+    String msg;
+    msg.reserve(length);
+
+    for (unsigned int i = 0; i < length; i++)
+        msg += (char)payload[i];
+
+    // ===== COMMAND STRING =====
+    if (msg == "read_setting") {
+        readBmsSettingReq = true;
+        return;
+    }
+
+    // ===== JSON PARSE =====
+    DynamicJsonDocument doc(256);
+    DeserializationError err = deserializeJson(doc, msg);
+
+    if (err) {
+        Serial.print("MQTT JSON error: ");
+        Serial.println(err.c_str());
+        return;
+    }
+
+    // ===== CHECK BLE =====
+    if (!ffe1) {
+        Serial.println("BLE not ready");
+        return;
+    }
+
+    // ===== SAFE PARSE BOOL =====
+    auto getBool = [](JsonVariant v) -> bool {
+        if (v.is<bool>()) return v.as<bool>();
+        return v.as<int>() == 1;
+    };
+
+    // ===== CONTROL MAP =====
+
+    if (doc.containsKey("bms_oncharge")) {
+        bool v = getBool(doc["bms_oncharge"]);
+        Serial.printf("Charge = %d\n", v);
+        writeMos(0x1D, v);
+    }
+
+    if (doc.containsKey("bms_ondischarge")) {
+        bool v = getBool(doc["bms_ondischarge"]);
+        Serial.printf("Discharge = %d\n", v);
+        writeMos(0x1E, v);
+    }
+
+    if (doc.containsKey("bms_onbalance")) {
+        bool v = getBool(doc["bms_onbalance"]);
+        Serial.printf("Balance = %d\n", v);
+        writeMos(0x1F, v);
+    }
+
+}
+// gửi data MQTT
 void sendMQTT() {
 
   if (!mqtt.connected())
@@ -819,10 +890,10 @@ void sendBMSSettingMQTT()
     json += "\"bms_celloff\":" + String(bms_celloff,3) + ",";
     json += "\"bms_maxcharge\":" + String(bms_maxcharge,0) + ",";
     json += "\"bms_maxdischarge\":" + String(bms_maxdischarge,0) + ",";
-    json += "\"bms_oncharge\":" + String(bms_oncharge,0) + ",";
-    json += "\"bms_ondischarge\":" + String(bms_ondischarge,0) + ",";
-    json += "\"bms_onbalance\":" + String(bms_onbalance,0) + ",";
-                        
+    json += "\"bms_oncharge\":" + String((int)bms_oncharge) + ",";
+    json += "\"bms_ondischarge\":" + String((int)bms_ondischarge) + ",";
+    json += "\"bms_onbalance\":" + String((int)bms_onbalance) + ",";
+                            
     json += "\"bms_uvp\":" + String(bms_uvp,3) + ",";
     json += "\"bms_ovp\":" + String(bms_ovp,3);
 
@@ -917,27 +988,25 @@ void parseFrame(uint8_t* data, uint16_t len)
             ((uint32_t)data[64] << 16) |
             ((uint32_t)data[65] << 24))
             /1000.0f;
+        bms_capacity =
+        ((uint32_t)data[130] |
+        ((uint32_t)data[131] << 8) |
+        ((uint32_t)data[132] << 16) |
+        ((uint32_t)data[133] << 24))
+        *0.001f;
+      
         bms_oncharge =
-            ((uint32_t)data[118] |
-            ((uint32_t)data[119] << 8) |
-            ((uint32_t)data[120] << 16) |
-            ((uint32_t)data[121] << 24))
-            /1000.0f;
+            (uint32_t)data[118];
         bms_ondischarge =
-            ((uint32_t)data[122] |
-            ((uint32_t)data[123] << 8) |
-            ((uint32_t)data[124] << 16) |
-            ((uint32_t)data[125] << 24))
-            /1000.0f;
+            (uint32_t)data[122];
         bms_onbalance =
-            ((uint32_t)data[126] |
-            ((uint32_t)data[127] << 8) |
-            ((uint32_t)data[128] << 16) |
-            ((uint32_t)data[129] << 24))
-            /1000.0f;
+            (uint32_t)data[126];
                                                                                         
         sendBMSSettingMQTT();
     }
+
+    
+ 
     // ===== 0x02 CELL INFO =====
     else if(type == 0x02)
     {
@@ -960,13 +1029,6 @@ void parseFrame(uint8_t* data, uint16_t len)
                 ((uint32_t)data[77] << 8))
                 /1000.0f;
         bms_soc =(uint8_t)data[173] ;
-        
-        bms_capacity =
-              ((uint32_t)data[174] |
-              ((uint32_t)data[175] << 8) |
-              ((uint32_t)data[176] << 16) |
-              ((uint32_t)data[177] << 24))
-              *0.001f;
 
         bms_cycle =
               ((uint32_t)data[182] |
@@ -991,6 +1053,8 @@ void parseFrame(uint8_t* data, uint16_t len)
                 ((uint32_t)data[161] << 24)
             );
         bms_pack_current =rawCurrent * 0.001f;
+
+        
 
     }
 
@@ -1058,8 +1122,19 @@ void notifyCallback(
             uint8_t crcRecv =
                 frameBuf[frameLen-1];
 
+          //  Serial.printf(
+       // "CHECK type=%02Xlen=%u\n",
+             //   type,frameLen);
+
+           // Serial.printf(
+    // "CRC calc=%02Xrecv=%02X\n",
+    //   crcCalc, crcRecv  );
+
             if(crcCalc==crcRecv)
             {
+                //Serial.println(
+          // "CRC OK"
+          //      );
 
                 parseFrame(
                     frameBuf,
@@ -1082,13 +1157,18 @@ void notifyCallback(
        len<=8 &&
        frameLen>0)
     {
-
+       // Serial.println(
+      //      "SKIP tiny junk"
+     //   );
         return;
     }
 
     if(frameLen+len >
        sizeof(frameBuf))
     {
+      //  Serial.println(
+      //      "OVERFLOW DROP"
+    //    );
 
         frameLen=0;
         return;
@@ -1101,8 +1181,17 @@ void notifyCallback(
     );
 
     frameLen += len;
+
+   // Serial.printf(
+   //     "BUFFER=%u\n",
+   //     frameLen
+ //   );
+
     if(frameLen>320)
     {
+       // Serial.println(
+      //      "FRAME >320 DROP"
+     //   );
 
         frameLen=0;
     }
@@ -1136,6 +1225,12 @@ void sendCommand(uint8_t cmd)
     else if(ffe1->canWriteNoResponse())
         ok=ffe1->writeValue(frame,20,false);
 
+  //  Serial.printf(
+   //     "SEND CMD=%02XCRC=%02X%s\n",
+    //    cmd,
+  //      frame[19],
+  //      ok?"OK":"FAIL"
+  //  );
 }
 
 void sendBMSMQTT()
@@ -1151,7 +1246,7 @@ void sendBMSMQTT()
     json += "\"bms_capacity2\":" + String(bms_charge,0) + ",";
     json += "\"bms_discharge\":" + String(bms_discharge,0) + ",";
     json += "\"bms_balance\":" + String(bms_balance,0) + ",";
-    json += "\"bms_cycle\":" + String(bms_cycle,0) + ",";                    
+     json += "\"bms_cycle\":" + String(bms_cycle,0) + ",";                    
     json += "\"bms_volt_dif\":" + String(bms_volt_dif, 4) + ",";
     json += "\"bms_soc\":" + String(bms_soc);
     json += "}";
