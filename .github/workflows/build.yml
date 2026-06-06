@@ -60,7 +60,7 @@ jobs:
     
         git commit -m "Auto update solar.bin"
     
-        git fetch origin main
-        git push origin HEAD:main
+        git fetch origin main 
+        git push origin main --force
 
 
