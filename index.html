@@ -739,7 +739,20 @@
 						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_max_discharge_power','ivt_max_discharge_power')">
 							OK
 						</button>				
-					</div>		
+					</div>	
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">
+							Soc dừng sạc (%)
+						</div>
+						<input
+							id="ivt_full_charge_soc"
+							class="ivtsetting-input"
+							value="0.00"
+						>
+						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_full_charge_soc','ivt_full_charge_soc')">
+							OK
+						</button>				
+					</div>						
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
 							Soc dừng xả (%)
@@ -752,35 +765,33 @@
 						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_discharge_end_soc','ivt_discharge_end_soc')">
 							OK
 						</button>				
-					</div>			
+					</div>		
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Điện áp dừng xả (V)
+							Giới hạn dòng sạc (A)
 						</div>
-	
 						<input
-							id="ivt_dischargevolt"
+							id="ivt_charge_current"
 							class="ivtsetting-input"
 							value="0.00"
 						>
-						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_dischargevolt','ivt_dischargevolt')">
+						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_charge_current','ivt_charge_current')">
 							OK
-						</button>
-					</div>
+						</button>				
+					</div>		
 					<div class="ivtsetting-row">
 						<div class="ivtsetting-name">
-							Điện áp dừng sạc (V)
+							Giới hạn dòng xả (A)
 						</div>
-	
 						<input
-							id="ivt_stopcharge"
+							id="ivt_discharge_current"
 							class="ivtsetting-input"
 							value="0.00"
 						>
-						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_stopcharge','ivt_stopcharge')">
+						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_discharge_current','ivt_discharge_current')">
 							OK
-						</button>
-					</div>
+						</button>				
+					</div>						
 					<div class="ivtsetting-row" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
 						<div class="ivtsetting-name" style="color: #d32f2f; font-weight: bold;">
 							Khởi động lại ESP32
@@ -1164,6 +1175,7 @@ client.on('connect', () => {
     client.subscribe('solar/inverter/data')
     client.subscribe('solar/bms/data')
 	client.subscribe("solar/bms/setting");
+	client.subscribe("solar/inverter/setting");
 	
     document.getElementById("chargeSwitch").addEventListener("change", function () {
         client.publish("solar/bms/cmd", JSON.stringify({
@@ -1216,7 +1228,8 @@ function sendInvSetting(inputId, mqttKey) {
     );
 }
 let settingLogin = false;
-
+let ivtSettingCache = null;
+let ivtSettingOpened = false;
 function toggleSetting(contentId, btn, topic){
 
     const box = document.getElementById(contentId);
@@ -1237,7 +1250,6 @@ function toggleSetting(contentId, btn, topic){
 
         if(client.connected){
             client.publish(topic, "read_setting");
-  
         }else{
             alert("MQTT chưa kết nối");
             return;
@@ -1246,10 +1258,19 @@ function toggleSetting(contentId, btn, topic){
         box.style.display = "block";
         btn.innerHTML = "🛠";
 
-    }else{
+        // 🔥 MARK OPEN STATE
+        
+
+        // 🔥 LOAD NGAY NẾU ĐÃ CÓ CACHE
+        loadIvtSettingUI();
+
+    } else {
 
         box.style.display = "none";
         btn.innerHTML = "🛠";
+
+        // 🔥 MARK CLOSE
+        ivtSettingOpened = false;
     }
 }
 function showTab(id,el){
@@ -1271,7 +1292,36 @@ function showTab(id,el){
 // =========================
 // CACHE DOM
 // =========================
+function loadIvtSettingUI() {
 
+    if (!ivtSettingCache) return;
+
+    const d = ivtSettingCache;
+
+    const mode = String(d.ivt_battery_mode ?? d.battery ?? 0);
+
+    const select = UI["ivt_battery_mode"];
+
+    if (select) {
+        const exists = [...select.options].some(o => o.value === mode);
+        if (exists) select.value = mode;
+    }
+
+    const fields = [
+        "ivt_max_charge_power",
+        "ivt_max_discharge_power",
+        "ivt_discharge_end_soc",
+        "ivt_full_charge_soc",
+        "ivt_charge_current",
+        "ivt_discharge_current"
+    ];
+
+    fields.forEach(id => {
+        if (d[id] !== undefined && UI[id]) {
+            UI[id].value = d[id];
+        }
+    });
+}
 const UI = {};
 
 [
@@ -1317,19 +1367,29 @@ const UI = {};
     "bms_uvp",
     "bms_celloff",
     "bms_rfv",
-	"ivt_stopcharge",
-	"ivt_dischargevolt",
+
+	"ivt_max_discharge_power",
     "ivt_max_charge_power",
-    "ivt_max_discharge_power",
     "ivt_discharge_end_soc",
+    "ivt_full_charge_soc",
 	"ivt_battery_mode",
+	"ivt_charge_current",
+	"ivt_discharge_current",
 	"inv-clock"
 ].forEach(id => {
     UI[id] = document.getElementById(id);
 });
+
 client.on('message', (topic, payload) => {
 
-    const d = JSON.parse(payload.toString())
+	let d;
+
+	try {
+		d = JSON.parse(payload.toString());
+	} catch (e) {
+		console.log("❌ MQTT BAD JSON:", payload.toString());
+		return;
+	}
 	//BMS SETTING
 	///////////
 	if(topic === "solar/bms/setting"){
@@ -1349,7 +1409,7 @@ client.on('message', (topic, payload) => {
 		];
 
 		fields.forEach(id => {
-			if(d[id] !== undefined){
+			if(d[id] !== undefined&& UI[id]){
 				UI[id].value = d[id];
 			}
 		});
@@ -1365,25 +1425,17 @@ client.on('message', (topic, payload) => {
 
 		return;
 	}
-	// IVT setting
-	if(topic === "solar/inverter/setting"){
-		UI["ivt_battery_mode"].value =
-        String(d.battery ?? 0);
-		
-		const fields = [
-				"ivt_stopcharge",
-				"ivt_dischargevolt",
-				"ivt_max_charge_power",
-				"ivt_max_discharge_power",
-				"ivt_discharge_end_soc"
-		];
-		
-		fields.forEach(id => {
-			if(d[id] !== undefined){
-				UI[id].value = d[id];
-			}
-		});
+// IVT setting
+	if (topic === "solar/inverter/setting") {
+
+		ivtSettingCache = d;   // chỉ lưu
+
+		if (ivtSettingOpened) {
+			loadIvtSettingUI(); // chỉ update khi đang mở
 		}
+
+		return;
+	}
     // =========================
     // BMS DATA
     // =========================
@@ -1484,11 +1536,17 @@ client.on('message', (topic, payload) => {
     const ivt_temp=Number(d.ivt_temp)||0
 	// BAR
     const use_total=load_today+eps_today
-	const use_pv=use_total-battery_dischanger_today-grid_buy_today||0
+	const use_pv =
+    (use_total - battery_dischanger_today - grid_buy_today) || 0;
 	//%
-	const bar_pv = use_pv/use_total*100
-	const bar_battery =battery_dischanger_today/use_total*100
-	const bar_grid = grid_buy_today/use_total*100
+	const bar_pv =
+		use_total > 0 ? (use_pv / use_total * 100) : 0;
+
+	const bar_battery =
+		use_total > 0 ? (battery_dischanger_today / use_total * 100) : 0;
+
+	const bar_grid =
+		use_total > 0 ? (grid_buy_today / use_total * 100) : 0;
     const grid_percent=
         load_today>0
         ? (grid_buy_today/load_today)*100
