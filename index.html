@@ -9,7 +9,7 @@
 	<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌞</text></svg>">
     <style>
         body { background-color: #f1f5f9; margin: 0; display: flex; flex-direction: column; align-items: center; font-family: 'Inter', sans-serif;; padding-top: 15px; }
-        .wrapper{position:relative;width:360px;height:350px;background:radial-gradient(circle at 20% 22%,rgba(255,255,255,0.28) 0 55px,transparent 70px),radial-gradient(circle at 75% 18%,rgba(255,255,255,0.22) 0 70px,transparent 85px),radial-gradient(circle at 55% 40%,rgba(255,255,255,0.18) 0 60px,transparent 75px),linear-gradient(to bottom,rgba(80,180,255,0.22),rgba(180,230,255,0.12));border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.18);overflow:hidden;}
+        .wrapper{position:relative;width:360px;height:340px;background:radial-gradient(circle at 20% 22%,rgba(255,255,255,0.28) 0 55px,transparent 70px),radial-gradient(circle at 75% 18%,rgba(255,255,255,0.22) 0 70px,transparent 85px),radial-gradient(circle at 55% 40%,rgba(255,255,255,0.18) 0 60px,transparent 75px),linear-gradient(to bottom,rgba(80,180,255,0.22),rgba(180,230,255,0.12));border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.18);overflow:hidden;}
         .node{position:absolute;width:73px;height:73px;border:0px solid rgba(255,255,255,0.18);border-radius:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:transparent;z-index:2;font-weight:bold;color:#ffffff;box-shadow:none;}
         .node span { font-size: 10px; }
         .node .val { font-size: 11px; color: #0f172a; margin-top: 2px; }
@@ -26,28 +26,28 @@
         .base-line { stroke: #808080; stroke-width: 0.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
         .flow-line { stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; display: none; }
 
-@keyframes flowMove{
-	from{
-		stroke-dashoffset:0;
-	}
-	to{
-		stroke-dashoffset:-18;
-	}
-}
-        .particle{
-	fill:#fff;
-	stroke:currentColor;
-	stroke-width:2.5;
-	display:none;
+		@keyframes flowMove{
+			from{
+				stroke-dashoffset:0;
+			}
+			to{
+				stroke-dashoffset:-18;
+			}
+		}
+				.particle{
+			fill:#fff;
+			stroke:currentColor;
+			stroke-width:2.5;
+			display:none;
 
-	filter:
-		drop-shadow(0 0 2px currentColor)
-		drop-shadow(0 0 6px currentColor);
-}
+			filter:
+				drop-shadow(0 0 2px currentColor)
+				drop-shadow(0 0 6px currentColor);
+		}
 
         /* Style phần bổ sung */
         .stats-container{width:360px;background:radial-gradient(circle at 20% 20%,rgba(255,255,255,0.25) 0 55px,transparent 70px),radial-gradient(circle at 80% 18%,rgba(255,255,255,0.18) 0 70px,transparent 85px),linear-gradient(to bottom,rgba(90,180,255,0.18),rgba(180,230,255,0.10));border-radius:20px;padding:20px;box-sizing:border-box;box-shadow:0 4px 15px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);}
-        .stats-title { font-size: 14px; font-weight: bold; margin-bottom: 15px; color: #334155; }
+        .stats-title { font-size: 14px; font-weight: bold; margin-bottom: 2px; color: #334155; }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px;  }
         .stat-item { display: flex; align-items: center; gap: 10px; }
         .stat-text { font-size: 11px; color: #64748b; }
@@ -56,12 +56,46 @@
         .title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;}
 
 
-        /* Layout Tổng sản lượng mới */
-		.total-container{width:360px;background:radial-gradient(circle at 25% 25%,rgba(255,255,255,0.22) 0 50px,transparent 65px),radial-gradient(circle at 70% 15%,rgba(255,255,255,0.16) 0 65px,transparent 80px),linear-gradient(to bottom,rgba(80,170,255,0.16),rgba(190,235,255,0.08));border-radius:20px;padding:20px;box-sizing:border-box;box-shadow:0 4px 15px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);}
-        .total-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .total-item { display: flex; flex-direction: column; }
-        .total-label { font-size: 10px; color: #64748b; margin-bottom: 2px; }
-        .total-value { font-size: 13px; font-weight: bold; color: #0f172a; }
+		/* Layout Tổng sản lượng */
+		.total-container {
+			position: relative; /* Tạo mốc để định vị nút */
+			width: 360px;
+			background: radial-gradient(circle at 25% 25%,rgba(255,255,255,0.22) 0 50px,transparent 65px),
+						radial-gradient(circle at 70% 15%,rgba(255,255,255,0.16) 0 65px,transparent 80px),
+						linear-gradient(to bottom,rgba(80,170,255,0.16),rgba(190,235,255,0.08));
+			border-radius: 20px;
+			padding: 20px;
+			box-sizing: border-box;
+			box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+			margin-bottom: 60px;
+			backdrop-filter: blur(8px);
+			border: 1px solid rgba(255,255,255,0.18);
+			
+		}
+
+		.total-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+
+		/* Nút bấm ở góc phải */
+		.setting-toggle {
+			position: absolute;
+			top: 10px;
+			right: 15px;
+			background: rgba(255, 255, 255, 0.3);
+			border: 1px solid rgba(255, 255, 255, 0.4);
+			border-radius: 6px;
+			padding: 5px 8px;
+			cursor: pointer;
+			font-size: 16px;
+			transition: all 0.2s;
+		}
+
+		.setting-toggle:hover {
+			background: rgba(255, 255, 255, 0.5);
+		}
+
+		.total-item { display: flex; flex-direction: column; }
+		.total-label { font-size: 11px; color: #64748b; margin-bottom: 2px; }
+		.total-value { font-size: 15px; font-weight: bold; color: #00b0ff; }
 		body, div, span {-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;text-rendering: optimizeLegibility;}
 		/* biểu đồ*/
 		.chart-header {
@@ -141,7 +175,7 @@
 		#v-inv{
 		position: absolute;
 		left: 50%;
-		top: 135px;   /* chỉnh lên/xuống ở đây */
+		top: 100px;   /* chỉnh lên/xuống ở đây */
 		transform: translateX(-50%);
 		font-size: 15px;
 		font-weight: 600;
@@ -152,6 +186,7 @@
 		border-radius: 6px;
 		backdrop-filter: blur(4px);
 		}
+		.inv-led{position:absolute;top:10px;right:34px;width:8px;height:8px;border-radius:999px;background:#22c55e;box-shadow:0 0 5px #22c55e,0 0 10px #22c55e;animation:blink 1.2s infinite;}@keyframes blink{0%{opacity:1;}50%{opacity:.35;}100%{opacity:1;}}
 		.inv-clock{
 		position:absolute;
 
@@ -201,7 +236,7 @@
 		}
 
 		.tab-btn.active{
-			background:#22c55e;
+			background:#00b0ff;
 			color:#fff;
 		}
 
@@ -301,164 +336,22 @@
 			color:#22c55e;
 			font-size:12px;
 		}
-		.setting-card{
-			width:360px;
-			background:#fff;
-			border-radius:20px;
-			padding:18px;
-			box-sizing:border-box;
-		    margin-bottom: calc(60px + env(safe-area-inset-bottom));
-			box-shadow:0 4px 15px rgba(0,0,0,0.08);
-		}
-
-		.setting-title{
-			font-size:14px;
-			font-weight:700;
-			margin-bottom:10px;
-			color:#0f172a;
-		}
-
-		.setting-row{
-			display:grid;
-			grid-template-columns:1fr 80px 40px;
-			gap:10px;
-			align-items:center;
-			padding:8px 0;
-			border-bottom:1px solid #e2e8f0;
-		}
-
-		.setting-name{
-			font-size:12px;
-			color:#334155;
-			font-weight:500;
-		}
-
-		.setting-input{
-			height:20px;
-			border:none;
-			outline:none;
-			background:#f8fafc;
-			border-radius:12px;
-			text-align:center;
-			font-size:12px;
-			font-weight:300;
-			color:#22c55e;
-		}
-
-		.setting-btn{
-			height:20px;
-			border:none;
-			border-radius:12px;
-			background:#22c55e;
-			color:#fff;
-			font-weight:300;
-			cursor:pointer;
-		}	
-
-		.ivtsetting-card{
-			width:360px;
-			background:#fff;
-			border-radius:20px;
-			padding:18px;
-			box-sizing:border-box;
-			margin-bottom: calc(60px + env(safe-area-inset-bottom));
-			box-shadow:0 4px 15px rgba(0,0,0,0.08);
-		}
-
-		.ivtsetting-title{
-			font-size:14px;
-			font-weight:700;
-			margin-bottom:10px;
-			color:#0f172a;
-		}
-
-		.ivtsetting-row{
-			display:grid;
-			grid-template-columns:1fr 80px 40px;
-			gap:10px;
-			align-items:center;
-			padding:8px 0;
-			border-bottom:1px solid #e2e8f0;
-		}
-
-		.ivtsetting-name{
-			font-size:12px;
-			color:#334155;
-			font-weight:500;
-		}
-
-		.ivtsetting-input{
-			height:20px;
-			border:none;
-			outline:none;
-			background:#f8fafc;
-			border-radius:12px;
-			text-align:center;
-			font-size:12px;
-			font-weight:300;
-			color:#22c55e;
-		}
-
-		.ivtsetting-btn{
-			height:20px;
-			border:none;
-			border-radius:10px;
-			background:#22c55e;
-			color:#fff;
-			font-weight:300;
-			cursor:pointer;
-		}
-
-		.ivtsetting-title{
-			display:flex;
-			align-items:center;
-			justify-content:space-between;
-
-			font-size:14px;
-			font-weight:600;
-			color:#334155;
-			margin-bottom:15px;
-		}
-
-		.login-btn{
-			width:32px;
-			height:32px;
-			border:none;
-			border-radius:10px;
-			background:#f1f5f9;
-			cursor:pointer;
-			font-size:14px;
-		}
-
-		.login-btn:active{
-			transform:scale(0.95);
-		}	
-		.setting-title{
-		    display:flex;
-		    justify-content:space-between;
-		    align-items:center;
-		
-		    font-size:14px;
-		    font-weight:700;
-		    margin-bottom:10px;
-		    color:#0f172a;
-		}
-		
-		.setting-toggle{
-		    width:32px;
-		    height:32px;
-		    border:none;
-		    border-radius:10px;
-		    background:#f1f5f9;
-		    cursor:pointer;
-		    font-size:16px;
-		}
-		
-		.setting-toggle:active{
-		    transform:scale(.95);
-		}
 
 
+		/* Overlay Popup */
+		.ivt-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; }
+
+		/* Bảng Popup */
+		.ivtsetting-card-popup { width: 360px; background: #fff; border-radius: 20px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+
+		.ivtsetting-title { display: flex; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 600; color: #334155; margin-bottom: 15px; }
+
+		.close-btn { cursor: pointer; border: none; background: #f1f5f9; border-radius: 50%; width: 35px; height: 25px; }
+
+		.ivtsetting-row { display: grid; grid-template-columns: 1fr 80px 40px; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid #e2e8f0; }
+		.ivtsetting-name { font-size: 14px; color: #334155; font-weight: 500; }
+		.ivtsetting-input { height: 20px; border: none; outline: none; background: #f8fafc; border-radius: 12px; text-align: center; font-size: 14px; color: #000000; }
+		.ivtsetting-btn { height: 20px; border: none; border-radius: 10px; background: #00b0ff; color: #fff; cursor: pointer; font-size: 11px; }
 		.user-name {
 		  font-family: 'Poppins', sans-serif;
 		  color: #FFFFFF;
@@ -480,7 +373,7 @@
 			padding-top: env(safe-area-inset-top);
 			
 			/* Màu sắc */
-			background-color: #FFA500; 
+			background-color: #00b0ff; 
 			color: white;
 			
 			/* Căn giữa chữ */
@@ -498,21 +391,24 @@
 		}
 		/* 3. ĐẨY NỘI DUNG XUỐNG - Chìa khóa nằm ở đây */
 		.content-wrapper {
-		padding-top: calc(40px + env(safe-area-inset-top));
-		width: 100%;
-		box-sizing: border-box;
-
-		display: flex;
-		flex-direction: column;
-		align-items: center;
+			padding-top: calc(40px + env(safe-area-inset-top));
+			width: 100%;
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			}
 		.setting-row2{
 			display:flex;
 			align-items:center;
-			justify-content:space-between; /* đẩy 2 đầu */
+			justify-content:space-between;
 			width:100%;
-			margin-top: 10px;
-			margin-bottom: 10px;
+			margin-top: 1px;
+			margin-bottom: 1px;
+			font-size: 13px;
+			
 		}
+		.setting-row2 { display: grid; grid-template-columns: 1fr 20px 15px; gap: 5px; align-items: center; padding: 8px 0; border-bottom: 1px solid #e2e8f0; }
 
 		.switch {
 			position: relative;
@@ -556,7 +452,6 @@
 		input:checked + .slider:before {
 			transform: translateX(18px);
 		}
-}
 
 
 	
@@ -597,7 +492,7 @@
 				<div class="node" id="node-home">🏠<div class="val" id="v-home">0W</div>
 				<div style="font-size:9px;color:#94a3b8" id="info-home">0V | 0A
 				</div></div>
-				<div class="node" id="node-inv"><div class="inv-header"></div><div class="inv-screen">🤖</div><div class="inv-brand">SENERGY</div></div>
+				<div class="node" id="node-inv"><div class="inv-header"></div><div class="inv-screen">🤖</div><div class="inv-led"></div><div class="inv-brand">SENERGY</div></div>
 				<div class="node" id="node-bu">💡<div class="val" id="v-bu">0W</div>
 				<div style="font-size:9px;color:#94a3b8" id="info-eps">0V | 0A
 				</div></div>
@@ -641,8 +536,8 @@
 					<div class="stat-item">🪫<div><div class="stat-text">Xả pin</div><div class="stat-val" id="st-bat-discharge">0 kWh</div></div></div>
 				</div>
 				<div class="chart-header">
-					<span class="chart-title">Sử dụng điện</span>
-					<span id="total-usage" class="total-value">4.83 kWh</span>
+					<span class="stats-title">Sử dụng điện</span>
+					<span id="total-usage" class="stats-title">4.83 kWh</span>
 				</div>
 				<div id="usage-progress-bar" class="progress-bar">
 					<div id="solar-bar" class="bar solar" style="width: 0%;"></div>
@@ -673,153 +568,97 @@
 					</div>
 				</div>
 
-
-
 			</div>
 
+
 			<div class="total-container">
-				<div class="stats-title">Tổng sản lượng</div>
+				<div class="stats-title" style="font-weight: bold; color: #0f172a;">Tổng sản lượng</div>
+				
+				<button class="setting-toggle" onclick="openSetting('solar/inverter/cmd','ivt-setting-overlay')">🛠</button>
+				
 				<div class="total-grid">
-					<div class="total-item"><div class="total-label">Sản lượng PV</div><span id="total_pv">0 kWh</span></div>
-					<div class="total-item"><div class="total-label">Tiêu thụ</div><span id="total_sd">0 kWh</span></div>
-					<div class="total-item"><div class="total-label">Nạp pin</div><span id="total_bat">0 kWh</span></div>
-					<div class="total-item"><div class="total-label">Xả pin</div><span id="total_bat2">0 kWh</span></div>
+					<div class="total-item"><div class="total-label">Sản lượng PV</div><span class="stats-title" id="total_pv">0 kWh</span></div>
+					<div class="total-item"><div class="total-label">Tiêu thụ</div><span class="stats-title" id="total_sd">0 kWh</span></div>
+					<div class="total-item"><div class="total-label">Nạp pin</div><span class="stats-title" id="total_bat">0 kWh</span></div>
+					<div class="total-item"><div class="total-label">Xả pin</div><span class="stats-title" id="total_bat2">0 kWh</span></div>
 				</div>
 			</div>
 			<!-- SETTING ivt -->
-			<div class="ivtsetting-card">
-
-				<div class="ivtsetting-title">
-					<span>Cài đặt biến tần</span>
-                    <button
-					    class="setting-toggle"
-					    onclick="toggleSetting('ivt-setting-content',this,'solar/inverter/cmd')">
-					    🛠
-					</button></div>
-				<div id="ivt-setting-content" style="display:none;">
-					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">
-							Giao tiếp PIN
-						</div>
-
-						<select
-							id="ivt_battery_mode"
-							class="ivtsetting-input">
-							<option value="0">OFF</option>
-							<option value="1">Điện áp</option>
-							<option value="2">SOC</option>
-						</select>
-
-						<button
-							class="ivtsetting-btn"
-							onclick="sendInvSetting('ivt_battery_mode','ivt_battery_mode')">
-							OK
-						</button>
-						<div class="ivtsetting-name">
-							Công suất sạc (W)
-						</div>
-						<input
-							id="ivt_max_charge_power"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_max_charge_power','ivt_max_charge_power')">
-							OK
-						</button>				
+			<div id="ivt-setting-overlay" class="ivt-modal-overlay" onclick="closeSetting()">
+				<div class="ivtsetting-card-popup" onclick="event.stopPropagation()">
+					<div class="ivtsetting-title">
+						<span>Cài đặt biến tần</span>
+						<button class="close-btn" onclick="closeSetting('ivt-setting-overlay')">❌</button>
 					</div>
+				<div id="ivt-setting-content">
 					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">
-							Công suất xả (W)
-						</div>
-						<input
-							id="ivt_max_discharge_power"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_max_discharge_power','ivt_max_discharge_power')">
-							OK
-						</button>				
+						<div class="ivtsetting-name">Giao tiếp PIN</div>
+						<select id="ivt_battery_mode" class="ivtsetting-input"><option value="0">OFF</option><option value="1">Điện áp</option><option value="2">SOC</option></select>
+						<button class="ivtsetting-btn" onclick="sendInvSetting('ivt_battery_mode','ivt_battery_mode')">OK</button>
+					</div>
+					
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">Công suất sạc (W)</div>
+						<input id="ivt_max_charge_power" class="ivtsetting-input" value="0.00">
+						<button class="ivtsetting-btn" onclick="sendInvSetting('ivt_max_charge_power','ivt_max_charge_power')">OK</button>
+					</div>
+
+					<div class="ivtsetting-row">
+						<div class="ivtsetting-name">Công suất xả (W)</div>
+						<input id="ivt_max_discharge_power" class="ivtsetting-input" value="0.00">
+						<button class="ivtsetting-btn" onclick="sendInvSetting('ivt_max_discharge_power','ivt_max_discharge_power')">OK</button>
 					</div>	
+
 					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">
-							Soc dừng sạc (%)
-						</div>
-						<input
-							id="ivt_full_charge_soc"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_full_charge_soc','ivt_full_charge_soc')">
-							OK
-						</button>				
+						<div class="ivtsetting-name">Soc dừng sạc (%)</div>
+						<input id="ivt_full_charge_soc" class="ivtsetting-input" value="0.00">
+						<button class="ivtsetting-btn" onclick="sendInvSetting('ivt_full_charge_soc','ivt_full_charge_soc')">OK</button>
 					</div>						
+
 					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">
-							Soc dừng xả (%)
-						</div>
-						<input
-							id="ivt_discharge_end_soc"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_discharge_end_soc','ivt_discharge_end_soc')">
-							OK
-						</button>				
+						<div class="ivtsetting-name">Soc dừng xả (%)</div>
+						<input id="ivt_discharge_end_soc" class="ivtsetting-input" value="0.00">
+						<button class="ivtsetting-btn" onclick="sendInvSetting('ivt_discharge_end_soc','ivt_discharge_end_soc')">OK</button>
 					</div>		
+
 					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">
-							Giới hạn dòng sạc (A)
-						</div>
-						<input
-							id="ivt_charge_current"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_charge_current','ivt_charge_current')">
-							OK
-						</button>				
+						<div class="ivtsetting-name">Giới hạn dòng sạc (A)</div>
+						<input id="ivt_charge_current" class="ivtsetting-input" value="0.00">
+						<button class="ivtsetting-btn" onclick="sendInvSetting('ivt_charge_current','ivt_charge_current')">OK</button>
 					</div>		
+
 					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">
-							Giới hạn dòng xả (A)
-						</div>
-						<input
-							id="ivt_discharge_current"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn"onclick="sendInvSetting('ivt_discharge_current','ivt_discharge_current')">
-							OK
-						</button>				
+						<div class="ivtsetting-name">Giới hạn dòng xả (A)</div>
+						<input id="ivt_discharge_current" class="ivtsetting-input" value="0.00">
+						<button class="ivtsetting-btn" onclick="sendInvSetting('ivt_discharge_current','ivt_discharge_current')">OK</button>
 					</div>						
+
 					<div class="ivtsetting-row" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
 						<div class="ivtsetting-name" style="color: #d32f2f; font-weight: bold;">
 							Khởi động lại ESP32
 						</div>
-						
-						<button class="ivtsetting-btn" onclick="sendResetCommand()" style="background-color: #d32f2f; color: white;">
+						<div></div> 
+						<button class="ivtsetting-btn" onclick="sendResetCommand()" style="background-color: #d32f2f; color: white;width: 50px">
 							RESET
 						</button>
 					</div>
-	
-
-					</div>
-		        </div>		
+				</div>
 			</div>	
-			
 		</div>
+	</div>
 		<!-- PAGE CHART -->
 		<div id="bms" class="page">
 
 			<!-- CARD TỔNG -->
 			<div class="bms-card">
-
-				<div class="bms-top">
-					<div class="bms-status" id="bms_charge">Sạc: Off</div>
-					<div class="bms-status"id="bms_discharge">Xả: Off</div>
-					<div class="bms-status"id="bms_balance">Cân bằng: Off</div>
+				<div class="bms-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+					<div class="bms-top" style="display: flex; gap: 45px;">
+						<div class="bms-status" id="bms_charge">Sạc: Off</div>
+						<div class="bms-status" id="bms_discharge">Xả: Off</div>
+						<div class="bms-status" id="bms_balance">Cân bằng: Off</div>
+					</div>
+					<button class="setting-toggle" onclick="openSetting('solar/bms/cmd','bms-setting-overlay')">🛠</button>
 				</div>
-
 				<div class="bms-main">
 
 					<div class="bms-big">
@@ -873,201 +712,196 @@
 
 
 			<!-- SETTING BMS -->
-			<div class="setting-card">
+			<div id="bms-setting-overlay" class="ivt-modal-overlay" onclick="closeSetting()">
+				<div class="ivtsetting-card-popup" onclick="event.stopPropagation()">
+					<div class="ivtsetting-title">
+						<span>Cài đặt BMS</span>
+						<button class="close-btn" onclick="closeSetting('bms-setting-overlay')">❌</button>
+					</div>
+					<div id="ivt-setting-content">
+						<div class="ivtsetting-row">
+							<div class="ivtsetting-name">
+								Công suất sạc (A)
+							</div>
+							<input
+								id="bms_maxcharge"
+								class="ivtsetting-input"
+								value="0.00"
+							>
+							<button class="ivtsetting-btn">
+								OK
+							</button>				
+						</div>
+						<div class="ivtsetting-row">
+							<div class="ivtsetting-name">
+								Công suất xả (A)
+							</div>
+							<input
+								id="bms_maxdischarge"
+								class="ivtsetting-input"
+								value="0.00"
+							>
+							<button class="ivtsetting-btn">
+								OK
+							</button>				
+						</div>
+						<div class="ivtsetting-row">
+							<div class="ivtsetting-name">
+								Bảo vệ áp cao(OVP)
+							</div>
+							<input
+								id="bms_ovp"
+								class="ivtsetting-input"
+								value="0.00"
+							>
+							<button class="ivtsetting-btn">
+								OK
+							</button>				
+						</div>			
+						<div class="ivtsetting-row">
+							
+							<div class="ivtsetting-name">
+								Điện áp sạc nhanh (RCV)
+							</div>
+							<input
+								id="bms_rcv"
+								class="ivtsetting-input"
+								value="0.00"
+							>
+							<button class="ivtsetting-btn">
+								OK
+							</button>				
+						</div>			
+						<div class="ivtsetting-row">
+							<div class="ivtsetting-name">
+								Điện áp đầy 100%
+							</div>
+		
+							<input
+								id="bms_soc100"
+								class="ivtsetting-input"
+								value="0.00"
+							>
+							<button class="ivtsetting-btn">
+								OK
+							</button>
+						</div>
+		
+						<div class="ivtsetting-row">
+							<div class="ivtsetting-name">
+								Điện áp phục hồi cao(OVPR)
+							</div>
+							<input
+								id="bms_ovpr"
+								class="ivtsetting-input"
+								value="0.00"
+							>
+							<button class="ivtsetting-btn">
+								OK
+							</button>				
+						</div>
+						<div class="ivtsetting-row">
+							<div class="ivtsetting-name">
+								Điện áp phục hồi thấp(UVPR)
+							</div>
+							<input
+								id="bms_uvpr"
+								class="ivtsetting-input"
+								value="0.00"
+							>
+							<button class="ivtsetting-btn">
+								OK
+							</button>				
+						</div>			
 
-				<div class="setting-title">
-					<span>Cài đặt BMS</span>
-					
-					<button
-					    class="setting-toggle"
-					    onclick="toggleSetting('bms-setting-content',this,'solar/bms/cmd')">
-					    🛠
-					</button>
-					</div>
-                <div id="bms-setting-content" style="display:none;">
-					<div class="setting-row">
-						<div class="setting-name">
-							Công suất sạc (A)
+						<div class="ivtsetting-row">
+							<div class="ivtsetting-name">
+								Điện áp pin 0%
+							</div>
+							<input
+								id="bms_soc0"
+								class="ivtsetting-input"
+								value="0.00"
+							>
+							<button class="ivtsetting-btn">
+								OK
+							</button>				
 						</div>
-						<input
-							id="bms_maxcharge"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>				
-					</div>
-					<div class="setting-row">
-						<div class="setting-name">
-							Công suất xả (A)
+						<div class="ivtsetting-row">
+							<div class="ivtsetting-name">
+								Bảo vệ áp thấp(UVP)
+							</div>
+		
+							<input
+								id="bms_uvp"
+								class="ivtsetting-input"
+								value="0.00"
+							>
+							<button class="ivtsetting-btn">
+								OK
+							</button>
 						</div>
-						<input
-							id="bms_maxdischarge"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>				
-					</div>
-					<div class="setting-row">
-						<div class="setting-name">
-							Bảo vệ áp cao(OVP)
-						</div>
-						<input
-							id="bms_ovp"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>				
-					</div>			
-					<div class="setting-row">
 						
-						<div class="setting-name">
-							Điện áp sạc nhanh (RCV)
+						<div class="ivtsetting-row">
+							<div class="ivtsetting-name">
+								Điện áp tắt BMS
+							</div>
+							<input
+								id="bms_celloff"
+								class="ivtsetting-input"
+								value="0.00"
+							>
+							<button class="ivtsetting-btn">
+								OK
+							</button>				
 						</div>
-						<input
-							id="bms_rcv"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>				
-					</div>			
-					<div class="setting-row">
-						<div class="setting-name">
-							Điện áp đầy 100%
+						<div class="ivtsetting-row">
+							<div class="ivtsetting-name">
+								Điện áp sạc nổi(RFV)
+							</div>
+		
+							<input
+								id="bms_rfv"
+								class="ivtsetting-input"
+								value="0.00"
+							>
+							<button class="ivtsetting-btn">
+								OK
+							</button>
 						</div>
-	
-						<input
-							id="bms_soc100"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>
-					</div>
-	
-					<div class="setting-row">
-						<div class="setting-name">
-							Điện áp phục hồi cao(OVPR)
-						</div>
-						<input
-							id="bms_ovpr"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>				
-					</div>
-					<div class="setting-row">
-						<div class="setting-name">
-							Điện áp phục hồi thấp(UVPR)
-						</div>
-						<input
-							id="bms_uvpr"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>				
-					</div>			
+						<div class="setting-row2">
+							<div class="setting-name">
+								Sạc
+							</div>
+		
+							<label class="switch">
+								<input type="checkbox" id="chargeSwitch">
+								<span class="slider"></span>
+							</label>
+						</div>					
+						<div class="setting-row2">
+							<div class="setting-name">
+								Xả
+							</div>
+		
+							<label class="switch">
+								<input type="checkbox" id="dischargeSwitch">
+								<span class="slider"></span>
+							</label>
+						</div>					
+						<div class="setting-row2">
+							<div class="setting-name">
+								Cân bằng
+							</div>
 
-					<div class="setting-row">
-						<div class="setting-name">
-							Điện áp pin 0%
-						</div>
-						<input
-							id="bms_soc0"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>				
-					</div>
-					<div class="setting-row">
-						<div class="setting-name">
-							Bảo vệ áp thấp(UVP)
-						</div>
-	
-						<input
-							id="bms_uvp"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>
-					</div>
-					
-					<div class="setting-row">
-						<div class="setting-name">
-							Điện áp tắt BMS
-						</div>
-						<input
-							id="bms_celloff"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>				
-					</div>
-					<div class="setting-row">
-						<div class="setting-name">
-							Điện áp sạc nổi(RFV)
-						</div>
-	
-						<input
-							id="bms_rfv"
-							class="ivtsetting-input"
-							value="0.00"
-						>
-						<button class="ivtsetting-btn">
-							OK
-						</button>
-					</div>
-					<div class="setting-row2">
-						<div class="setting-name">
-							Sạc
-						</div>
-	
-						<label class="switch">
-							<input type="checkbox" id="chargeSwitch">
-							<span class="slider"></span>
-						</label>
-					</div>					
-					<div class="setting-row2">
-						<div class="setting-name">
-							Xả
-						</div>
-	
-						<label class="switch">
-							<input type="checkbox" id="dischargeSwitch">
-							<span class="slider"></span>
-						</label>
-					</div>					
-					<div class="setting-row2">
-						<div class="setting-name">
-							Cân bằng
-						</div>
-
-						<label class="switch">
-							<input type="checkbox" id="balanceSwitch">
-							<span class="slider"></span>
-						</label>
-					</div>					
-	            </div>				
+							<label class="switch">
+								<input type="checkbox" id="balanceSwitch">
+								<span class="slider"></span>
+							</label>
+						</div>					
+					</div>				
+				</div>
 			</div>
-
 		</div>
 	</main>
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
@@ -1087,6 +921,7 @@ function formatPower2(value) {
     }
     return Math.round(value).toFixed(1) + " Wh"
 }
+
 /* =========================
    FLOW ON/OFF
 ========================= */
@@ -1230,48 +1065,36 @@ function sendInvSetting(inputId, mqttKey) {
 let settingLogin = false;
 let ivtSettingCache = null;
 let ivtSettingOpened = false;
-function toggleSetting(contentId, btn, topic){
-
-    const box = document.getElementById(contentId);
-
-    if(box.style.display === "none"){
-
-        if(!settingLogin){
-
-            const pass = prompt("PASS WORD");
-
-            if(pass !== "123456"){
-                alert("Sai Pass");
-                return;
-            }
-
-            settingLogin = true;
-        }
-
-        if(client.connected){
-            client.publish(topic, "read_setting");
-        }else{
-            alert("MQTT chưa kết nối");
+function openSetting(topic,page) {
+    const box = document.getElementById(page);
+    
+    // Logic mật khẩu của bạn
+    if (!settingLogin) {
+        const pass = prompt("PASS WORD");
+        if (pass !== "123456") {
+            alert("Sai Pass");
             return;
         }
-
-        box.style.display = "block";
-        btn.innerHTML = "🛠";
-
-        // 🔥 MARK OPEN STATE
-        
-
-        // 🔥 LOAD NGAY NẾU ĐÃ CÓ CACHE
-        loadIvtSettingUI();
-
-    } else {
-
-        box.style.display = "none";
-        btn.innerHTML = "🛠";
-
-        // 🔥 MARK CLOSE
-        ivtSettingOpened = false;
+        settingLogin = true;
     }
+
+    // Logic MQTT của bạn
+    if (client.connected) {
+        client.publish(topic, "read_setting");
+    } else {
+        alert("MQTT chưa kết nối");
+        return;
+    }
+
+    // Hiển thị Popup
+    box.style.display = "flex";
+    
+    // Load UI
+    loadIvtSettingUI();
+}
+
+function closeSetting(page) {
+    document.getElementById(page).style.display = "none";
 }
 function showTab(id,el){
 
@@ -1430,9 +1253,6 @@ client.on('message', (topic, payload) => {
 
 		ivtSettingCache = d;   // chỉ lưu
 
-		if (ivtSettingOpened) {
-			loadIvtSettingUI(); // chỉ update khi đang mở
-		}
 
 		return;
 	}
