@@ -205,40 +205,68 @@
 		.inv-brand{position:absolute;bottom:12px;font-size:11px;font-weight:700;letter-spacing:1px;color:rgba(0,0,255,0.9);}
 	
 		/* =========================
-		TAB
+		TAB BAR
 		========================= */
+
 		.tabs{
 			position:fixed;
-			bottom:0px;
+			bottom:0;
 			left:50%;
 			transform:translateX(-50%);
-			width:340px;
+
+			width:360px;
+			height:50px;
+
 			display:flex;
-			gap:5px;
-			padding:10px;
-			background:rgba(255,255,255,0.2);
-			backdrop-filter:blur(10px);
-			border-radius:0px;
-			box-shadow:0 2px 20px rgba(0,0,0,0.1);
+			align-items:center;
+
+			background:#fff;
+			border-top:1px solid #e5e7eb;
+
 			z-index:999;
 		}
+
 		.tab-btn{
 			flex:1;
+			height:100%;
+
 			border:none;
-			background:#fff;
-			padding:8px;
-			border-radius:8px;
-			font-weight:500;
+			background:none;
+
 			color:#64748b;
-			box-shadow:0 4px 15px rgba(0,0,0,0.08);
+			font-size:13px;
+			font-weight:500;
+
 			cursor:pointer;
+
+			position:relative;
+
+			transition:all .2s ease;
+		}
+
+		.tab-btn:hover{
+			color:#00b0ff;
 		}
 
 		.tab-btn.active{
-			background:#00b0ff;
-			color:#fff;
+			color:#00b0ff;
+			font-weight:600;
 		}
 
+		.tab-btn.active::after{
+			content:"";
+
+			position:absolute;
+
+			left:25%;
+			right:25%;
+			bottom:0;
+
+			height:3px;
+
+			background:#00b0ff;
+			border-radius:3px 3px 0 0;
+		}
 		.page{
 			display:none;
 		}
@@ -246,7 +274,7 @@
 			display:block;
 		}
 		
-		.bms-card{width:360px;background:radial-gradient(circle at 18% 22%,rgba(255,255,255,0.24) 0 55px,transparent 70px),radial-gradient(circle at 78% 20%,rgba(255,255,255,0.18) 0 70px,transparent 85px),linear-gradient(to bottom,rgba(70,160,255,0.18),rgba(170,225,255,0.10));border-radius:20px;padding:18px;box-sizing:border-box;margin-bottom:15px;box-shadow:0 4px 15px rgba(0,0,0,0.06);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.18);}
+		.bms-card{width:360px;height:350px;background:radial-gradient(circle at 18% 22%,rgba(255,255,255,0.24) 0 55px,transparent 70px),radial-gradient(circle at 78% 20%,rgba(255,255,255,0.18) 0 70px,transparent 85px),linear-gradient(to bottom,rgba(70,160,255,0.18),rgba(170,225,255,0.10));border-radius:20px;padding:18px;box-sizing:border-box;margin-bottom:5px;box-shadow:0 4px 15px rgba(0,0,0,0.06);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.18);}
 
 		.bms-top{
 			display:flex;
@@ -314,28 +342,34 @@
 
 
 
-		.cell{
-			background:#f8fafc;
-			border-radius:8px;
-			padding:10px;
-			display:flex;
-			justify-content:space-between;
-			align-items:center;
+		.bms-cell-grid{
+			display:grid;
+			grid-template-columns:repeat(3,1fr);
+			gap:5px;
+			margin-top:3px;
 		}
 
-		.cell span{
-			background:#e2e8f0;
-			padding:4px 8px;
-			border-radius:999px;
+		.cell-item{
+			background:radial-gradient(circle at 18% 22%,rgba(255,255,255,0.24) 0 55px,transparent 70px),radial-gradient(circle at 78% 20%,rgba(255,255,255,0.18) 0 70px,transparent 85px),linear-gradient(to bottom,rgba(70,160,255,0.18),rgba(170,225,255,0.10));
+			border-radius:10px;
+			padding:4px;
+			text-align:center;
+		}
+
+		.cell-item span{
+			display:block;
 			font-size:10px;
-			font-weight:300;
+			color:#36454F;
 		}
-
-		.cell b{
-			color:#22c55e;
+		.cell-low{
+			color:#ff4d4f !important;
+		}
+		.cell-item b{
+			display:block;
+			margin-top:2px;
 			font-size:12px;
+			color:#000;
 		}
-
 
 		/* Overlay Popup */
 		.ivt-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; }
@@ -461,11 +495,11 @@
 	  <div class="user-name">🌤️Phạm Đình Tân🌤️</div>
 	</header>
 	<div class="tabs">
-		<button class="tab-btn active" onclick="showTab('home',this)">
-			Biến tần
+		<button class="tab-btn active" onclick="showTab('home',this)"><div>💻</div>
+			BIẾN TẦN
 		</button>
-		<button class="tab-btn bms" onclick="showTab('bms',this)">
-			BMS JK
+		<button class="tab-btn bms" onclick="showTab('bms',this)"><div>🔌</div>
+			BMS
 		</button>
 	</div>
 	<main class="content-wrapper">
@@ -708,7 +742,90 @@
 				</div>
 
 			</div>
+			<!-- CELL VOLTAGE -->
+			<div class="bms-cell-grid" id="bms-cell-grid">
 
+				<div class="cell-item">
+					<span>Cell 1</span>
+					<b id="cell1">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 2</span>
+					<b id="cell2">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 3</span>
+					<b id="cell3">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 4</span>
+					<b id="cell4">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 5</span>
+					<b id="cell5">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 6</span>
+					<b id="cell6">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 7</span>
+					<b id="cell7">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 8</span>
+					<b id="cell8">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 9</span>
+					<b id="cell9">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 10</span>
+					<b id="cell10">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 11</span>
+					<b id="cell11">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 12</span>
+					<b id="cell12">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 13</span>
+					<b id="cell13">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 14</span>
+					<b id="cell14">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 15</span>
+					<b id="cell15">0.000V</b>
+				</div>
+
+				<div class="cell-item">
+					<span>Cell 16</span>
+					<b id="cell16">0.000V</b>
+				</div>
+
+			</div>
 
 			<!-- SETTING BMS -->
 			<div id="bms-setting-overlay" class="ivt-modal-overlay" onclick="closeSetting()">
@@ -1036,7 +1153,7 @@ function sendResetCommand() {
     if (confirm("Bạn có chắc chắn muốn khởi động lại thiết bị không?")) {
 
         if (client && client.connected) {
-            client.publish("solar/esp32/cmd", "RESET");
+            client.publish("solar/inverter/cmd","reset");
             alert("Đã gửi lệnh Reset!");
         } else {
             alert("MQTT chưa kết nối!");
@@ -1306,7 +1423,31 @@ client.on('message', (topic, payload) => {
 		UI["bms_balance"].textContent =
 			"Cân bằng:" + (bms_balance ? "ON" : "OFF");
 
-        return
+		let minIndex = -1;
+		let minValue = Infinity;
+
+		for(let i = 0; i < 16; i++){
+			const v = Number(cells[i] || 0);
+
+			if(v > 0 && v < minValue){
+				minValue = v;
+				minIndex = i;
+			}
+		}
+		for(let i = 0; i < 16; i++){
+
+			const el = document.getElementById(`cell${i+1}`);
+			if(!el) continue;
+
+			el.textContent =
+				`${Number(cells[i] || 0).toFixed(3)}V`;
+
+			el.classList.remove("cell-low");
+
+			if(i === minIndex){
+				el.classList.add("cell-low");
+			}
+		}
     }
 
     // =========================
