@@ -9,22 +9,26 @@
 	<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌞</text></svg>">
     <style>
         body { background-color: #f1f5f9; margin: 0; display: flex; flex-direction: column; align-items: center; font-family: 'Inter', sans-serif;; padding-top: 0px; }
-        .wrapper{position:relative;width:360px;height:340px;background:radial-gradient(circle at 20% 22%,rgba(255,255,255,0.28) 0 55px,transparent 70px),radial-gradient(circle at 75% 18%,rgba(255,255,255,0.22) 0 70px,transparent 85px),radial-gradient(circle at 55% 40%,rgba(255,255,255,0.18) 0 60px,transparent 75px),linear-gradient(to bottom,rgba(80,180,255,0.22),rgba(180,230,255,0.12));border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.18);overflow:hidden;}
-        .node{position:absolute;width:73px;height:73px;border:0px solid rgba(255,255,255,0.18);border-radius:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:transparent;z-index:2;font-weight:bold;color:#ffffff;box-shadow:none;}
+        .wrapper{position:relative;width:360px;height:340px;background-image: url('a.png');
+			background-repeat: no-repeat;
+			background-position: center; /* Gi? tâm b?c ?nh ? chính gi?a khung */
+			
+			/* C?t lõi ? dây: */
+			background-size: cover;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.18);overflow:hidden;}
+        .node{position:absolute;width:63px;height:53px;border:0px solid rgba(255,255,255,0.18);border-radius:5px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:transparent;z-index:2;font-weight:bold;color:#ffffff;box-shadow:none;}
         .node span { font-size: 10px; }
-        .node .val { font-size: 11px; color: #0f172a; margin-top: 2px; }
+        .node .val { font-size: 12px; color: #4c13eb; margin-top: 2px; }
 
 
-        #node-inv{left:139.5px;top:130px;width:78px;height:78px;border-radius:15px;background:linear-gradient(145deg,rgba(255,255,255,0.18),rgba(255,255,255,0.04));border:2px solid rgba(255,255,255,0.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 6px 18px rgba(0,0,0,0.15),inset 0 1px 0 rgba(255,255,255,0.55),inset 0 -2px 6px rgba(0,0,0,0.08);display:flex;flex-direction:column;align-items:center;justify-content:center;position:absolute;overflow:hidden;}
-        #node-bu  { left: 150px; top: 250px; width: 60px; height: 60px; border-top: 3px solid #a855f7; }
-        #node-bat { left: 38px;  top: 250px; border-top: 3px solid #00e676; }
-        #node-home{ left: 248px; top: 250px; border-top: 3px solid #00b0ff; }
-		#node-pv{left:38px;top:25px;border-bottom:3px solid #ffb300;}
-		#node-grid{left:248px;top:25px;border-bottom:3px solid #ef4444;}
+ 
+        #node-bat { left: 113px;  top: 260px; border-top: 0px solid #00e676; }
+        #node-home{ left: 218px; top: 230px; border-top: 0px solid #00b0ff; }
+		#node-pv{left:58px;top:0px;border-bottom:0px solid #ffb300;}
+		#node-grid{left:288px;top:1px;border-bottom:2px solid #ef4444;}
 		
         svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        .base-line { stroke: #808080; stroke-width: 0.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-        .flow-line { stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; display: none; }
+        .base-line { stroke: #808080; stroke-width: 0.7; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        .flow-line { stroke-width: 0; fill: none; stroke-linecap: round; stroke-linejoin: round; display: none; }
 
 		@keyframes flowMove{
 			from{
@@ -173,35 +177,35 @@
 		/* model máy */
 		#v-inv{
 		position: absolute;
-		left: 50%;
-		top: 100px;   /* chỉnh lên/xuống ở đây */
+		left: 62%;
+		top: 170px;   /* chỉnh lên/xuống ở đây */
 		transform: translateX(-50%);
-		font-size: 15px;
+		font-size: 13px;
 		font-weight: 600;
 		color: #334155;
 		z-index: 3;
-		background: rgba(255,255,255,0.7);
+
 		padding: 2px 8px;
 		border-radius: 6px;
-		backdrop-filter: blur(4px);
+		backdrop-filter: blur(1px);
 		}
-		.inv-led{position:absolute;top:10px;right:34px;width:8px;height:8px;border-radius:999px;background:#22c55e;box-shadow:0 0 5px #22c55e,0 0 10px #22c55e;animation:blink 1.2s infinite;}@keyframes blink{0%{opacity:1;}50%{opacity:.35;}100%{opacity:1;}}
+		.inv-led{position:absolute;top:160px;right:160px;width:8px;height:8px;border-radius:999px;background:#22c55e;box-shadow:0 0 5px #22c55e,0 0 10px #22c55e;animation:blink 1.2s infinite;}@keyframes blink{0%{opacity:1;}50%{opacity:.35;}100%{opacity:1;}}
 		.inv-clock{
 		position:absolute;
 
-		top:30px;
+		top:5px;
 		left:50%;
 
 		transform:translateX(-50%);
 
-		font-size:14px;
+		font-size:15px;
 		font-weight:600;
 
 		color:#00b0ff;
 
 		letter-spacing:1px;
 	}
-		.inv-header{position:absolute;top:0;left:0;width:100%;height:14px;background:linear-gradient(to bottom,rgba(255,255,255,0.55),rgba(255,255,255,0.05));border-bottom:1px solid rgba(255,255,255,0.25);}
+		
 		.inv-brand{position:absolute;bottom:12px;font-size:11px;font-weight:700;letter-spacing:1px;color:rgba(0,0,255,0.9);}
 	
 		/* =========================
@@ -514,7 +518,7 @@
 				<div class="node" id="node-pv">🌞<div class="val" id="v-pv">0W</div>
 				<div style="font-size:9px;color:#94a3b8" id="info-pv">0V | 0A
 				</div></div>
-				<div class="node" id="node-bat">🔋<div class="val" id="v-bat">0W</div>
+				<div class="node" id="node-bat"><div class="val" id="v-bat">0W</div>
 				<div style="font-size:9px;color:#94a3b8" id="info-bat">0V | 0A
 				</div>
 				<div style="font-size:9px;color:#94a3b8" id="info-batc">0A</div>
@@ -522,36 +526,30 @@
 				<div class="node" id="node-grid">⚡<div class="val" id="v-grid">0W</div>
 				<div style="font-size:9px;color:#94a3b8" id="info-grid">0V | 0A
 				</div></div>
-				<div class="node" id="node-home">🏠<div class="val" id="v-home">0W</div>
+				<div class="node" id="node-home"><div class="val" id="v-home">0W</div>
 				<div style="font-size:9px;color:#94a3b8" id="info-home">0V | 0A
 				</div></div>
-				<div class="node" id="node-inv"><div class="inv-header"></div><div class="inv-screen">🤖</div><div class="inv-led"></div><div class="inv-brand">SENERGY</div></div>
-				<div class="node" id="node-bu">💡<div class="val" id="v-bu">0W</div>
-				<div style="font-size:9px;color:#94a3b8" id="info-eps">0V | 0A
-				</div></div>
+				<div class="inv-led"></div>
 
 				<svg id="svg-layer">
 					<!-- BASE LINE -->
 					<path class="base-line" d="
-						M 139,150 L 85,150 Q 75,150 75,140 L 75,100
-						M 139,195 L 85,195 Q 75,195 75,205 L 75,250
-						M 222,150 L 275,150 Q 285,150 285,140 L 285,100
-						M 222,195 L 275,195 Q 285,195 285,205 L 285,250
-						M 181,212 L 181,250
+						M 193 106 L 193 150
+						M 187 203 L 187 221 Q 187 226, 182 227 L 168 230
+						M 320 55 L 320 90 Q 320 100, 310 100 L 290 100
+						M 199 203 L 199 219 Q 199 223, 202 223 L 226 220
 					"/>
 
 					<!-- FLOW LINES -->
-					<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 139,150 L 85,150 Q 75,150 75,140 L 75,100"/>
-					<path id="l-bat" class="flow-line" style="stroke:#00e676;" d="M 139,195 L 85,195 Q 75,195 75,205 L 75,250"/>
-					<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 222,150 L 275,150 Q 285,150 285,140 L 285,100"/>
-					<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 222,195 L 275,195 Q 285,195 285,205 L 285,250"/>
-					<path id="l-bu" class="flow-line" style="stroke:#a855f7;" d="M 181,212 L 181,250"/>
+					<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 193 106 L 193 150"/>
+					<path id="l-bat" class="flow-line" style="stroke:#00e676;" d="M 187 203 L 187 221 Q 187 226, 182 227 L 168 230"/>
+					<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 320 75 L 320 90 Q 320 100, 310 100 L 290 100"/>
+					<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 199 203 L 199 219 Q 199 224, 202 223 L 226 220"/>
 
-					<circle id="p-pv" class="particle" style="color:#ffb300;" r="5"><animateMotion dur="4s" repeatCount="indefinite" path="M 139,150 L 85,150 Q 75,150 75,140 L 75,100" /></circle>
-					<circle id="p-bat" class="particle" style="color:#00e676;" r="5"><animateMotion dur="4s" repeatCount="indefinite" path="M 139,195 L 85,195 Q 75,195 75,205 L 75,250" /></circle>
-					<circle id="p-grid" class="particle" style="color:#ef4444;" r="5"><animateMotion dur="4s" repeatCount="indefinite" path="M 222,150 L 275,150 Q 285,150 285,140 L 285,100" /></circle>
-					<circle id="p-home" class="particle" style="color:#00b0ff;" r="5"><animateMotion dur="4s" repeatCount="indefinite" path="M 222,195 L 275,195 Q 285,195 285,205 L 285,250" /></circle>
-					<circle id="p-bu" class="particle" style="color:#a855f7;" r="5"><animateMotion dur="4s" repeatCount="indefinite" path="M 181,212 L 181,250" /></circle>
+					<circle id="p-pv" class="particle" style="color:#ffb300;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 193 106 L 193 150" /></circle>
+					<circle id="p-bat" class="particle" style="color:#00e676;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 187 203 L 187 221 Q 187 226, 182 227 L 168 230" /></circle>
+					<circle id="p-grid" class="particle" style="color:#ef4444;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 320 75 L 320 90 Q 320 100, 310 100 L 290 100" /></circle>
+					<circle id="p-home" class="particle" style="color:#00b0ff;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 199 203 L 199 219 Q 199 224, 202 223 L 226 220" /></circle>
 				</svg>
 			</div>
 
@@ -1064,7 +1062,7 @@ function setFlow(name, value, d) {
 
         case "pv":
             show = pv > 0;
-            reverse = true;
+            reverse = false;
             break;
 
         case "grid":
@@ -1270,8 +1268,8 @@ const UI = {};
     "bms-soc","bms-mos","bms-capacity","bms-cycle",
     "bms_charge","bms_discharge","bms_balance",
 
-    "v-pv","v-grid","v-home","v-bu","v-bat",
-    "info-pv","info-grid","info-home","info-eps",
+    "v-pv","v-grid","v-home","v-bat",
+    "info-pv","info-grid","info-home",
     "info-bat","info-batc",
 
     "st-pv","st-peak","st-grid-buy","st-grid-sell",
@@ -1519,7 +1517,6 @@ client.on('message', (topic, payload) => {
 	UI["v-pv"].textContent = formatPower(pv);
 	UI["v-grid"].textContent = formatPower(grid);
 	UI["v-home"].textContent = formatPower(home);
-	UI["v-bu"].textContent = formatPower(bu);
 	UI["v-bat"].textContent = formatPower(bat);
 
 	UI["info-pv"].textContent =
@@ -1531,8 +1528,6 @@ client.on('message', (topic, payload) => {
 	UI["info-home"].textContent =
 		`${load_voltage}V / ${load_current}A`;
 
-	UI["info-eps"].textContent =
-		`${eps_voltage}V / ${eps_current}A`;
 
 	UI["info-bat"].textContent =
 		`${bat_soc}% / ${battery_voltage}V`;
@@ -1620,7 +1615,6 @@ client.on('message', (topic, payload) => {
 	setFlow("pv", pv, d);
 	setFlow("grid", grid, d);
 	setFlow("home", home, d);
-	setFlow("bu", bu, d);
 	setFlow("bat", bat, d);
 
 })
