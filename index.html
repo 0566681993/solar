@@ -1082,7 +1082,7 @@ function setFlow(name, value, d) {
 
         case "grid":
             show = grid !== 0;
-            reverse = grid > 0;
+            reverse = grid < 0;
             break;
 
         case "bat":
@@ -1094,9 +1094,7 @@ function setFlow(name, value, d) {
             show = load > 0;
             break;
 
-        case "bu":
-            show = eps > 0;
-            break;
+        
     }
 
     const display = show ? "block" : "none";
