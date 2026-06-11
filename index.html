@@ -15,21 +15,38 @@
 			
 			/* C?t lõi ? dây: */
 			background-size: cover;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.18);overflow:hidden;}
-        .node{position:absolute;width:63px;height:53px;border:0px solid rgba(255,255,255,0.18);border-radius:5px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:transparent;z-index:2;font-weight:bold;color:#ffffff;box-shadow:none;}
+        .node{position:absolute;width:63px;height:40px;border:0px solid rgba(255,255,255,0.18);border-radius:5px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:transparent;z-index:2;font-weight:bold;color:#ffffff;box-shadow:none;}
         .node span { font-size: 10px; }
-        .node .val { font-size: 12px; color: #4c13eb; margin-top: 2px; }
+        .node .val { font-size: 14px; color: #FF4500; margin-top: 2px; }
 
 
  
-        #node-bat { left: 113px;  top: 260px; border-top: 0px solid #00e676; }
-        #node-home{ left: 218px; top: 230px; border-top: 0px solid #00b0ff; }
+        #node-bat { left: 120px;  top: 299px; border-top: 0px solid #00e676; }
+        #node-home{ left: 213px; top: 247px; border-top: 0px solid #00b0ff; }
 		#node-pv{left:58px;top:0px;border-bottom:0px solid #ffb300;}
-		#node-grid{left:288px;top:1px;border-bottom:2px solid #ef4444;}
-		
+		#node-grid{left:293px;top:1px;border-bottom:0px solid #ef4444;}
+		.icon-grid{
+    position:absolute;
+    left:330px;
+    top:37px;
+    font-size:15px;
+    font-weight:700;
+    z-index:10;
+    cursor:pointer;
+}
+		.icon-pv{
+    position:absolute;
+    left:45px;
+    top:0px;
+    font-size:15px;
+    font-weight:700;
+    z-index:10;
+    cursor:pointer;
+}
         svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .base-line { stroke: #808080; stroke-width: 0.7; fill: none; stroke-linecap: round; stroke-linejoin: round; }
         .flow-line { stroke-width: 0; fill: none; stroke-linecap: round; stroke-linejoin: round; display: none; }
-
+	
 		@keyframes flowMove{
 			from{
 				stroke-dashoffset:0;
@@ -41,12 +58,12 @@
 				.particle{
 			fill:#fff;
 			stroke:currentColor;
-			stroke-width:2.5;
+			stroke-width:2;
 			display:none;
 
 			filter:
 				drop-shadow(0 0 2px currentColor)
-				drop-shadow(0 0 6px currentColor);
+				drop-shadow(0 0 2px currentColor);
 		}
 
         /* Style phần bổ sung */
@@ -177,37 +194,34 @@
 		/* model máy */
 		#v-inv{
 		position: absolute;
-		left: 62%;
-		top: 170px;   /* chỉnh lên/xuống ở đây */
+		left: 64%;
+		top: 192px;   /* chỉnh lên/xuống ở đây */
 		transform: translateX(-50%);
-		font-size: 13px;
-		font-weight: 600;
-		color: #334155;
+		font-size: 12px;
+		font-weight: 500;
+		color: #000;
 		z-index: 3;
 
-		padding: 2px 8px;
-		border-radius: 6px;
-		backdrop-filter: blur(1px);
 		}
-		.inv-led{position:absolute;top:160px;right:160px;width:8px;height:8px;border-radius:999px;background:#22c55e;box-shadow:0 0 5px #22c55e,0 0 10px #22c55e;animation:blink 1.2s infinite;}@keyframes blink{0%{opacity:1;}50%{opacity:.35;}100%{opacity:1;}}
+		
 		.inv-clock{
 		position:absolute;
 
-		top:5px;
-		left:50%;
+		top:320px;
+		left:90%;
 
 		transform:translateX(-50%);
 
 		font-size:15px;
 		font-weight:600;
 
-		color:#00b0ff;
+		color:#fff;
 
 		letter-spacing:1px;
 	}
 		
 		.inv-brand{position:absolute;bottom:12px;font-size:11px;font-weight:700;letter-spacing:1px;color:rgba(0,0,255,0.9);}
-	
+		
 		/* =========================
 		TAB BAR
 		========================= */
@@ -515,41 +529,42 @@
 					00:00
 				</div>
 				<div id="v-inv">0 °C</div>
-				<div class="node" id="node-pv">🌞<div class="val" id="v-pv">0W</div>
-				<div style="font-size:9px;color:#94a3b8" id="info-pv">0V | 0A
+				<div class="icon-grid">⚡</div>
+				<div class="icon-pv">🔆</div>
+				<div class="node" id="node-pv"><div class="val" id="v-pv">0W</div>
+				<div style="font-size:9px;color:#1e3a8a" id="info-pv">0V | 0A
 				</div></div>
 				<div class="node" id="node-bat"><div class="val" id="v-bat">0W</div>
-				<div style="font-size:9px;color:#94a3b8" id="info-bat">0V | 0A
+				<div style="font-size:9px;color:#1e3a8a" id="info-bat">0V | 0A
 				</div>
-				<div style="font-size:9px;color:#94a3b8" id="info-batc">0A</div>
+				<div style="font-size:9px;color:#1e3a8a" id="info-batc">0A</div>
 				</div>
-				<div class="node" id="node-grid">⚡<div class="val" id="v-grid">0W</div>
-				<div style="font-size:9px;color:#94a3b8" id="info-grid">0V | 0A
+				<div class="node" id="node-grid"><div class="val" id="v-grid">0W</div>
+				<div style="font-size:9px;color:#1e3a8a" id="info-grid">0V | 0A
 				</div></div>
 				<div class="node" id="node-home"><div class="val" id="v-home">0W</div>
-				<div style="font-size:9px;color:#94a3b8" id="info-home">0V | 0A
+				<div style="font-size:9px;color:#1e3a8a" id="info-home">0V | 0A
 				</div></div>
-				<div class="inv-led"></div>
 
 				<svg id="svg-layer">
 					<!-- BASE LINE -->
 					<path class="base-line" d="
-						M 193 106 L 193 150
-						M 187 203 L 187 221 Q 187 226, 182 227 L 168 230
-						M 320 55 L 320 90 Q 320 100, 310 100 L 290 100
-						M 199 203 L 199 219 Q 199 223, 202 223 L 226 220
+						M 200 101 200 160
+						M 185 227 L 185 241 Q 185 246, 182 247 L 172 249
+						M 327 37 L 327 90 Q 327 97, 320 98
+						M 202 224 L 202 237 Q 202 247, 210 246 L 228 243
 					"/>
 
 					<!-- FLOW LINES -->
-					<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 193 106 L 193 150"/>
-					<path id="l-bat" class="flow-line" style="stroke:#00e676;" d="M 187 203 L 187 221 Q 187 226, 182 227 L 168 230"/>
-					<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 320 75 L 320 90 Q 320 100, 310 100 L 290 100"/>
-					<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 199 203 L 199 219 Q 199 224, 202 223 L 226 220"/>
+					<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 200 101 200 160"/>
+					<path id="l-bat" class="flow-line" style="stroke:#00e676;" d="M 185 227 L 185 241 Q 185 246, 182 247 L 172 249"/>
+					<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 327 37 L 327 90 Q 327 97, 320 98"/>
+					<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 202 224 L 202 237 Q 202 247, 210 246 L 228 243"/>
 
-					<circle id="p-pv" class="particle" style="color:#ffb300;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 193 106 L 193 150" /></circle>
-					<circle id="p-bat" class="particle" style="color:#00e676;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 187 203 L 187 221 Q 187 226, 182 227 L 168 230" /></circle>
-					<circle id="p-grid" class="particle" style="color:#ef4444;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 320 75 L 320 90 Q 320 100, 310 100 L 290 100" /></circle>
-					<circle id="p-home" class="particle" style="color:#00b0ff;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 199 203 L 199 219 Q 199 224, 202 223 L 226 220" /></circle>
+					<circle id="p-pv" class="particle" style="color:#ffb300;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 200 101 200 160" /></circle>
+					<circle id="p-bat" class="particle" style="color:#00e676;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 185 227 L 185 241 Q 185 246, 182 247 L 172 249" /></circle>
+					<circle id="p-grid" class="particle" style="color:#ef4444;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 327 37 L 327 90 Q 327 97, 320 98" /></circle>
+					<circle id="p-home" class="particle" style="color:#00b0ff;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 202 224 L 202 237 Q 202 247, 210 246 L 228 243" /></circle>
 				</svg>
 			</div>
 
@@ -568,7 +583,7 @@
 				</div>
 				<div class="chart-header">
 					<span class="stats-title">Sử dụng điện</span>
-					<span id="total-usage" class="stats-title">4.83 kWh</span>
+					<span id="total-usage" class="stats-title">0</span>
 				</div>
 				<div id="usage-progress-bar" class="progress-bar">
 					<div id="solar-bar" class="bar solar" style="width: 0%;"></div>
@@ -629,14 +644,14 @@
 					</div>
 					
 					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">Công suất sạc (W)</div>
+						<div class="ivtsetting-name">Công suất sạc(W)</div>
 						<input id="ivt_max_charge_power" class="ivtsetting-input" value="0.00">
 						<button class="ivtsetting-btn" onclick="sendInvSetting('ivt_max_charge_power','ivt_max_charge_power')">OK</button>
 					</div>
 
 					<div class="ivtsetting-row">
-						<div class="ivtsetting-name">Công suất xả (W)</div>
-						<input id="ivt_max_discharge_power" class="ivtsetting-input" value="0.00">
+						<div class="ivtsetting-name">Công suất sạc (W)</div>
+						<input id="ivt_max_charge_power2" class="ivtsetting-input" value="0.00">
 						<button class="ivtsetting-btn" onclick="sendInvSetting('ivt_max_discharge_power','ivt_max_discharge_power')">OK</button>
 					</div>	
 
@@ -1225,40 +1240,7 @@ function showTab(id,el){
 }
 
 
-//
-// =========================
-// CACHE DOM
-// =========================
-function loadIvtSettingUI() {
 
-    if (!ivtSettingCache) return;
-
-    const d = ivtSettingCache;
-
-    const mode = String(d.ivt_battery_mode ?? d.battery ?? 0);
-
-    const select = UI["ivt_battery_mode"];
-
-    if (select) {
-        const exists = [...select.options].some(o => o.value === mode);
-        if (exists) select.value = mode;
-    }
-
-    const fields = [
-        "ivt_max_charge_power",
-        "ivt_max_discharge_power",
-        "ivt_discharge_end_soc",
-        "ivt_full_charge_soc",
-        "ivt_charge_current",
-        "ivt_discharge_current"
-    ];
-
-    fields.forEach(id => {
-        if (d[id] !== undefined && UI[id]) {
-            UI[id].value = d[id];
-        }
-    });
-}
 const UI = {};
 
 [
@@ -1305,18 +1287,51 @@ const UI = {};
     "bms_celloff",
     "bms_rfv",
 
-	"ivt_max_discharge_power",
-    "ivt_max_charge_power",
-    "ivt_discharge_end_soc",
-    "ivt_full_charge_soc",
 	"ivt_battery_mode",
+    "ivt_max_charge_power",
+	"ivt_max_discharge_power",
+	"ivt_full_charge_soc",
+    "ivt_discharge_end_soc",
 	"ivt_charge_current",
 	"ivt_discharge_current",
 	"inv-clock"
 ].forEach(id => {
     UI[id] = document.getElementById(id);
 });
+//
+// =========================
+// CACHE DOM
+// =========================
+function loadIvtSettingUI() {
 
+    if (!ivtSettingCache) return;
+
+    const d = ivtSettingCache;
+
+    const mode = String(d.ivt_battery_mode ?? d.battery ?? 0);
+
+    const select = UI["ivt_battery_mode"];
+
+    if (select) {
+        const exists = [...select.options].some(o => o.value === mode);
+        if (exists) select.value = mode;
+    }
+
+    const fields = [
+        "ivt_max_discharge_power",
+		"ivt_max_charge_power",
+        "ivt_discharge_end_soc",
+        "ivt_full_charge_soc",
+        "ivt_charge_current",
+        "ivt_discharge_current"
+    ];
+
+    fields.forEach(id => {
+        if (d[id] !== undefined && UI[id]) {
+            UI[id].value = d[id];
+        }
+    });
+}
 client.on('message', (topic, payload) => {
 
 	let d;
