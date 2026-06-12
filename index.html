@@ -504,7 +504,7 @@
 			transform: translateX(18px);
 		}
 
-
+		.pass-modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); backdrop-filter:blur(4px); justify-content:center; align-items:center; z-index:99999; } .pass-box{ width:320px; background:#fff; border-radius:16px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.25); animation:popup .2s ease; } @keyframes popup{ from{ transform:scale(.9); opacity:0; } to{ transform:scale(1); opacity:1; } } .pass-title{ font-size:18px; font-weight:700; margin-bottom:15px; text-align:center; } #passInput{ width:100%; box-sizing:border-box; padding:10px; border:1px solid #d1d5db; border-radius:10px; outline:none; font-size:15px; } #passInput:focus{ border-color:#2563eb; } .pass-btns{ margin-top:15px; display:flex; gap:10px; } .pass-btns button{ flex:1; border:none; border-radius:10px; padding:10px; cursor:pointer; font-weight:600; } .btn-cancel{ background:#e5e7eb; } .btn-ok{ background:#2563eb; color:#fff; } .pass-error{ margin-top:10px; color:#dc2626; text-align:center; font-size:13px; }
 	
     </style>
 </head>
@@ -1192,32 +1192,30 @@ function sendInvSetting(inputId, mqttKey) {
 let settingLogin = false;
 let ivtSettingCache = null;
 let ivtSettingOpened = false;
-function openSetting(topic,page) {
-    const box = document.getElementById(page);
-    
-    // Logic mật khẩu của bạn
-    if (!settingLogin) {
-        const pass = prompt("PASS WORD");
-        if (pass !== "123456") {
-            alert("Sai Pass");
+function openSetting(topic,page){
+
+    const run = () => {
+        const box = document.getElementById(page);
+
+        if(client.connected){
+            client.publish(topic,"read_setting");
+        }else{
+            alert("MQTT chưa kết nối");
             return;
         }
-        settingLogin = true;
-    }
 
-    // Logic MQTT của bạn
-    if (client.connected) {
-        client.publish(topic, "read_setting");
-    } else {
-        alert("MQTT chưa kết nối");
-        return;
-    }
+        box.style.display = "flex";
+        loadIvtSettingUI();
+    };
 
-    // Hiển thị Popup
-    box.style.display = "flex";
-    
-    // Load UI
-    loadIvtSettingUI();
+    if(!settingLogin){
+        showPassModal(()=>{
+            settingLogin = true;
+            run();
+        });
+    }else{
+        run();
+    }
 }
 
 function closeSetting(page) {
@@ -1631,6 +1629,7 @@ client.on('message', (topic, payload) => {
 	setFlow("bat", bat, d);
 
 })
+let passCallback = null; function showPassModal(callback){ passCallback = callback; document.getElementById("passInput").value = ""; document.getElementById("passError").textContent = ""; document.getElementById("passModal").style.display = "flex"; setTimeout(() => { document.getElementById("passInput").focus(); }, 100); } function closePassModal(){ document.getElementById("passModal").style.display = "none"; } function checkPassword(){ const pass = document.getElementById("passInput").value; if(pass === "123456"){ closePassModal(); if(passCallback){ passCallback(); } }else{ document.getElementById("passError").textContent = "Mật khẩu không đúng!"; } } document.getElementById("passInput").addEventListener("keydown", e=>{ if(e.key === "Enter"){ checkPassword(); } });
 function updateClock() {
 
     const now = new Date();
@@ -1644,5 +1643,6 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 1000);
 </script>
+<!-- Popup Password --> <div id="passModal" class="pass-modal"> <div class="pass-box"> <div class="pass-title">🔒 Đăng nhập cài đặt</div> <input type="password" id="passInput" placeholder="Nhập mật khẩu..." autocomplete="off"> <div class="pass-btns"> <button class="btn-cancel" onclick="closePassModal()">Hủy</button> <button class="btn-ok" onclick="checkPassword()">OK</button> </div> <div id="passError" class="pass-error"></div> </div> </div>
 </body>
 </html>
