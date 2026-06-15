@@ -204,22 +204,7 @@
 
 		}
 		
-		.inv-clock{
-		position:absolute;
-
-		top:320px;
-		left:90%;
-
-		transform:translateX(-50%);
-
-		font-size:15px;
-		font-weight:600;
-
-		color:#fff;
-
-		letter-spacing:1px;
-	}
-		
+				
 		.inv-brand{position:absolute;bottom:12px;font-size:11px;font-weight:700;letter-spacing:1px;color:rgba(0,0,255,0.9);}
 		
 		/* =========================
@@ -524,10 +509,7 @@
 		<!-- PAGE inverter -->
 		<div id="home" class="page active">
 			<div class="wrapper">
-				<!-- GIỜ -->
-				<div id="inv-clock" class="inv-clock">
-					00:00
-				</div>
+	
 				<div id="v-inv">0 °C</div>
 				<div class="icon-grid">⚡</div>
 				<div class="icon-pv">🔆</div>
@@ -1630,18 +1612,7 @@ client.on('message', (topic, payload) => {
 
 })
 let passCallback = null; function showPassModal(callback){ passCallback = callback; document.getElementById("passInput").value = ""; document.getElementById("passError").textContent = ""; document.getElementById("passModal").style.display = "flex"; setTimeout(() => { document.getElementById("passInput").focus(); }, 100); } function closePassModal(){ document.getElementById("passModal").style.display = "none"; } function checkPassword(){ const pass = document.getElementById("passInput").value; if(pass === "123456"){ closePassModal(); if(passCallback){ passCallback(); } }else{ document.getElementById("passError").textContent = "Mật khẩu không đúng!"; } } document.getElementById("passInput").addEventListener("keydown", e=>{ if(e.key === "Enter"){ checkPassword(); } });
-function updateClock() {
 
-    const now = new Date();
-
-    const hh = String(now.getHours()).padStart(2, "0");
-    const mm = String(now.getMinutes()).padStart(2, "0");
-
-    UI["inv-clock"].textContent = `${hh}:${mm}`;
-}
-
-updateClock();
-setInterval(updateClock, 1000);
 </script>
 <!-- Popup Password --> <div id="passModal" class="pass-modal"> <div class="pass-box"> <div class="pass-title">🔒 Đăng nhập cài đặt</div> <input type="password" id="passInput" placeholder="Nhập mật khẩu..." autocomplete="off"> <div class="pass-btns"> <button class="btn-cancel" onclick="closePassModal()">Hủy</button> <button class="btn-ok" onclick="checkPassword()">OK</button> </div> <div id="passError" class="pass-error"></div> </div> </div>
 </body>
