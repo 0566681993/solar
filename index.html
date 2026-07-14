@@ -1099,24 +1099,27 @@ client.on('connect', () => {
 	client.subscribe("solar/bms/setting");
 	client.subscribe("solar/inverter/setting");
 	
-    document.getElementById("chargeSwitch").addEventListener("change", function () {
-        client.publish("solar/bms/cmd", JSON.stringify({
-            bms_oncharge: this.checked ? 1 : 0
-        }));
-    });
+	document.getElementById("chargeSwitch").addEventListener("change", function () {
+		client.publish("solar/bms/cmd", JSON.stringify({
+			key: "bms_oncharge",
+			value: this.checked ? 1 : 0
+		}));
+	});
 
     // Xả
     document.getElementById("dischargeSwitch").addEventListener("change", function () {
         client.publish("solar/bms/cmd", JSON.stringify({
-            bms_ondischarge: this.checked ? 1 : 0
-        }));
+			key: "bms_ondischarge",
+			value: this.checked ? 1 : 0
+		}));
     });
 
     // Cân bằng
     document.getElementById("balanceSwitch").addEventListener("change", function () {
         client.publish("solar/bms/cmd", JSON.stringify({
-            bms_onbalance: this.checked ? 1 : 0
-        }));
+			key: "bms_onbalance",
+			value: this.checked ? 1 : 0
+		}));
     });
 })
 
