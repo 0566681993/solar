@@ -839,9 +839,7 @@
 								class="ivtsetting-input"
 								value="0.00"
 							>
-							<button class="ivtsetting-btn">
-								OK
-							</button>				
+							<button class="ivtsetting-btn" onclick="sendBmsSetting('bms_maxcharge','bms_charge_cur')">OK</button>				
 						</div>
 						<div class="ivtsetting-row">
 							<div class="ivtsetting-name">
@@ -852,9 +850,7 @@
 								class="ivtsetting-input"
 								value="0.00"
 							>
-							<button class="ivtsetting-btn">
-								OK
-							</button>				
+							<button class="ivtsetting-btn" onclick="sendBmsSetting('bms_maxdischarge','bms_discharge_cur')">OK</button>				
 						</div>
 						<div class="ivtsetting-row">
 							<div class="ivtsetting-name">
@@ -865,9 +861,7 @@
 								class="ivtsetting-input"
 								value="0.00"
 							>
-							<button class="ivtsetting-btn">
-								OK
-							</button>				
+							<button class="ivtsetting-btn" onclick="sendBmsSetting('bms_ovp','bms_ovp')">OK</button>				
 						</div>			
 						<div class="ivtsetting-row">
 							
@@ -879,9 +873,7 @@
 								class="ivtsetting-input"
 								value="0.00"
 							>
-							<button class="ivtsetting-btn">
-								OK
-							</button>				
+							<button class="ivtsetting-btn" onclick="sendBmsSetting('bms_rcv','bms_rcv')">OK</button>				
 						</div>			
 						<div class="ivtsetting-row">
 							<div class="ivtsetting-name">
@@ -893,9 +885,7 @@
 								class="ivtsetting-input"
 								value="0.00"
 							>
-							<button class="ivtsetting-btn">
-								OK
-							</button>
+							<button class="ivtsetting-btn" onclick="sendBmsSetting('bms_soc100','bms_soc100')">OK</button>	
 						</div>
 		
 						<div class="ivtsetting-row">
@@ -907,9 +897,7 @@
 								class="ivtsetting-input"
 								value="0.00"
 							>
-							<button class="ivtsetting-btn">
-								OK
-							</button>				
+							<button class="ivtsetting-btn" onclick="sendBmsSetting('bms_ovpr','bms_ovpr')">OK</button>					
 						</div>
 						<div class="ivtsetting-row">
 							<div class="ivtsetting-name">
@@ -920,9 +908,7 @@
 								class="ivtsetting-input"
 								value="0.00"
 							>
-							<button class="ivtsetting-btn">
-								OK
-							</button>				
+							<button class="ivtsetting-btn" onclick="sendBmsSetting('bms_uvpr','bms_uvpr')">OK</button>					
 						</div>			
 
 						<div class="ivtsetting-row">
@@ -934,9 +920,7 @@
 								class="ivtsetting-input"
 								value="0.00"
 							>
-							<button class="ivtsetting-btn">
-								OK
-							</button>				
+							<button class="ivtsetting-btn" onclick="sendBmsSetting('bms_soc0','bms_soc0')">OK</button>					
 						</div>
 						<div class="ivtsetting-row">
 							<div class="ivtsetting-name">
@@ -948,9 +932,7 @@
 								class="ivtsetting-input"
 								value="0.00"
 							>
-							<button class="ivtsetting-btn">
-								OK
-							</button>
+							<button class="ivtsetting-btn" onclick="sendBmsSetting('bms_uvp','bms_uvp')">OK</button>	
 						</div>
 						
 						<div class="ivtsetting-row">
@@ -962,9 +944,7 @@
 								class="ivtsetting-input"
 								value="0.00"
 							>
-							<button class="ivtsetting-btn">
-								OK
-							</button>				
+							<button class="ivtsetting-btn" onclick="sendBmsSetting('bms_celloff','bms_celloff')">OK</button>					
 						</div>
 						<div class="ivtsetting-row">
 							<div class="ivtsetting-name">
@@ -976,9 +956,7 @@
 								class="ivtsetting-input"
 								value="0.00"
 							>
-							<button class="ivtsetting-btn">
-								OK
-							</button>
+							<button class="ivtsetting-btn" onclick="sendBmsSetting('bms_rfv','bms_rfv')">OK</button>	
 						</div>
 						<div class="setting-row2">
 							<div class="setting-name">
@@ -1153,7 +1131,23 @@ function sendResetCommand() {
         }
     }
 }
+function sendBmsSetting(inputId, mqttKey) {
 
+    const el = document.getElementById(inputId);
+    if (!el) return;
+
+    const value = Number(el.value);
+
+    if (!client || !client.connected) return;
+
+    client.publish(
+        "solar/bms/cmd",
+        JSON.stringify({
+            key: mqttKey,
+            value: value
+        })
+    );
+}
 function sendInvSetting(inputId, mqttKey) {
 
     const el = document.getElementById(inputId);
