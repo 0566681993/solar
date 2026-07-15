@@ -11,16 +11,11 @@
         body { background-color: #f1f5f9; margin: 0; display: flex; flex-direction: column; align-items: center; font-family: 'Inter', sans-serif;; padding-top: 0px; }
         .wrapper{position:relative;width:360px;height:340px;background-image: url('a.png');
 			background-repeat: no-repeat;
-			background-position: center; /* Gi? tâm b?c ?nh ? chính gi?a khung */
-			
-			/* C?t lõi ? dây: */
+			background-position: center;
 			background-size: cover;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.18);overflow:hidden;}
         .node{position:absolute;width:63px;height:40px;border:0px solid rgba(255,255,255,0.18);border-radius:5px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:transparent;z-index:2;font-weight:bold;color:#ffffff;box-shadow:none;}
         .node span { font-size: 10px; }
         .node .val { font-size: 14px; color: #FF4500; margin-top: 2px; }
-
-
- 
         #node-bat { left: 120px;  top: 299px; border-top: 0px solid #00e676; }
         #node-home{ left: 213px; top: 247px; border-top: 0px solid #00b0ff; }
 		#node-pv{left:58px;top:0px;border-bottom:0px solid #ffb300;}
@@ -66,7 +61,6 @@
 				drop-shadow(0 0 2px currentColor);
 		}
 
-        /* Style phần bổ sung */
         .stats-container{width:360px;background:radial-gradient(circle at 20% 20%,rgba(255,255,255,0.25) 0 55px,transparent 70px),radial-gradient(circle at 80% 18%,rgba(255,255,255,0.18) 0 70px,transparent 85px),linear-gradient(to bottom,rgba(90,180,255,0.18),rgba(180,230,255,0.10));border-radius:20px;padding:20px;box-sizing:border-box;box-shadow:0 4px 15px rgba(0,0,0,0.06);margin-bottom:5px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.18);}
         .stats-title { font-size: 14px; font-weight: bold; margin-bottom: 2px; color: #334155; }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; grid-template-columns:60% 40%; }
@@ -76,10 +70,8 @@
 		.title-row .stats-title{margin-bottom:0;}
         .title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;}
 
-
-		/* Layout Tổng sản lượng */
 		.total-container {
-			position: relative; /* Tạo mốc để định vị nút */
+			position: relative;
 			width: 360px;
 			background: radial-gradient(circle at 25% 25%,rgba(255,255,255,0.22) 0 50px,transparent 65px),
 						radial-gradient(circle at 70% 15%,rgba(255,255,255,0.16) 0 65px,transparent 80px),
@@ -96,7 +88,6 @@
 
 		.total-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
 
-		/* Nút bấm ở góc phải */
 		.setting-toggle {
 			position: absolute;
 			top: 10px;
@@ -117,7 +108,6 @@
 		.total-item { display: flex; flex-direction: column; }
 		.total-label { font-size: 11px; color: #64748b; margin-bottom: 2px; }
 		.total-value { font-size: 15px; font-weight: bold; color: #00b0ff; }
-		/* biểu đồ*/
 		.chart-header {
 			display: flex;
 			justify-content: space-between;
@@ -140,10 +130,10 @@
 		}
 		.progress-bar {
 		  display: flex;
-		  height: 10px; /* Độ dày của thanh */
+		  height: 10px;
 		  width: 100%;
 		  border-radius: 5px;
-		  overflow: hidden; /* Giúp các đoạn bo góc chung */
+		  overflow: hidden;
 		  background-color: #eee;
 
 		  margin-bottom: 5px;
@@ -153,12 +143,10 @@
 		  height: 100%;
 		}
 
-		/* Màu sắc tương ứng */
 		.solar { background-color: #FFC107; }
 		.battery { background-color: #00E676; }
 		.grid { background-color: #FF7043; }
 
-		/* Chú thích */
 		.legend {
 			display: flex;
 			justify-content: space-between;
@@ -167,15 +155,15 @@
 
 		.legend-item {
 			display: flex;
-			flex-direction: column; /* Xếp chồng theo chiều dọc */
-			align-items: center;    /* Căn giữa icon và chữ */
+			flex-direction: column;
+			align-items: center;
 			font-size: 10px;
 		}
 
 		.legend-label {
 			display: flex;
 			align-items: center;
-			margin-bottom: 4px; /* Khoảng cách giữa tên và số liệu */
+			margin-bottom: 4px;
 			font-weight: 500;
 		}
 
@@ -191,11 +179,10 @@
 			border-radius: 50%;
 			margin-right: 5px;
 		}	
-		/* model máy */
 		#v-inv{
 		position: absolute;
 		left: 64%;
-		top: 192px;   /* chỉnh lên/xuống ở đây */
+		top: 192px;
 		transform: translateX(-50%);
 		font-size: 12px;
 		font-weight: 500;
@@ -207,10 +194,6 @@
 				
 		.inv-brand{position:absolute;bottom:12px;font-size:11px;font-weight:700;letter-spacing:1px;color:rgba(0,0,255,0.9);}
 		
-		/* =========================
-		TAB BAR
-		========================= */
-
 		.tabs{
 			position:fixed;
 			bottom:0;
@@ -343,8 +326,6 @@
 			font-size:15px;
 		}
 
-
-
 		.bms-cell-grid{
 			display:grid;
 			grid-template-columns:repeat(3,1fr);
@@ -374,10 +355,8 @@
 			color:#000;
 		}
 
-		/* Overlay Popup */
 		.ivt-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; }
 
-		/* Bảng Popup */
 		.ivtsetting-card-popup { width: 360px; background: #fff; border-radius: 20px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
 
 		.ivtsetting-title { display: flex; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 600; color: #334155; margin-bottom: 15px; }
@@ -396,36 +375,23 @@
 		  font-weight: 600;
 		}
 
-
-
-		/* 2. Thanh header cố định */
 		.status-header {
 			position: fixed;
 			top: 0;
 			left: 0;
 			width: 100%;
-			/* Chiều cao 60px bao gồm cả phần notch */
 			height: 35px; 
 			padding-top: env(safe-area-inset-top);
-			
-			/* Màu sắc */
 			background-color: #00b0ff; 
 			color: white;
-			
-			/* Căn giữa chữ */
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			
-			/* Font chữ */
 			font-weight: bold;
 			font-size: 18px;
 			font-family: sans-serif;
-			
-			/* Thứ tự hiển thị */
 			z-index: 1000;
 		}
-		/* 3. ĐẨY NỘI DUNG XUỐNG - Chìa khóa nằm ở đây */
 		.content-wrapper {
 			padding-top: calc(40px + env(safe-area-inset-top));
 			width: 100%;
@@ -490,7 +456,161 @@
 		}
 
 		.pass-modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); backdrop-filter:blur(4px); justify-content:center; align-items:center; z-index:99999; } .pass-box{ width:320px; background:#fff; border-radius:16px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.25); animation:popup .2s ease; } @keyframes popup{ from{ transform:scale(.9); opacity:0; } to{ transform:scale(1); opacity:1; } } .pass-title{ font-size:18px; font-weight:700; margin-bottom:15px; text-align:center; } #passInput{ width:100%; box-sizing:border-box; padding:10px; border:1px solid #d1d5db; border-radius:10px; outline:none; font-size:15px; } #passInput:focus{ border-color:#2563eb; } .pass-btns{ margin-top:15px; display:flex; gap:10px; } .pass-btns button{ flex:1; border:none; border-radius:10px; padding:10px; cursor:pointer; font-weight:600; } .btn-cancel{ background:#e5e7eb; } .btn-ok{ background:#2563eb; color:#fff; } .pass-error{ margin-top:10px; color:#dc2626; text-align:center; font-size:13px; }
-	
+
+		.diagram-view{ display:none; }
+		.diagram-view.active{ display:block; }
+
+		.view-switch{
+			display:flex;
+			width:220px;
+			margin:8px auto 14px;
+			background:#e2e8f0;
+			border-radius:999px;
+			padding:4px;
+			box-shadow:inset 0 1px 3px rgba(0,0,0,0.08);
+		}
+		.view-switch-btn{
+			flex:1;
+			border:none;
+			background:transparent;
+			padding:8px 0;
+			font-size:13px;
+			font-weight:700;
+			color:#94a3b8;
+			border-radius:999px;
+			cursor:pointer;
+			transition:all .2s ease;
+		}
+		.view-switch-btn.active{
+			background:#fff;
+			color:#0f172a;
+			box-shadow:0 2px 6px rgba(0,0,0,0.12);
+		}
+
+		/* =========================
+		   2D DIAGRAM
+		   Toa do co dinh, khop SVG - wrapper 360x340
+		========================= */
+		.wrapper2d{
+			position:relative;
+			width:360px;
+			height:340px;
+			background:radial-gradient(circle at 20% 15%,rgba(255,255,255,0.55) 0 90px,transparent 110px),
+						radial-gradient(circle at 80% 85%,rgba(255,255,255,0.35) 0 100px,transparent 120px),
+						linear-gradient(to bottom,#eaf5ff,#dbeeff);
+			border-radius:20px;
+			box-shadow:0 4px 20px rgba(0,0,0,0.06);
+			margin-bottom:8px;
+			border:1px solid rgba(255,255,255,0.5);
+		}
+		.card2d{
+			position:absolute;
+			width:100px;
+			display:flex;
+			flex-direction:column;
+			align-items:center;
+			text-align:center;
+			z-index:2;
+		}
+		.card2d .icon-box{
+			width:60px;
+			height:60px;
+			background:#fff;
+			border-radius:14px;
+			display:flex;
+			align-items:center;
+			justify-content:center;
+			font-size:26px;
+			box-shadow:0 3px 10px rgba(0,0,0,0.08);
+		}
+		.card2d .label2d{
+			font-size:11px;
+			color:#334155;
+			font-weight:600;
+			margin-top:6px;
+		}
+		.card2d .value2d{
+			font-size:14px;
+			font-weight:700;
+			color:#0f172a;
+			margin-top:2px;
+		}
+		.card2d .percent2d{
+			position:absolute;
+			top:-18px;
+			left:0;
+			right:0;
+			text-align:center;
+			font-size:12px;
+			font-weight:700;
+			color:#16a34a;
+		}
+		#card-pv2d{ left:14px; top:10px; }
+		#card-grid2d{ right:14px; top:10px; }
+		#card-bat2d{ left:14px; top:245px; }
+		#card-load2d{ right:14px; top:245px; }
+
+		.center2d{
+			position:absolute;
+			left:145px;
+			top:110px;
+			width:70px;
+			height:70px;
+			background:linear-gradient(160deg,#bfe3ff,#8fcaff);
+			border-radius:15px;
+			z-index:3;
+			box-shadow:0 4px 12px rgba(0,120,255,0.25);
+			display:flex;
+			align-items:center;
+			justify-content:center;
+		}
+		.center2d::before{
+			content:"Senergy";
+			width:50px;
+			height:18px;
+			background:#fff;
+			border-radius:4px;
+			display:flex;
+			justify-content:center;
+			align-items:center;
+			font-size:8px;
+			font-weight:700;
+			color:#0369a1;
+		}
+		.backup2d{
+			position:absolute;
+			left:152px;
+			top:245px;
+			width:56px;
+			display:flex;
+			flex-direction:column;
+			align-items:center;
+			text-align:center;
+			z-index:2;
+		}
+		.backup2d .icon-box{
+			width:50px;
+			height:50px;
+			background:#fff;
+			border-radius:14px;
+			display:flex;
+			align-items:center;
+			justify-content:center;
+			font-size:22px;
+			box-shadow:0 3px 10px rgba(0,0,0,0.08);
+		}
+		.backup2d .label2d{ font-size:10px; color:#334155; font-weight:600; margin-top:5px; line-height:1.2; }
+		.backup2d .value2d{ font-size:11px; font-weight:700; color:#94a3b8; margin-top:1px; }
+
+		.ts2d{
+			text-align:center;
+			font-size:12px;
+			color:#94a3b8;
+			margin-bottom:8px;
+		}
+
+		.svg2d{ position:absolute; top:0; left:0; width:100%; height:100%; z-index:1; }
+		.dline{ stroke:#94a3b8; stroke-width:1; stroke-dasharray:3 3; fill:none; stroke-linecap:round; stroke-linejoin:round; }
     </style>
 </head>
 <body>
@@ -508,6 +628,9 @@
 	<main class="content-wrapper">
 		<!-- PAGE inverter -->
 		<div id="home" class="page active">
+
+			<!-- ==== 3D DIAGRAM (giao dien goc) ==== -->
+			<div id="view-3d" class="diagram-view active">
 			<div class="wrapper">
 	
 				<div id="v-inv">0 °C</div>
@@ -538,16 +661,82 @@
 					"/>
 
 					<!-- FLOW LINES -->
-					<path id="l-pv" class="flow-line" style="stroke:#ffb300;" d="M 200 101 200 160"/>
-					<path id="l-bat" class="flow-line" style="stroke:#00e676;" d="M 185 227 L 185 241 Q 185 246, 182 247 L 172 249"/>
-					<path id="l-grid" class="flow-line" style="stroke:#ef4444;" d="M 327 37 L 327 90 Q 327 97, 320 98"/>
-					<path id="l-home" class="flow-line" style="stroke:#00b0ff;" d="M 202 224 L 202 237 Q 202 247, 210 246 L 228 243"/>
+					<path id="l-pv" class="flow-line flow-pv" style="stroke:#ffb300;" d="M 200 101 200 160"/>
+					<path id="l-bat" class="flow-line flow-bat" style="stroke:#00e676;" d="M 185 227 L 185 241 Q 185 246, 182 247 L 172 249"/>
+					<path id="l-grid" class="flow-line flow-grid" style="stroke:#ef4444;" d="M 327 37 L 327 90 Q 327 97, 320 98"/>
+					<path id="l-home" class="flow-line flow-home" style="stroke:#00b0ff;" d="M 202 224 L 202 237 Q 202 247, 210 246 L 228 243"/>
 
-					<circle id="p-pv" class="particle" style="color:#ffb300;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 200 101 200 160" /></circle>
-					<circle id="p-bat" class="particle" style="color:#00e676;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 185 227 L 185 241 Q 185 246, 182 247 L 172 249" /></circle>
-					<circle id="p-grid" class="particle" style="color:#ef4444;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 327 37 L 327 90 Q 327 97, 320 98" /></circle>
-					<circle id="p-home" class="particle" style="color:#00b0ff;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 202 224 L 202 237 Q 202 247, 210 246 L 228 243" /></circle>
+					<circle id="p-pv" class="particle particle-pv" style="color:#ffb300;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 200 101 200 160" /></circle>
+					<circle id="p-bat" class="particle particle-bat" style="color:#00e676;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 185 227 L 185 241 Q 185 246, 182 247 L 172 249" /></circle>
+					<circle id="p-grid" class="particle particle-grid" style="color:#ef4444;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 327 37 L 327 90 Q 327 97, 320 98" /></circle>
+					<circle id="p-home" class="particle particle-home" style="color:#00b0ff;" r="3"><animateMotion dur="4s" repeatCount="indefinite" path="M 202 224 L 202 237 Q 202 247, 210 246 L 228 243" /></circle>
 				</svg>
+			</div>
+			</div>
+
+			<!-- ==== 2D DIAGRAM ==== -->
+			<div id="view-2d" class="diagram-view">
+			<div class="wrapper2d">
+
+				<svg class="svg2d" viewBox="0 0 360 340" preserveAspectRatio="none">
+					<!-- PV -> center -->
+					<path class="dline" d="M 64 70 L 64 122 Q 64 130 72 130 L 145 130"/>
+					<!-- Grid -> center -->
+					<path class="dline" d="M 296 70 L 296 122 Q 296 130 288 130 L 215 130"/>
+					<!-- center -> Battery -->
+					<path class="dline" d="M 145 160 L 72 160 Q 64 160 64 168 L 64 245"/>
+					<!-- center -> Load -->
+					<path class="dline" d="M 215 160 L 288 160 Q 296 160 296 168 L 296 245"/>
+					<!-- center -> Backup -->
+					<path class="dline" d="M 180 180 L 180 245"/>
+
+					<circle id="p-pv2d" class="particle particle-pv" style="color:#ffb300;" r="4"><animateMotion dur="4s" repeatCount="indefinite" path="M 64 70 L 64 122 Q 64 130 72 130 L 145 130" /></circle>
+					<circle id="p-grid2d" class="particle particle-grid" style="color:#ef4444;" r="4"><animateMotion dur="4s" repeatCount="indefinite" path="M 296 70 L 296 122 Q 296 130 288 130 L 215 130" /></circle>
+					<circle id="p-bat2d" class="particle particle-bat" style="color:#00e676;" r="4"><animateMotion dur="4s" repeatCount="indefinite" path="M 145 160 L 72 160 Q 64 160 64 168 L 64 245" /></circle>
+					<circle id="p-home2d" class="particle particle-home" style="color:#00b0ff;" r="4"><animateMotion dur="4s" repeatCount="indefinite" path="M 215 160 L 288 160 Q 296 160 296 168 L 296 245" /></circle>
+				</svg>
+
+				<div class="card2d" id="card-pv2d">
+					<div class="icon-box">🌞</div>
+					<div class="label2d">Pin mặt trời</div>
+					<div class="value2d" id="v-pv-2d">0 W</div>
+				</div>
+
+				<div class="card2d" id="card-grid2d">
+					<div class="icon-box">🔌</div>
+					<div class="label2d">Hòa lưới</div>
+					<div class="value2d" id="v-grid-2d">— —</div>
+				</div>
+
+				<div class="card2d" id="card-bat2d">
+					<div class="percent2d" id="info-bat-2d">0%</div>
+					<div class="icon-box">🔋</div>
+					<div class="label2d">Pin lưu trữ</div>
+					<div class="value2d" id="v-bat-2d">0 W</div>
+				</div>
+
+				<div class="card2d" id="card-load2d">
+					<div class="icon-box">🏠</div>
+					<div class="label2d">Tải</div>
+					<div class="value2d" id="v-home-2d">— —</div>
+				</div>
+
+				<div class="center2d" id="center-inv2d" title="Biến tần"></div>
+
+				<div class="backup2d">
+					<div class="icon-box">🔌</div>
+					<div class="label2d">Tải dự phòng</div>
+					<div class="value2d">— —</div>
+				</div>
+			</div>
+
+			<div class="ts2d" id="ts-2d">--</div>
+			</div>
+
+			<!-- ==== NUT CHUYEN 2D / 3D ==== -->
+			<div class="view-switch">
+				<button class="view-switch-btn active" id="btn-view-3d" onclick="switchDiagram('3d')">Đồ thị 3D</button>
+				<button class="view-switch-btn" id="btn-view-2d" onclick="switchDiagram('2d')">Đồ thị 2D</button>
 			</div>
 
 			<div class="stats-container">
@@ -1012,17 +1201,24 @@ function formatPower2(value) {
 }
 
 /* =========================
+   CHUYỂN GIAO DIỆN 2D / 3D
+========================= */
+function switchDiagram(view){
+	document.getElementById("view-3d").classList.toggle("active", view === "3d");
+	document.getElementById("view-2d").classList.toggle("active", view === "2d");
+	document.getElementById("btn-view-3d").classList.toggle("active", view === "3d");
+	document.getElementById("btn-view-2d").classList.toggle("active", view === "2d");
+}
+
+/* =========================
    FLOW ON/OFF
 ========================= */
 function setFlow(name, value, d) {
 
-    const line = UI["l-" + name] || document.getElementById("l-" + name);
-    const particle = UI["p-" + name] || document.getElementById("p-" + name);
+    const lines = document.querySelectorAll(".flow-" + name);
+    const particles = document.querySelectorAll(".particle-" + name);
 
-    if (!line || !particle) return;
-
-    const anim = particle.querySelector("animateMotion");
-    if (!anim) return;
+    if (!lines.length || !particles.length) return;
 
     const pv   = Number(d.pv1_power) || 0;
     const grid = Number(d.grid_power) || 0;
@@ -1059,28 +1255,29 @@ function setFlow(name, value, d) {
 
     const display = show ? "block" : "none";
 
-    if (line.style.display !== display)
-        line.style.display = display;
+    lines.forEach(line => {
+        if (line.style.display !== display) line.style.display = display;
+    });
 
-    if (particle.style.display !== display)
-        particle.style.display = display;
+    particles.forEach(particle => {
 
-    if (!show) return;
+        if (particle.style.display !== display) particle.style.display = display;
 
-    if (reverse) {
+        const anim = particle.querySelector("animateMotion");
+        if (!anim || !show) return;
 
-        if (anim.getAttribute("keyPoints") !== "1;0") {
-            anim.setAttribute("keyPoints", "1;0");
-            anim.setAttribute("keyTimes", "0;1");
+        if (reverse) {
+            if (anim.getAttribute("keyPoints") !== "1;0") {
+                anim.setAttribute("keyPoints", "1;0");
+                anim.setAttribute("keyTimes", "0;1");
+            }
+        } else {
+            if (anim.hasAttribute("keyPoints")) {
+                anim.removeAttribute("keyPoints");
+                anim.removeAttribute("keyTimes");
+            }
         }
-
-    } else {
-
-        if (anim.hasAttribute("keyPoints")) {
-            anim.removeAttribute("keyPoints");
-            anim.removeAttribute("keyTimes");
-        }
-    }
+    });
 }
 
 const client = mqtt.connect(
@@ -1106,7 +1303,6 @@ client.on('connect', () => {
 		}));
 	});
 
-    // Xả
     document.getElementById("dischargeSwitch").addEventListener("change", function () {
         client.publish("solar/bms/cmd", JSON.stringify({
 			key: "bms_ondischarge",
@@ -1114,7 +1310,6 @@ client.on('connect', () => {
 		}));
     });
 
-    // Cân bằng
     document.getElementById("balanceSwitch").addEventListener("change", function () {
         client.publish("solar/bms/cmd", JSON.stringify({
 			key: "bms_onbalance",
@@ -1269,14 +1464,12 @@ const UI = {};
     "ivt_discharge_end_soc",
 	"ivt_charge_current",
 	"ivt_discharge_current",
-	"inv-clock"
+	"inv-clock",
+
+	"v-pv-2d","v-grid-2d","v-home-2d","v-bat-2d","info-bat-2d","ts-2d"
 ].forEach(id => {
     UI[id] = document.getElementById(id);
 });
-//
-// =========================
-// CACHE DOM
-// =========================
 function loadIvtSettingUI() {
 
     if (!ivtSettingCache) return;
@@ -1317,8 +1510,6 @@ client.on('message', (topic, payload) => {
 		console.log("❌ MQTT BAD JSON:", payload.toString());
 		return;
 	}
-	//BMS SETTING
-	///////////
 	if(topic === "solar/bms/setting"){
 
 		const fields = [
@@ -1352,17 +1543,12 @@ client.on('message', (topic, payload) => {
 
 		return;
 	}
-// IVT setting
 	if (topic === "solar/inverter/setting") {
 
-		ivtSettingCache = d;   // chỉ lưu
-
+		ivtSettingCache = d;
 
 		return;
 	}
-    // =========================
-    // BMS DATA
-    // =========================
     if(topic === "solar/bms/data"){
 
         const cells = d.cell || []
@@ -1438,12 +1624,8 @@ client.on('message', (topic, payload) => {
 		}
     }
 
-    // =========================
-    // INVERTER DATA
-    // =========================
     if(topic !== "solar/inverter/data") return
 
-    // PV
     const pv = Number(d.pv1_power)||0
     const pv1_current=Number(d.pv1_current)||0
     const pv1_voltage=Number(d.pv1_voltage)||0
@@ -1451,27 +1633,23 @@ client.on('message', (topic, payload) => {
     const pv_total=Number(d.pv_total)||0
     const pv_peak=Number(d.pv_power_peak)||0
 
-    // GRID
     const grid=Number(d.grid_power)||0
     const grid_current=Number(d.grid_current)||0
     const grid_voltage=Number(d.grid_voltage)||0
     const grid_buy_today=Number(d.grid_buy_today)||0
     const grid_sel_today=Number(d.grid_sel_today)||0
 
-    // LOAD
     const home=Number(d.load_power)||0
     const load_current=Number(d.load_current)||0
     const load_voltage=Number(d.load_voltage)||0
     const load_today=Number(d.load_today)||0
     const load_total=Number(d.load_total)||0
 
-    // EPS
     const bu=Number(d.eps_power)||0
     const eps_voltage=Number(d.eps_voltage)||0
     const eps_current=Number(d.eps_current)||0
     const eps_today=Number(d.eps_today)||0
 
-    // BATTERY
     const bat=Number(d.battery_power)||0
 	const bat_soc=Number(d.battery_soc)||0
     const battery_voltage=Number(d.battery_voltage)||0
@@ -1482,11 +1660,9 @@ client.on('message', (topic, payload) => {
     const battery_total_dischanger=Number(d.battery_total_dischanger)||0
 
     const ivt_temp=Number(d.ivt_temp)||0
-	// BAR
     const use_total=load_today+eps_today
 	const use_pv =
     (use_total - battery_dischanger_today - grid_buy_today) || 0;
-	//%
 	const bar_pv =
 		use_total > 0 ? (use_pv / use_total * 100) : 0;
 
@@ -1499,10 +1675,6 @@ client.on('message', (topic, payload) => {
         load_today>0
         ? (grid_buy_today/load_today)*100
         :0
-
-	// =========================
-	// UI
-	// =========================
 
 	UI["v-pv"].textContent = formatPower(pv);
 	UI["v-grid"].textContent = formatPower(grid);
@@ -1525,10 +1697,12 @@ client.on('message', (topic, payload) => {
 	UI["info-batc"].textContent =
 		`${battery_current}A`;
 
-
-	// =========================
-	// HÔM NAY
-	// =========================
+	if (UI["v-pv-2d"]) UI["v-pv-2d"].textContent = formatPower(pv);
+	if (UI["v-grid-2d"]) UI["v-grid-2d"].textContent = formatPower(grid);
+	if (UI["v-home-2d"]) UI["v-home-2d"].textContent = formatPower(home);
+	if (UI["v-bat-2d"]) UI["v-bat-2d"].textContent = formatPower(bat);
+	if (UI["info-bat-2d"]) UI["info-bat-2d"].textContent = `${bat_soc.toFixed(1)}%`;
+	if (UI["ts-2d"]) UI["ts-2d"].textContent = new Date().toLocaleString("vi-VN");
 
 	UI["st-pv"].textContent =
 		formatPower2(pv_today);
@@ -1551,11 +1725,6 @@ client.on('message', (topic, payload) => {
 	UI["grid-buy-label"].innerHTML =
 		`Lấy lưới <span style="color:#00b0ff">${grid_percent.toFixed(0)}%</span>`;
 
-
-	// =========================
-	// BIỂU ĐỒ
-	// =========================
-
 	UI["total-usage"].textContent =
 		formatPower2(use_total * 10);
 
@@ -1577,11 +1746,6 @@ client.on('message', (topic, payload) => {
 	UI["grid-bar"].style.width =
 		`${bar_grid}%`;
 
-
-	// =========================
-	// TỔNG
-	// =========================
-
 	UI["total_pv"].textContent =
 		formatPower2(pv_total);
 
@@ -1596,11 +1760,6 @@ client.on('message', (topic, payload) => {
 
 	UI["v-inv"].textContent =
 		`${ivt_temp}°C`;
-
-
-	// =========================
-	// FLOW
-	// =========================
 
 	setFlow("pv", pv, d);
 	setFlow("grid", grid, d);
